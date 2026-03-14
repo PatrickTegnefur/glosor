@@ -1,0 +1,3413 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glosträning på AD</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
+:root{--bg:#0f0e17;--surface:#1a1830;--surface2:#252340;--surface3:#2e2b50;--yellow:#ffd166;--pink:#ef476f;--teal:#06d6a0;--blue:#118ab2;--purple:#a855f7;--orange:#f77f00;--white:#fffffe;--gray:#a8a4c0;--green:#22c55e;--red:#ef4444;--radius:16px;--radius-sm:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden;padding-bottom:44px}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(15,14,23,.98);border-bottom:2px solid var(--yellow);backdrop-filter:blur(10px);flex-wrap:wrap;gap:10px}
+.logo{font-family:'Fredoka One',cursive;font-size:1.5rem;letter-spacing:.2px}
+.logo strong{background:linear-gradient(90deg,var(--yellow),#ffb347);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo em{color:rgba(255,255,255,.45);font-style:normal;font-weight:400;font-size:1.2rem}
+
+/* Student home clean design */
+.sh-set-card{background:var(--surface);border:1px solid rgba(255,209,102,.2);border-radius:var(--radius);padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.sh-set-left{display:flex;align-items:center;gap:14px}
+.sh-set-icon{width:38px;height:38px;border-radius:10px;background:rgba(255,209,102,.15);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;color:var(--yellow);flex-shrink:0}
+.sh-set-name{font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:2px}
+.sh-set-meta{font-size:.78rem;color:var(--gray);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.sh-dot{opacity:.4}
+.sh-set-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+
+/* Direction toggle inline */
+.sh-dir-toggle{display:inline-flex;align-items:center;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden;background:var(--surface2);cursor:pointer;user-select:none}
+.sh-dir-lang{padding:6px 14px;font-size:.82rem;font-weight:700;color:var(--gray);white-space:nowrap;transition:all .15s}
+.sh-dir-lang.sh-dir-active{background:rgba(255,255,255,.1);color:var(--white)}
+.sh-dir-sep{width:1px;background:rgba(255,255,255,.1);height:100%;align-self:stretch}
+.sh-dir-swap{padding:6px 10px;font-size:.88rem;color:var(--gray)}
+.sh-dir-toggle:hover .sh-dir-swap{color:var(--white)}
+
+/* Filter row */
+.sh-filter-row{display:flex;align-items:center;gap:7px;margin-bottom:18px;flex-wrap:wrap}
+.sh-filter-label{font-size:.75rem;font-weight:700;color:var(--gray);white-space:nowrap;margin-right:2px}
+.sh-fpill{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:50px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--gray);cursor:pointer;transition:all .15s;white-space:nowrap}
+.sh-fpill:hover{border-color:rgba(255,255,255,.25);color:var(--white)}
+.sh-fpill.active{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);color:var(--white)}
+.sh-fpill span{font-size:.68rem;opacity:.65;margin-left:2px}
+.sh-info-pill{font-family:'Nunito',sans-serif;font-size:.73rem;font-weight:600;padding:4px 11px;border-radius:50px;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--gray);cursor:pointer;margin-left:auto;white-space:nowrap}
+.sh-info-pill:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
+
+/* Section label */
+.sh-section-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--yellow);margin-bottom:8px;opacity:.8}
+
+/* Mode grid clean */
+.sh-mode-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.sh-mode-card{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:14px 12px;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s}
+.sh-mode-card:hover{border-color:rgba(255,209,102,.35);background:var(--surface2);box-shadow:0 4px 20px rgba(255,209,102,.08)}
+.sh-mc-icon{font-size:1.3rem;margin-bottom:7px}
+.sh-mc-name{font-size:.92rem;font-weight:700;color:var(--white);margin-bottom:3px}
+.sh-mc-desc{font-size:.75rem;color:var(--gray);line-height:1.4;margin-bottom:7px}
+.sh-mc-tag{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:50px}
+.sh-tag-study{background:rgba(17,138,178,.15);color:var(--blue)}
+.sh-tag-game{background:rgba(6,214,160,.12);color:var(--teal)}
+@media(max-width:580px){.sh-mode-grid{grid-template-columns:1fr 1fr}}
+.header-btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn-teacher-link{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;background:transparent;border:none;color:rgba(168,164,192,.45);cursor:pointer;padding:6px 10px;border-radius:50px;letter-spacing:.3px;text-transform:uppercase;transition:color .2s}
+.btn-teacher-link:hover{color:var(--gray)}
+.btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;padding:8px 16px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;letter-spacing:.4px;text-transform:uppercase}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.btn:active{transform:translateY(0)}
+.btn-ghost{background:transparent;color:var(--gray);border:2px solid rgba(168,164,192,.3)}
+.btn-ghost:hover{color:var(--white);border-color:var(--gray)}
+.btn-yellow{background:var(--yellow);color:#0f0e17}
+.btn-teal{background:var(--teal);color:#0f0e17}
+.btn-pink{background:var(--pink);color:var(--white)}
+.btn-purple{background:var(--purple);color:var(--white)}
+.btn-blue{background:var(--blue);color:var(--white)}
+.btn-green{background:var(--green);color:#0f0e17}
+.btn-sm{font-size:.75rem;padding:6px 12px}
+.diff-ingame-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:.72rem;padding:5px 11px;border-radius:50px;border:2px solid;cursor:pointer;transition:all .18s;text-transform:uppercase;letter-spacing:.2px;background:transparent}
+.diff-ingame-btn.easy{border-color:rgba(6,214,160,.4);color:var(--teal)}
+.diff-ingame-btn.medium{border-color:rgba(255,209,102,.4);color:var(--yellow)}
+.diff-ingame-btn.hard{border-color:rgba(239,71,111,.4);color:var(--pink)}
+.diff-ingame-btn.active.easy{background:var(--teal);color:#0f0e17;border-color:var(--teal)}
+.diff-ingame-btn.active.medium{background:var(--yellow);color:#0f0e17;border-color:var(--yellow)}
+.diff-ingame-btn.active.hard{background:var(--pink);color:var(--white);border-color:var(--pink)}
+.lang-badge{font-size:.82rem;font-weight:800;color:var(--white)}
+.lang-picker{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:4px}
+.lang-select{font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;background:var(--surface2);border:2px solid rgba(255,255,255,.12);color:var(--white);border-radius:var(--radius-sm);padding:8px 12px;outline:none;cursor:pointer;width:100%;transition:border-color .2s}
+.lang-select:focus{border-color:var(--yellow)}
+.lang-select option{background:var(--surface2);color:var(--white)}
+.dir-ingame-btn{font-size:.85rem;padding:5px 14px;border-color:rgba(255,255,255,.2);color:var(--white);transition:all .2s}
+.dir-ingame-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.4);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.btn-lg{font-size:1rem;padding:13px 28px}
+.view{display:none;position:relative;z-index:5}
+.view.active{display:block}
+
+/* TEACHER */
+#teacher-view{max-width:760px;margin:0 auto;padding:36px 20px 80px}
+/* Spreadsheet teacher view */
+.xl-header{display:grid;grid-template-columns:36px 160px 1fr 1fr 160px 32px;gap:0;background:var(--surface2);border-bottom:2px solid rgba(255,255,255,.12);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);flex-shrink:0;position:sticky;top:57px;z-index:5}
+.xl-header>div{padding:7px 10px;border-right:1px solid rgba(255,255,255,.06)}
+.xl-row{display:grid;grid-template-columns:36px 160px 1fr 1fr 160px 32px;gap:0;border-bottom:1px solid rgba(255,255,255,.05);transition:background .1s}
+.xl-row:hover{background:rgba(255,255,255,.03)}
+.xl-row.selected-row{background:rgba(255,209,102,.07);border-left:3px solid var(--yellow)}
+.xl-cell{border-right:1px solid rgba(255,255,255,.04);display:flex;align-items:center;min-height:36px}
+.xl-cell-num{color:var(--gray);font-size:.72rem;font-weight:800;justify-content:center;user-select:none;cursor:pointer}
+.xl-cell-num:hover{color:var(--white)}
+.xl-input{font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:600;background:transparent;border:none;color:var(--white);padding:5px 10px;width:100%;outline:none;height:100%}
+.xl-input:focus{background:rgba(255,209,102,.06);outline:1px solid rgba(255,209,102,.4);outline-offset:-1px}
+.xl-input::placeholder{color:rgba(168,164,192,.3);font-weight:400}
+.xl-assign-input{font-size:.78rem;color:var(--teal)}
+.xl-del-btn{width:28px;height:28px;background:transparent;border:none;color:rgba(255,255,255,.2);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;border-radius:4px;margin:auto}
+.xl-del-btn:hover{background:rgba(239,71,111,.2);color:var(--pink)}
+.xl-col-num{grid-column:1}.xl-col-assign{grid-column:2}.xl-col-l1{grid-column:3}.xl-col-l2{grid-column:4}.xl-col-cat{grid-column:5}.xl-col-lamp{grid-column:6;text-align:center}.xl-col-del{grid-column:7}
+
+.teacher-hero{text-align:center;margin-bottom:32px}
+.teacher-hero h1{font-family:'Fredoka One',cursive;font-size:2.1rem;color:var(--yellow);margin-bottom:6px}
+.teacher-hero p{color:var(--gray);font-size:.97rem}
+.card{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:22px;margin-bottom:18px}
+.card h2{font-size:.87rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--yellow);margin-bottom:12px}
+.field-row{display:grid;grid-template-columns:1fr 1fr 130px 52px auto;gap:7px;align-items:center;margin-bottom:7px}
+input[type=text]{font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:600;background:var(--surface2);border:2px solid rgba(255,255,255,.1);color:var(--white);border-radius:var(--radius-sm);padding:9px 13px;width:100%;outline:none;transition:border-color .2s}
+input[type=text]::placeholder{color:rgba(168,164,192,.45);font-weight:400}
+input[type=text]:focus{border-color:var(--yellow)}
+.del-btn{width:33px;height:33px;background:rgba(239,71,111,.15);border:2px solid rgba(239,71,111,.3);color:var(--pink);border-radius:50%;font-size:.97rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.del-btn:hover{background:var(--pink);color:white}
+.col-labels{display:grid;grid-template-columns:1fr 1fr 130px 52px auto;gap:7px;margin-bottom:5px}
+.col-labels span{font-size:.73rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gray);padding-left:3px}
+#word-list{max-height:300px;overflow-y:auto;padding-right:3px}
+#word-list::-webkit-scrollbar{width:3px}
+#word-list::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:4px}
+
+/* Category */
+.cat-wrap{position:relative}
+.cat-input{font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;background:var(--surface2);border:2px solid rgba(255,255,255,.1);color:var(--white);border-radius:50px;padding:5px 11px;width:100%;outline:none;transition:border-color .2s}
+.cat-input:focus{border-color:var(--yellow)}
+.cat-input::placeholder{color:rgba(168,164,192,.4);font-weight:400;font-style:italic}
+.cat-dropdown{position:absolute;top:calc(100% + 4px);left:0;min-width:160px;background:var(--surface);border:1px solid rgba(255,255,255,.12);border-radius:10px;z-index:100;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.5);display:none}
+.cat-dropdown.open{display:block}
+.cat-option{padding:7px 13px;font-size:.8rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s}
+.cat-option:hover{background:var(--surface2)}
+.cat-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;display:inline-block}
+.cat-badge{font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:50px;white-space:nowrap;vertical-align:middle}
+/* Difficulty lamp */
+.lamp-cell{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px}
+.lamp{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.15);display:inline-block;cursor:default;transition:all .2s}
+.lamp.spell-easy  {background:var(--green); border-color:var(--green);  box-shadow:0 0 6px rgba(34,197,94,.5)}
+.lamp.spell-medium{background:var(--yellow);border-color:var(--yellow); box-shadow:0 0 6px rgba(255,209,102,.5)}
+.lamp.spell-hard  {background:var(--red);   border-color:var(--red);    box-shadow:0 0 6px rgba(239,68,68,.5)}
+.lamp.flash-sure  {background:var(--green); border-color:var(--green);  box-shadow:0 0 6px rgba(34,197,94,.5)}
+.lamp.flash-maybe {background:var(--yellow);border-color:var(--yellow); box-shadow:0 0 6px rgba(255,209,102,.5)}
+.lamp.flash-unsure{background:var(--red);   border-color:var(--red);    box-shadow:0 0 6px rgba(239,68,68,.5)}
+.lamp.unset{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1)}
+.word-count{text-align:right;font-size:.78rem;color:var(--gray);margin-top:5px}
+.word-count span{color:var(--teal);font-weight:800}
+label.field-label{display:block;font-size:.73rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gray);margin-bottom:5px}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+textarea{font-family:'Nunito',sans-serif;font-size:.87rem;background:var(--surface2);border:2px solid rgba(255,255,255,.1);color:var(--white);border-radius:var(--radius-sm);padding:10px 13px;width:100%;resize:vertical;outline:none;transition:border-color .2s;min-height:100px}
+textarea:focus{border-color:var(--teal)}
+.hint{font-size:.77rem;color:var(--gray);margin-top:4px}
+.hint code{background:var(--surface2);padding:1px 6px;border-radius:4px;font-family:monospace;color:var(--teal)}
+.row-gap{display:flex;gap:9px;flex-wrap:wrap;margin-top:8px}
+
+/* STUDENT HOME */
+#student-home{max-width:860px;margin:0 auto;padding:36px 20px 80px}
+.set-hero{text-align:center;margin-bottom:36px}
+.set-hero .badge{display:inline-block;background:rgba(255,209,102,.15);border:1px solid rgba(255,209,102,.3);color:var(--yellow);font-size:.73rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;padding:3px 13px;border-radius:50px;margin-bottom:10px}
+.set-hero h1{font-family:'Fredoka One',cursive;font-size:2.5rem;color:var(--white);margin-bottom:4px}
+.set-hero p{color:var(--gray);font-size:.97rem}
+/* Strength filters */
+.strength-filter{font-family:'Nunito',sans-serif;font-weight:800;font-size:.74rem;padding:4px 12px;border-radius:50px;border:1px solid rgba(255,255,255,.15);background:transparent;color:var(--gray);cursor:pointer;transition:all .18s}
+.strength-filter:hover{border-color:rgba(255,255,255,.3);color:var(--white)}
+.strength-filter.active{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:var(--white)}
+.strength-filter span{font-size:.68rem;opacity:.7;margin-left:2px}
+/* Library cards */
+.lib-set-card{background:var(--surface);border:2px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:18px;cursor:pointer;transition:all .2s;position:relative}
+.lib-set-card:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
+.lib-set-card.selected{border-color:var(--yellow);background:rgba(255,209,102,.06)}
+.lib-set-card.active-set{border-color:var(--teal);background:rgba(6,214,160,.06)}
+.lib-set-title{font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--white);margin-bottom:3px}
+.lib-set-meta{font-size:.78rem;color:var(--gray);margin-bottom:10px}
+.lib-strength-bar{display:flex;height:6px;border-radius:50px;overflow:hidden;gap:1px;margin-bottom:10px}
+.lib-strength-bar div{height:100%;border-radius:50px;transition:width .4s}
+.lib-set-actions{display:flex;gap:6px;flex-wrap:wrap}
+.dir-toggle{display:inline-flex;align-items:center;gap:9px;background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:50px;padding:7px 18px;font-size:.83rem;font-weight:700;cursor:pointer;user-select:none;transition:all .2s;margin-bottom:32px}
+.dir-toggle:hover{border-color:rgba(255,255,255,.2);background:var(--surface2)}
+.dir-arrow{font-size:1.1rem}
+.dir-toggle.flipped .dir-arrow{transform:none}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.mode-card{background:var(--surface);border:2px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:22px 18px;cursor:pointer;transition:all .25s;text-align:center;position:relative;overflow:hidden}
+.mode-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s}
+.mode-card.mc::before{background:radial-gradient(circle at 50% 0%,rgba(17,138,178,.14),transparent 70%)}
+.mode-card.match::before{background:radial-gradient(circle at 50% 0%,rgba(6,214,160,.14),transparent 70%)}
+.mode-card.spell::before{background:radial-gradient(circle at 50% 0%,rgba(168,85,247,.14),transparent 70%)}
+.mode-card.flash::before{background:radial-gradient(circle at 50% 0%,rgba(255,209,102,.14),transparent 70%)}
+.mode-card.rain::before{background:radial-gradient(circle at 50% 0%,rgba(6,214,160,.14),transparent 70%)}
+.mode-card:hover{transform:translateY(-4px)}
+.mode-card.mc:hover{border-color:var(--blue);box-shadow:0 8px 32px rgba(17,138,178,.2)}
+.mode-card.match:hover{border-color:var(--teal);box-shadow:0 8px 32px rgba(6,214,160,.2)}
+.mode-card.spell:hover{border-color:var(--purple);box-shadow:0 8px 32px rgba(168,85,247,.2)}
+.mode-card.flash:hover{border-color:var(--yellow);box-shadow:0 8px 32px rgba(255,209,102,.2)}
+.mode-card:hover::before{opacity:1}
+.mode-icon{font-size:2.4rem;margin-bottom:9px;display:block;animation:float 3s ease-in-out infinite}
+.mode-card:nth-child(2) .mode-icon{animation-delay:-1s}
+.mode-card:nth-child(3) .mode-icon{animation-delay:-2s}
+.mode-card:nth-child(4) .mode-icon{animation-delay:-.5s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.mode-card h3{font-family:'Fredoka One',cursive;font-size:1.35rem;margin-bottom:4px}
+.mode-card.mc h3{color:var(--blue)}.mode-card.match h3{color:var(--teal)}.mode-card.spell h3{color:var(--purple)}.mode-card.flash h3{color:var(--yellow)}.mode-card.rain h3{color:var(--teal)}
+.mode-card.rain:hover{border-color:var(--teal);box-shadow:0 8px 32px rgba(6,214,160,.2)}
+/* MEMORY */
+.mem-card{perspective:600px;cursor:pointer;min-height:80px}
+.mem-card-inner{position:relative;width:100%;padding-bottom:100%;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.mem-card.revealed .mem-card-inner,.mem-card.matched .mem-card-inner{transform:rotateY(180deg)}
+.mem-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-weight:800;border:2px solid;user-select:none}
+.mem-back{background:var(--surface2);border-color:rgba(255,255,255,.12);font-size:1.6rem;color:rgba(255,255,255,.15)}
+.mem-front{transform:rotateY(180deg);font-size:1.15rem;line-height:1.3}
+#memory-grid.cols-4 .mem-front{font-size:1.25rem}
+#memory-grid.cols-5 .mem-front{font-size:1.05rem}
+#memory-grid.cols-8 .mem-front{font-size:.88rem}
+.mem-front.en{background:rgba(17,138,178,.15);border-color:rgba(17,138,178,.4);color:var(--white)}
+.mem-front.sv{background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.4);color:var(--white)}
+.mem-card.matched .mem-face.mem-front{background:rgba(6,214,160,.18);border-color:var(--teal);color:var(--teal);animation:matchPop .4s cubic-bezier(.175,.885,.32,1.275)}
+.mem-card.wrong-flash .mem-card-inner{animation:memShake .4s ease}
+@keyframes memShake{0%,100%{transform:rotateY(180deg) translateX(0)}30%{transform:rotateY(180deg) translateX(-5px)}70%{transform:rotateY(180deg) translateX(5px)}}
+
+#rain-arena{position:relative;width:100%;height:360px;background:linear-gradient(180deg,#080616 0%,#0c1828 100%);border-radius:var(--radius);overflow:hidden;border:2px solid rgba(255,255,255,.08);margin-bottom:14px;transition:height .3s}
+.rain-ground{position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--pink),var(--orange),var(--yellow));box-shadow:0 0 14px rgba(255,180,0,.6)}
+.rain-stars{position:absolute;inset:0;pointer-events:none}
+.rain-word{position:absolute;font-family:'Fredoka One',cursive;font-size:1.05rem;padding:5px 13px;border-radius:50px;border:2px solid;white-space:nowrap;pointer-events:none;user-select:none;transition:border-color .15s,color .15s,background .15s,box-shadow .15s}
+.rain-word.active{border-color:var(--yellow);color:var(--yellow);background:rgba(255,209,102,.13);box-shadow:0 0 18px rgba(255,209,102,.35)}
+.rain-word.inactive{border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.55);background:rgba(255,255,255,.04)}
+.rain-word.hit{border-color:var(--teal)!important;color:var(--teal)!important;background:rgba(6,214,160,.2)!important;box-shadow:0 0 28px rgba(6,214,160,.6)!important}
+.rain-word.miss{border-color:var(--pink)!important;color:var(--pink)!important;background:rgba(239,71,111,.15)!important}
+.rain-lives{display:flex;gap:5px;font-size:1.2rem;letter-spacing:2px}
+.rain-input{font-family:'Fredoka One',cursive;font-size:1.25rem;flex:1;text-align:center;letter-spacing:2px;background:var(--surface2);border:2px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);color:var(--white);padding:10px 14px;outline:none;transition:border-color .2s;text-transform:uppercase}
+.rain-input:focus{border-color:var(--yellow)}
+.rain-input.hit{border-color:var(--teal);background:rgba(6,214,160,.08)}
+.rain-input.miss{border-color:var(--pink);animation:shake .3s ease}
+#rain-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(8,6,22,.88);backdrop-filter:blur(6px);border-radius:calc(var(--radius) - 2px);z-index:10;gap:10px;text-align:center;padding:20px}
+#rain-overlay h2{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--yellow)}
+#rain-overlay p{color:var(--gray);font-size:.88rem;max-width:260px;line-height:1.5}
+.mode-card p{font-size:.8rem;color:var(--gray);line-height:1.4;margin-bottom:10px}
+.mode-badge{position:absolute;top:10px;right:10px;background:rgba(255,209,102,.18);color:var(--yellow);font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;padding:2px 8px;border-radius:50px}
+.diff-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.diff-pill{font-family:'Nunito',sans-serif;font-weight:800;font-size:.7rem;padding:3px 11px;border-radius:50px;border:2px solid;cursor:pointer;transition:all .18s;text-transform:uppercase;letter-spacing:.2px;background:transparent}
+.diff-pill.easy{border-color:var(--teal);color:var(--teal)}.diff-pill.medium{border-color:var(--yellow);color:var(--yellow)}.diff-pill.hard{border-color:var(--pink);color:var(--pink)}
+.diff-pill.active.easy{background:var(--teal);color:#0f0e17}.diff-pill.active.medium{background:var(--yellow);color:#0f0e17}.diff-pill.active.hard{background:var(--pink);color:var(--white)}
+.preview-card{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:16px 20px;margin-bottom:18px}
+.preview-card h2{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:10px}
+.word-chips{display:flex;flex-wrap:wrap;gap:6px}
+
+/* Word table in student home */
+.sh-word-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.sh-word-table thead tr{border-bottom:2px solid rgba(255,255,255,.08)}
+.sh-word-table thead th{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--gray);padding:0 10px 7px;text-align:left}
+.sh-word-table thead th.th-r{text-align:right}
+.sh-word-table tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .12s}
+.sh-word-table tbody tr:hover{background:rgba(255,255,255,.03)}
+.sh-word-table td{padding:7px 10px;color:var(--white);font-weight:600;vertical-align:middle}
+.sh-word-table td.td-trans{color:var(--gray);font-weight:400}
+.sh-word-table td.td-cat{text-align:right}
+.sh-word-table td.td-str{text-align:right;font-size:.8rem;width:20px}
+.word-chip{background:var(--surface2);border:1px solid rgba(255,255,255,.08);border-radius:50px;padding:3px 11px;font-size:.8rem;font-weight:700}
+.word-chip em{color:var(--gray);font-style:normal;margin-left:3px}
+
+/* GAME CHROME */
+.game-wrap{max-width:860px;margin:0 auto;padding:26px 20px 80px}
+.game-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px}
+.game-title-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.game-header h1{font-family:'Fredoka One',cursive;font-size:1.65rem}
+h1.teal{color:var(--teal)}h1.purple{color:var(--purple)}h1.yellow{color:var(--yellow)}h1.blue{color:var(--blue)}
+.stats-row{display:flex;gap:8px;flex-wrap:wrap}
+.stat-pill{display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:50px;padding:5px 13px;font-size:.85rem;font-weight:800}
+.stat-pill .val{color:var(--yellow)}
+.diff-badge{display:inline-flex;align-items:center;border-radius:50px;padding:3px 11px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;border:1px solid}
+.diff-badge.easy{background:rgba(6,214,160,.12);border-color:rgba(6,214,160,.3);color:var(--teal)}
+.diff-badge.medium{background:rgba(255,209,102,.12);border-color:rgba(255,209,102,.3);color:var(--yellow)}
+.diff-badge.hard{background:rgba(239,71,111,.12);border-color:rgba(239,71,111,.3);color:var(--pink)}
+.progress-bar-wrap{background:var(--surface);border-radius:50px;height:8px;overflow:hidden;margin-bottom:24px;border:1px solid rgba(255,255,255,.05)}
+.progress-bar-fill{height:100%;border-radius:50px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.fill-purple{background:linear-gradient(90deg,var(--purple),var(--pink))}
+.fill-blue{background:linear-gradient(90deg,var(--blue),var(--teal))}
+.fill-yellow{background:linear-gradient(90deg,var(--yellow),var(--orange))}
+
+/* MATCH */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px 18px}
+.match-col{display:flex;flex-direction:column;gap:7px}
+.match-col-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:1px;padding-left:2px}
+.match-card{background:var(--surface);border:2px solid rgba(255,255,255,.1);border-radius:var(--radius-sm);padding:11px 15px;font-size:.93rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;user-select:none}
+.match-card:hover:not(.matched):not(.selected){border-color:rgba(255,255,255,.3);background:var(--surface2);transform:scale(1.02)}
+.match-card.selected{border-color:var(--yellow);background:rgba(255,209,102,.1);box-shadow:0 0 16px rgba(255,209,102,.2)}
+.match-card.matched{border-color:var(--teal);background:rgba(6,214,160,.1);color:var(--teal);cursor:default;animation:matchPop .4s cubic-bezier(.175,.885,.32,1.275)}
+.match-card.wrong{border-color:var(--pink);background:rgba(239,71,111,.1);animation:shake .4s ease}
+@keyframes matchPop{0%{transform:scale(1)}50%{transform:scale(1.07)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+/* SPELL */
+.spell-card{background:var(--surface);border:2px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:32px 26px;text-align:center;margin-bottom:18px}
+.spell-prompt-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:9px}
+.spell-prompt{font-family:'Fredoka One',cursive;font-size:2.3rem;color:var(--white);margin-bottom:5px}
+.spell-hint{font-size:.85rem;color:var(--gray);margin-bottom:22px;min-height:1.3em}
+.letter-boxes{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:20px}
+.letter-box{width:38px;height:46px;background:var(--surface2);border:2px solid rgba(255,255,255,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:800;text-transform:uppercase;transition:all .15s}
+.letter-box.space{background:transparent!important;border:none!important;width:14px}
+.letter-box.filled{border-color:var(--purple);color:var(--white)}
+.letter-box.correct{border-color:var(--teal);background:rgba(6,214,160,.1);color:var(--teal)}
+.letter-box.wrong{border-color:var(--pink);background:rgba(239,71,111,.1);color:var(--pink)}
+.letter-box.locked{background:var(--surface3)!important;border-color:rgba(255,255,255,.05)!important;color:rgba(255,255,255,.1)!important}
+.letter-box.hidden{width:0!important;height:0!important;border:none!important;margin:0!important;padding:0!important;overflow:hidden;opacity:0}
+.spell-input{font-family:'Fredoka One',cursive;font-size:1.35rem;text-align:center;letter-spacing:3px;background:var(--surface2);border:2px solid rgba(255,255,255,.12);border-radius:var(--radius-sm);color:var(--white);padding:12px 17px;width:100%;outline:none;transition:border-color .2s;text-transform:uppercase;margin-bottom:13px}
+.spell-input:focus{border-color:var(--purple)}
+.spell-input.correct{border-color:var(--teal);background:rgba(6,214,160,.08)}
+.spell-input.wrong{border-color:var(--pink);background:rgba(239,71,111,.08);animation:shake .4s ease}
+.feedback-banner{border-radius:var(--radius-sm);padding:11px 16px;text-align:center;font-weight:800;font-size:.92rem;margin-bottom:12px;animation:fadeIn .3s ease;display:none}
+.feedback-banner.correct{background:rgba(6,214,160,.15);border:1px solid rgba(6,214,160,.3);color:var(--teal)}
+.feedback-banner.wrong{background:rgba(239,71,111,.15);border:1px solid rgba(239,71,111,.3);color:var(--pink)}
+.spell-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.char-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;min-width:36px;height:36px;padding:0 8px;background:var(--surface2);border:2px solid rgba(255,255,255,.15);border-radius:8px;color:var(--white);cursor:pointer;transition:all .15s}
+.char-btn:hover{background:var(--purple);border-color:var(--purple);transform:translateY(-2px)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+
+/* MC */
+.mc-card{background:var(--surface);border:2px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:32px 26px;text-align:center;margin-bottom:18px}
+.mc-question-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:9px}
+.mc-question{font-family:'Fredoka One',cursive;font-size:2.5rem;color:var(--white);margin-bottom:24px;word-break:break-word}
+.mc-options{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mc-option{background:var(--surface2);border:2px solid rgba(255,255,255,.1);border-radius:var(--radius-sm);padding:13px 16px;font-size:.97rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:center}
+.mc-option:hover:not(.locked){border-color:rgba(255,255,255,.28);background:var(--surface3);transform:scale(1.02)}
+.mc-option.correct{border-color:var(--teal);background:rgba(6,214,160,.12);color:var(--teal);animation:matchPop .4s ease}
+.mc-option.wrong{border-color:var(--pink);background:rgba(239,71,111,.12);color:var(--pink);animation:shake .4s ease}
+.mc-option.reveal{border-color:var(--teal);background:rgba(6,214,160,.08);color:var(--teal)}
+.mc-option.locked{cursor:default}
+
+/* FLASHCARDS */
+.flash-scene{perspective:1000px;margin-bottom:20px;cursor:pointer}
+.flash-card-inner{position:relative;width:100%;transition:transform .5s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.flash-card-inner.flipped{transform:rotateY(180deg)}
+.flash-face{background:var(--surface);border:2px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:44px 30px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:210px;text-align:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flash-face.back{position:absolute;top:0;left:0;width:100%;transform:rotateY(180deg);border-color:rgba(255,209,102,.28)}
+.flash-face-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:11px}
+.flash-face-word{font-family:'Fredoka One',cursive;font-size:2.7rem;color:var(--white)}
+.flash-face.back .flash-face-word{color:var(--yellow)}
+.flash-tap{font-size:.78rem;color:var(--gray);margin-top:9px}
+.confidence-row{display:flex;gap:9px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
+.conf-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;padding:8px 18px;border-radius:50px;border:2px solid;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.conf-btn:hover:not([disabled]){transform:scale(1.05)}
+.conf-btn.sure{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.1)}
+.conf-btn.sure:hover:not([disabled]){background:var(--green);color:#0f0e17}
+.conf-btn.maybe{border-color:var(--yellow);color:var(--yellow);background:rgba(255,209,102,.1)}
+.conf-btn.maybe:hover:not([disabled]){background:var(--yellow);color:#0f0e17}
+.conf-btn.unsure{border-color:var(--red);color:var(--red);background:rgba(239,68,68,.1)}
+.conf-btn.unsure:hover:not([disabled]){background:var(--red);color:var(--white)}
+.conf-btn[disabled]{opacity:.35;cursor:not-allowed;transform:none}
+kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:4px;padding:1px 5px;color:var(--gray);margin-left:3px;vertical-align:middle}
+.flash-piles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.pile{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-sm);padding:12px 8px;text-align:center}
+.pile-icon{font-size:1.3rem;margin-bottom:3px}
+.pile-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--gray);margin-bottom:2px}
+.pile-count{font-family:'Fredoka One',cursive;font-size:1.5rem}
+.pile.sure .pile-count{color:var(--green)}.pile.maybe .pile-count{color:var(--yellow)}.pile.unsure .pile-count{color:var(--red)}
+
+/* RESULTS */
+#results-view{max-width:500px;margin:0 auto;padding:56px 20px 80px;text-align:center}
+.trophy{font-size:4.8rem;margin-bottom:12px;animation:bounce 1s ease}
+@keyframes bounce{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-18px) rotate(-5deg)}60%{transform:translateY(-9px) rotate(3deg)}}
+#results-view h1{font-family:'Fredoka One',cursive;font-size:2.3rem;color:var(--yellow);margin-bottom:5px}
+#results-view>p{color:var(--gray);font-size:.92rem;margin-bottom:26px}
+.result-stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.result-stat{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:16px 22px;min-width:105px}
+.result-stat .num{font-family:'Fredoka One',cursive;font-size:1.9rem}
+.result-stat .lbl{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--gray);margin-top:2px}
+.result-stat.good .num{color:var(--teal)}.result-stat.bad .num{color:var(--pink)}.result-stat.time .num{color:var(--yellow)}
+.result-actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+
+/* MISC */
+.confetti-piece{position:fixed;width:8px;height:8px;top:-10px;border-radius:2px;animation:confettiFall linear forwards;pointer-events:none;z-index:9999}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--surface2);border:1px solid rgba(255,255,255,.12);border-radius:50px;padding:10px 20px;font-weight:700;font-size:.86rem;opacity:0;transition:all .3s;z-index:1000;white-space:nowrap;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:26px;max-width:440px;width:90%}
+.modal h2{font-family:'Fredoka One',cursive;font-size:1.35rem;color:var(--yellow);margin-bottom:6px}
+.modal p{color:var(--gray);font-size:.86rem;margin-bottom:12px}
+.modal-actions{display:flex;gap:8px;margin-top:12px;justify-content:flex-end;flex-wrap:wrap}
+.decoy-banner{background:rgba(239,71,111,.1);border:1px solid rgba(239,71,111,.25);border-radius:var(--radius-sm);padding:8px 14px;margin-bottom:14px;font-size:.8rem;font-weight:700;color:var(--pink);text-align:center;display:none}
+@media(max-width:580px){.mode-grid{grid-template-columns:1fr 1fr}.match-grid{grid-template-columns:1fr}.meta-grid{grid-template-columns:1fr}.mc-options{grid-template-columns:1fr}.spell-prompt{font-size:1.9rem}.mc-question{font-size:2rem}}
+@media(max-width:380px){.mode-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+
+<header>
+  <div style="display:flex;align-items:center;gap:10px">
+    <img src="AD_Colors.jpg" alt="" style="height:28px;border-radius:4px;object-fit:contain" onerror="this.style.display='none'"/>
+    <div class="logo"><strong>Glosträning</strong> <em>på AD</em></div>
+  </div>
+  <div class="header-btns">
+    <button class="btn btn-yellow" id="nav-ova" onclick="showStudentHome()">🎮 Öva</button>
+    <button class="btn btn-ghost" onclick="showLibrary()">📚 Bibliotek</button>
+    <button class="btn-teacher-link" onclick="showView('teacher')" title="Lärarvyn">⚙️ Lärare</button>
+  </div>
+</header>
+
+<!-- TEACHER -->
+<div id="teacher-view" class="view active">
+<div style="display:flex;flex-direction:column;height:calc(100vh - 57px);min-height:500px">
+
+  <!-- TOP BAR -->
+  <div style="background:var(--surface);border-bottom:1px solid rgba(255,255,255,.08);padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;flex-wrap:wrap;gap:8px">
+      <input type="text" id="set-name" placeholder="Namn på glosset, t.ex. Läxa 7.2 – Kroppen" style="flex:1;min-width:180px;font-size:.95rem;font-weight:800;background:transparent;border:none;border-bottom:2px solid rgba(255,255,255,.15);border-radius:0;padding:4px 0;color:var(--white)" onfocus="this.style.borderBottomColor='var(--yellow)'" onblur="this.style.borderBottomColor='rgba(255,255,255,.15)'"/>
+      <input type="text" id="set-subject" placeholder="Ämne / Klass" style="width:160px;font-size:.82rem;font-weight:600;background:transparent;border:none;border-bottom:2px solid rgba(255,255,255,.1);border-radius:0;padding:4px 0;color:var(--gray)" onfocus="this.style.borderBottomColor='var(--yellow)'" onblur="this.style.borderBottomColor='rgba(255,255,255,.1)'"/>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+      <select class="lang-select" id="lang1-select" onchange="updateLangPair()" style="width:auto;padding:5px 10px;font-size:.82rem">
+        <option value="en">🇬🇧 Engelska</option>
+        <option value="es">🇪🇸 Spanska</option>
+        <option value="fr">🇫🇷 Franska</option>
+        <option value="de">🇩🇪 Tyska</option>
+        <option value="sv">🇸🇪 Svenska</option>
+      </select>
+      <button onclick="swapLangs()" title="Byt" style="background:var(--surface2);border:2px solid rgba(255,255,255,.15);color:var(--white);border-radius:50%;width:28px;height:28px;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">⇄</button>
+      <select class="lang-select" id="lang2-select" onchange="updateLangPair()" style="width:auto;padding:5px 10px;font-size:.82rem">
+        <option value="sv" selected>🇸🇪 Svenska</option>
+        <option value="en">🇬🇧 Engelska</option>
+        <option value="es">🇪🇸 Spanska</option>
+        <option value="fr">🇫🇷 Franska</option>
+        <option value="de">🇩🇪 Tyska</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:6px;flex-shrink:0">
+      <button class="btn btn-yellow btn-sm" onclick="addWordRow()">＋ Rad</button>
+      <button class="btn btn-teal btn-sm" onclick="showPasteModal()">📋 Klistra in</button>
+      <button class="btn btn-teal btn-sm" onclick="exportHTML()">📤 Dela HTML</button>
+      <button class="btn btn-purple btn-sm" onclick="exportJSON()">💾 Spara JSON</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('json-import').click()">📂 Öppna</button>
+      <input type="file" id="json-import" accept=".json" style="display:none" onchange="loadJSONFile(event)">
+      <button class="btn btn-ghost btn-sm" onclick="openModal('help-modal')" title="Hjälp">❓</button>
+    </div>
+  </div>
+
+  <!-- BULK ACTION BAR (visas när rader är markerade) -->
+  <div id="bulk-bar" style="display:none;background:rgba(255,209,102,.08);border-bottom:1px solid rgba(255,209,102,.2);padding:7px 20px;align-items:center;gap:16px;flex-shrink:0;overflow-x:auto;white-space:nowrap">
+    <span style="font-size:.82rem;font-weight:800;color:var(--yellow);flex-shrink:0" id="bulk-count">0 rader markerade</span>
+    <div style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0">
+      <span style="font-size:.75rem;color:var(--gray)">Tilldelning:</span>
+      <input type="text" id="bulk-assign-input" placeholder="t.ex. Läxa 7.2" list="bulk-assign-list"
+        style="font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;background:var(--surface2);border:1px solid rgba(255,255,255,.15);color:var(--teal);border-radius:6px;padding:4px 10px;outline:none;width:140px"/>
+      <datalist id="bulk-assign-list"></datalist>
+      <button class="btn btn-ghost btn-sm" onclick="bulkSetAssign()">✅</button>
+    </div>
+    <div style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0">
+      <span style="font-size:.75rem;color:var(--gray)">Kategori:</span>
+      <input type="text" id="bulk-cat-input" placeholder="t.ex. Kroppen" list="bulk-cat-list"
+        style="font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;background:var(--surface2);border:1px solid rgba(255,255,255,.15);color:var(--teal);border-radius:6px;padding:4px 10px;outline:none;width:140px"/>
+      <datalist id="bulk-cat-list"></datalist>
+      <button class="btn btn-ghost btn-sm" onclick="bulkSetCategory()">✅</button>
+    </div>
+    <div style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto">
+      <button class="btn btn-pink btn-sm" onclick="bulkDeleteRows()">🗑 Ta bort</button>
+      <button class="btn btn-ghost btn-sm" onclick="clearSelection()">✕</button>
+    </div>
+  </div>
+
+  <!-- COLUMN HEADERS -->
+  <div class="xl-header">
+    <div class="xl-col-num">#</div>
+    <div class="xl-col-assign">Tilldelning</div>
+    <div class="xl-col-l1" id="col-label-1">🇬🇧 Engelska</div>
+    <div class="xl-col-l2" id="col-label-2">🇸🇪 Svenska</div>
+    <div class="xl-col-cat">Kategori</div>
+    <div class="xl-col-del"></div>
+  </div>
+
+  <!-- TABLE BODY -->
+  <div id="word-list" style="flex:1;overflow-y:visible;background:var(--bg)"></div>
+
+  <!-- STATUS BAR -->
+  <div style="background:var(--surface);border-top:1px solid rgba(255,255,255,.06);padding:6px 20px;display:flex;align-items:center;justify-content:space-between;font-size:.76rem;color:var(--gray);flex-shrink:0">
+    <span><span id="word-count">0</span> ord &nbsp;·&nbsp; <kbd style="font-size:.68rem">Enter</kbd> ny rad &nbsp;·&nbsp; <kbd style="font-size:.68rem">Tab</kbd> nästa cell &nbsp;·&nbsp; Klicka <strong style="color:var(--white)">#</strong> för att markera rad &nbsp;·&nbsp; <kbd style="font-size:.68rem">❓</kbd> för hjälp</span>
+    <span id="xl-selection-info" style="color:var(--yellow)"></span>
+  </div>
+</div>
+
+<!-- HELP MODAL -->
+<div class="modal-overlay" id="help-modal">
+  <div class="modal" style="max-width:580px;max-height:80vh;overflow-y:auto">
+    <h2>❓ Så här använder du lärarvyn</h2>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-top:4px">
+
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px">
+        <div style="font-weight:800;color:var(--yellow);margin-bottom:6px">📝 Mata in ord</div>
+        <div style="font-size:.85rem;color:var(--gray);line-height:1.6">
+          Skriv direkt i tabellens rader — precis som i Excel. <strong style="color:var(--white)">Enter</strong> skapar ny rad, <strong style="color:var(--white)">Tab</strong> hoppar till nästa kolumn. Du kan också klicka <strong style="color:var(--white)">📋 Klistra in</strong> för att klistra in en hel lista på en gång (format: ord – översättning, en per rad).
+        </div>
+      </div>
+
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px">
+        <div style="font-weight:800;color:var(--teal);margin-bottom:6px">🏷️ Tilldelning</div>
+        <div style="font-size:.85rem;color:var(--gray);line-height:1.6">
+          Kolumnen <strong style="color:var(--white)">Tilldelning</strong> låter dig märka upp ord med t.ex. <em style="color:var(--teal)">Läxa 7.1</em> eller <em style="color:var(--teal)">Prov kap 3</em>. Eleven kan sedan filtrera och öva just de orden.<br><br>
+          <strong style="color:var(--white)">Snabbtips:</strong> Markera flera rader (klicka på <strong style="color:var(--white)">#</strong>) → en gul verktygsmeny dyker upp → sätt tilldelning på alla markerade på en gång!
+        </div>
+      </div>
+
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px">
+        <div style="font-weight:800;color:var(--purple);margin-bottom:6px">🗂️ Kategorier</div>
+        <div style="font-size:.85rem;color:var(--gray);line-height:1.6">
+          Kategorier grupperar ord visuellt (t.ex. <em style="color:var(--purple)">Huvud & ansikte</em>, <em style="color:var(--purple)">Kropp</em>). Börja skriva i fältet — befintliga kategorier föreslås automatiskt. Nya kategorier skapas direkt när du skriver ett nytt namn.
+        </div>
+      </div>
+
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px">
+        <div style="font-weight:800;color:var(--pink);margin-bottom:6px">📤 Dela med elever</div>
+        <div style="font-size:.85rem;color:var(--gray);line-height:1.6">
+          Klicka <strong style="color:var(--white)">📤 Dela HTML</strong> för att generera en enda HTML-fil med alla glosorna inbakade. Dela filen i Teams, Classroom eller via mejl. Eleven klickar → övningen startar direkt i webbläsaren — ingen installation behövs.<br><br>
+          <strong style="color:var(--white)">💾 Spara JSON</strong> sparar en redigerbar version som du kan öppna igen och uppdatera.
+        </div>
+      </div>
+
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px">
+        <div style="font-weight:800;color:var(--green);margin-bottom:6px">💡 Svårighetslamporna</div>
+        <div style="font-size:.85rem;color:var(--gray);line-height:1.6">
+          De två små lamporna i kolumnen 💡 visar elevens självskattning — vänster är <strong style="color:var(--white)">flashcards</strong>, höger är <strong style="color:var(--white)">stavning</strong>. 🟢 Lätt · 🟡 Okej · 🔴 Svårt · ⚪ Ej graderat. Dessa fylls i av eleven och visas här när du öppnar deras sparade fil.
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn btn-yellow" onclick="closeModal('help-modal')">Förstått! 👍</button>
+    </div>
+  </div>
+</div>
+
+<!-- PASTE MODAL -->
+<div class="modal-overlay" id="paste-modal">
+  <div class="modal" style="max-width:560px">
+    <h2>📋 Klistra in ord</h2>
+    <p style="margin-bottom:4px">En rad per glospar. Tre kolumner separerade med bindestreck eller komma:</p>
+    <div style="background:var(--surface2);border-radius:6px;padding:10px 14px;font-size:.8rem;font-family:monospace;color:var(--teal);margin-bottom:12px;line-height:1.8">
+      head – huvud – Kroppen<br>
+      eye – öga – Kroppen<br>
+      dog – hund – Djur<br>
+      cat – katt – Djur<br>
+      <span style="color:rgba(168,164,192,.5)">← ord &nbsp; – &nbsp; översättning &nbsp; – &nbsp; kategori (valfri)</span>
+    </div>
+    <textarea id="paste-area" style="width:100%;min-height:180px" placeholder="Klistra in dina ord här..."></textarea>
+    <div class="hint" id="paste-hint" style="margin-top:6px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('paste-modal')">Avbryt</button>
+      <button class="btn btn-teal" onclick="importPaste();closeModal('paste-modal')">⚡ Importera</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- STUDENT HOME -->
+<div id="student-home" class="view">
+<div style="max-width:900px;margin:0 auto;padding:28px 20px 80px">
+
+  <!-- Set + direction row -->
+  <div class="sh-set-card">
+    <div class="sh-set-left">
+      <div class="sh-set-icon" id="sh-icon">EN</div>
+      <div>
+        <div class="sh-set-name" id="sh-title">Mina glosor</div>
+        <div class="sh-set-meta"><span id="sh-subject"></span><span class="sh-dot">·</span><span id="sh-word-badge">0 ord</span></div>
+      </div>
+    </div>
+    <div class="sh-set-right">
+      <div>
+        <div class="sh-dir-toggle" id="dir-toggle" onclick="toggleDirection()">
+          <span class="sh-dir-lang sh-dir-active" id="dir-from">🇬🇧 Engelska</span>
+          <span class="sh-dir-sep"></span>
+          <span class="sh-dir-swap">⇄</span>
+          <span class="sh-dir-sep"></span>
+          <span class="sh-dir-lang" id="dir-to">🇸🇪 Svenska</span>
+        </div>
+        <div id="sh-dir-label" style="font-size:.72rem;color:var(--gray);text-align:right;margin-top:5px">klicka för att vända riktning</div>
+      </div>
+      <button class="btn btn-yellow btn-sm" onclick="showLibrary()">📚 Byt glosset</button>
+    </div>
+  </div>
+
+  <!-- Filter row -->
+  <div class="sh-filter-row">
+    <span class="sh-filter-label">Öva:</span>
+    <button class="sh-fpill active" id="sf-all"     onclick="setStrengthFilter('all')"    >Alla <span id="sf-all-n"></span></button>
+    <button class="sh-fpill" id="sf-weak"            onclick="setStrengthFilter('weak')"   >🔴 Svaga <span id="sf-weak-n"></span></button>
+    <button class="sh-fpill" id="sf-medium"          onclick="setStrengthFilter('medium')" >🟡 Medel <span id="sf-medium-n"></span></button>
+    <button class="sh-fpill" id="sf-strong"          onclick="setStrengthFilter('strong')" >🟢 Starka <span id="sf-strong-n"></span></button>
+    <button class="sh-fpill" id="sf-unrated"         onclick="setStrengthFilter('unrated')">⚪ Ej graderade <span id="sf-unrated-n"></span></button>
+    <button class="sh-info-pill" onclick="openModal('color-info-modal')">Vad betyder färgerna? ℹ</button>
+  </div>
+
+  <!-- Study modes -->
+  <div class="sh-section-label">Läsa &amp; förstå</div>
+  <div class="sh-mode-grid">
+    <div class="sh-mode-card" onclick="startFlash()">
+      <div class="sh-mc-icon">🃏</div>
+      <div class="sh-mc-name">Flashcards</div>
+      <div class="sh-mc-desc">Bläddra och gradera din säkerhet</div>
+      <span class="sh-mc-tag sh-tag-study">Enkel · Medel · Svår</span>
+    </div>
+    <div class="sh-mode-card" onclick="startMC()">
+      <div class="sh-mc-icon">🎯</div>
+      <div class="sh-mc-name">Flerval</div>
+      <div class="sh-mc-desc">Välj rätt bland fyra alternativ</div>
+      <span class="sh-mc-tag sh-tag-study">Enkel · Medel · Svår</span>
+    </div>
+    <div class="sh-mode-card" onclick="startMatch()">
+      <div class="sh-mc-icon">🔗</div>
+      <div class="sh-mc-name">Para ihop</div>
+      <div class="sh-mc-desc">Matcha par mot klockan</div>
+      <span class="sh-mc-tag sh-tag-study">Enkel · Medel · Svår</span>
+    </div>
+    <div class="sh-mode-card" onclick="startSpell()">
+      <div class="sh-mc-icon">🔤</div>
+      <div class="sh-mc-name">Stava</div>
+      <div class="sh-mc-desc">Skriv rätt stavning</div>
+      <span class="sh-mc-tag sh-tag-study">Enkel · Medel · Svår</span>
+    </div>
+  </div>
+
+  <div class="sh-section-label" style="margin-top:20px">Spel</div>
+  <div class="sh-mode-grid">
+    <div class="sh-mode-card" onclick="startRain()">
+      <div class="sh-mc-icon">☔</div>
+      <div class="sh-mc-name">Ordregnet</div>
+      <div class="sh-mc-desc">Skriv ord innan de når marken</div>
+      <span class="sh-mc-tag sh-tag-game">Arkad</span>
+    </div>
+    <div class="sh-mode-card" onclick="startRace()">
+      <div class="sh-mc-icon">🏎️</div>
+      <div class="sh-mc-name">Ordjakten</div>
+      <div class="sh-mc-desc">Fyll tanken med rätta svar</div>
+      <span class="sh-mc-tag sh-tag-game">Racing</span>
+    </div>
+    <div class="sh-mode-card" onclick="startMemory()">
+      <div class="sh-mc-icon">🎴</div>
+      <div class="sh-mc-name">Memory</div>
+      <div class="sh-mc-desc">Vänd kort och matcha par</div>
+      <span class="sh-mc-tag sh-tag-game">Minne</span>
+    </div>
+    <div class="sh-mode-card" onclick="startShooter()">
+      <div class="sh-mc-icon">🚀</div>
+      <div class="sh-mc-name">Ordskjutaren</div>
+      <div class="sh-mc-desc">Skjut ned rätt översättning</div>
+      <span class="sh-mc-tag sh-tag-game">Arkad</span>
+    </div>
+  </div>
+
+  <!-- Word table -->
+  <div class="sh-section-label" style="margin-top:20px;display:flex;align-items:center;justify-content:space-between">
+    <span>Ord i det här setet (<span id="sh-count">0</span>)</span>
+    <button id="sh-show-all-btn" onclick="toggleWordTableFull()" style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;background:transparent;border:none;color:var(--gray);cursor:pointer;text-decoration:underline;padding:0" hidden>Visa alla</button>
+  </div>
+  <div id="sh-word-table" style="margin-bottom:16px"></div>
+
+  <!-- Own words + bottom actions -->
+  <div style="background:var(--surface);border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);padding:14px 18px;margin-bottom:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleMyWords()">
+      <span style="font-size:.82rem;font-weight:700;color:var(--gray)">✏️ Lägg till egna glosor <span id="my-words-count" style="color:var(--teal)"></span></span>
+      <span id="my-words-arrow" style="color:var(--gray)">▼</span>
+    </div>
+    <div id="my-words-panel" style="display:none;margin-top:12px">
+      <div style="font-size:.78rem;color:var(--gray);margin-bottom:10px">Dina glosor läggs till i setet och tas med i alla övningar.</div>
+      <div id="my-word-rows"></div>
+      <div class="row-gap" style="margin-top:8px">
+        <button class="btn btn-yellow btn-sm" onclick="addMyWordRow()">＋ Lägg till rad</button>
+        <button class="btn btn-ghost btn-sm" onclick="saveMyWords()">✅ Spara</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('student-load').click()">📂 Ladda JSON-fil</button>
+    <input type="file" id="student-load" accept=".json" style="display:none" onchange="loadJSONFile(event)">
+    <button class="btn btn-ghost btn-sm" onclick="showMyWords()">📊 Mina glosor</button>
+  </div>
+</div>
+</div>
+
+<!-- COLOR INFO MODAL -->
+<div class="modal-overlay" id="color-info-modal">
+  <div class="modal" style="max-width:440px">
+    <h2>ℹ️ Vad betyder färgerna?</h2>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;font-size:.88rem">
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">🟢</span><div><strong>Starka</strong> – ord du graderat som lätta (flashcards) eller enkel stavning</div></div>
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">🟡</span><div><strong>Medel</strong> – ord du är ganska säker på men inte helt</div></div>
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">🔴</span><div><strong>Svaga</strong> – ord du tyckt är svåra – fokusera på dessa!</div></div>
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">⚪</span><div><strong>Ej graderade</strong> – ord du ännu inte övat med gradering</div></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--gray);margin-top:12px">Graderingarna sätts automatiskt när du övar Flashcards eller Stava.</p>
+    <div class="modal-actions"><button class="btn btn-yellow" onclick="closeModal('color-info-modal')">Förstått!</button></div>
+  </div>
+</div>
+
+<!-- MATCH VIEW -->
+<div id="match-view" class="view">
+<div class="game-wrap">
+  <div class="game-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="showStudentHome()">← Tillbaka</button>
+        <button class="btn btn-ghost btn-sm dir-ingame-btn" id="match-dir-btn" onclick="flipInGame('match')"></button>
+        <button class="diff-ingame-btn easy" id="match-d-easy"   onclick="setDiffInGame('match','easy')">Enkel</button>
+        <button class="diff-ingame-btn medium" id="match-d-medium" onclick="setDiffInGame('match','medium')">Medel</button>
+        <button class="diff-ingame-btn hard"   id="match-d-hard"   onclick="setDiffInGame('match','hard')">Svår</button>
+      </div>
+      <div class="game-title-row"><h1 class="teal">🔗 Para ihop</h1><span class="diff-badge" id="match-diff-badge"></span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">✅ <span class="val" id="m-correct">0</span></div>
+      <div class="stat-pill">❌ <span class="val" id="m-wrong">0</span></div>
+      <div class="stat-pill">⏱ <span class="val" id="m-timer">0:00</span></div>
+    </div>
+  </div>
+  <div class="decoy-banner" id="decoy-banner">⚠️ Obs! Listan innehåller falska lockelseord – inte alla ord på höger sida går att para ihop!</div>
+  <div class="match-grid">
+    <div><div class="match-col-label" id="match-left-label">🇬🇧</div><div class="match-col" id="match-left"></div></div>
+    <div><div class="match-col-label" id="match-right-label">🇸🇪</div><div class="match-col" id="match-right"></div></div>
+  </div>
+</div>
+</div>
+
+<!-- SPELL VIEW -->
+<div id="spell-view" class="view">
+<div class="game-wrap" style="max-width:600px">
+  <div class="game-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="showStudentHome()">← Tillbaka</button>
+        <button class="btn btn-ghost btn-sm dir-ingame-btn" id="spell-dir-btn" onclick="flipInGame('spell')"></button>
+        <button class="diff-ingame-btn easy" id="spell-d-easy"   onclick="setDiffInGame('spell','easy')">Enkel</button>
+        <button class="diff-ingame-btn medium" id="spell-d-medium" onclick="setDiffInGame('spell','medium')">Medel</button>
+        <button class="diff-ingame-btn hard"   id="spell-d-hard"   onclick="setDiffInGame('spell','hard')">Svår</button>
+      </div>
+      <div class="game-title-row"><h1 class="purple">🔤 Stava</h1><span class="diff-badge" id="spell-diff-badge"></span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">✅ <span class="val" id="s-correct">0</span></div>
+      <div class="stat-pill">❌ <span class="val" id="s-wrong">0</span></div>
+      <div class="stat-pill">⏱ <span class="val" id="s-timer">0:00</span></div>
+    </div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill fill-purple" id="spell-progress" style="width:0%"></div></div>
+  <div class="spell-card">
+    <div class="spell-prompt-label" id="spell-q-label">Vad heter detta på engelska?</div>
+    <div class="spell-prompt" id="spell-prompt">–</div>
+    <div class="spell-hint" id="spell-hint"></div>
+    <div class="letter-boxes" id="letter-boxes"></div>
+    <input type="text" class="spell-input" id="spell-input" placeholder="Skriv svaret här..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+    <div class="feedback-banner" id="spell-feedback"></div>
+    <div id="spell-char-panel" style="display:none;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:10px"></div>
+    <div class="spell-actions">
+      <button class="btn btn-ghost" id="hint-btn" onclick="showHint()">💡 Tips</button>
+      <button class="btn btn-purple" id="check-btn" onclick="checkSpell()">Kontrollera →</button>
+      <button class="btn btn-teal" id="next-btn" onclick="nextSpell()" style="display:none">Nästa →</button>
+    </div>
+    <div id="spell-rate-row" style="display:none;margin-top:12px">
+      <div style="text-align:center;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);margin-bottom:8px">Hur svår var stavningen?</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="conf-btn sure"   onclick="rateSpellWord('easy')"  >🟢 Lätt <kbd>1</kbd></button>
+        <button class="conf-btn maybe"  onclick="rateSpellWord('medium')">🟡 Okej <kbd>2</kbd></button>
+        <button class="conf-btn unsure" onclick="rateSpellWord('hard')"  >🔴 Svårt <kbd>3</kbd></button>
+      </div>
+      <div style="text-align:center;font-size:.7rem;color:var(--gray);margin-top:7px"><kbd>Enter</kbd> / <kbd>→</kbd> Hoppa över</div>
+    </div>
+  </div>
+  <div style="text-align:center;color:var(--gray);font-size:.86rem">Ord <span id="spell-idx">1</span> av <span id="spell-total">?</span></div>
+</div>
+</div>
+
+<!-- MC VIEW -->
+<div id="mc-view" class="view">
+<div class="game-wrap" style="max-width:600px">
+  <div class="game-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="showStudentHome()">← Tillbaka</button>
+        <button class="btn btn-ghost btn-sm dir-ingame-btn" id="mc-dir-btn" onclick="flipInGame('mc')"></button>
+        <button class="diff-ingame-btn easy" id="mc-d-easy"   onclick="setDiffInGame('mc','easy')">Enkel</button>
+        <button class="diff-ingame-btn medium" id="mc-d-medium" onclick="setDiffInGame('mc','medium')">Medel</button>
+        <button class="diff-ingame-btn hard"   id="mc-d-hard"   onclick="setDiffInGame('mc','hard')">Svår</button>
+      </div>
+      <div class="game-title-row"><h1 class="blue">🎯 Flerval</h1><span class="diff-badge" id="mc-diff-badge"></span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">✅ <span class="val" id="mc-correct">0</span></div>
+      <div class="stat-pill">❌ <span class="val" id="mc-wrong">0</span></div>
+      <div class="stat-pill">⏱ <span class="val" id="mc-timer">0:00</span></div>
+    </div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill fill-blue" id="mc-progress" style="width:0%"></div></div>
+  <div class="mc-card">
+    <div class="mc-question-label" id="mc-q-label">Välj rätt översättning</div>
+    <div class="mc-question" id="mc-question">–</div>
+    <div class="mc-options" id="mc-options"></div>
+    <div class="feedback-banner" id="mc-feedback" style="margin-top:13px"></div>
+  </div>
+  <div style="text-align:center;color:var(--gray);font-size:.86rem">Fråga <span id="mc-idx">1</span> av <span id="mc-total">?</span></div>
+</div>
+</div>
+
+<!-- FLASH VIEW -->
+<div id="flash-view" class="view">
+<div class="game-wrap" style="max-width:540px">
+  <div class="game-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="showStudentHome()">← Tillbaka</button>
+        <button class="btn btn-ghost btn-sm dir-ingame-btn" id="flash-dir-btn" onclick="flipInGame('flash')"></button>
+        <button class="diff-ingame-btn easy" id="flash-d-easy"   onclick="setDiffInGame('flash','easy')">Enkel</button>
+        <button class="diff-ingame-btn medium" id="flash-d-medium" onclick="setDiffInGame('flash','medium')">Medel</button>
+        <button class="diff-ingame-btn hard"   id="flash-d-hard"   onclick="setDiffInGame('flash','hard')">Svår</button>
+      </div>
+      <div class="game-title-row"><h1 class="yellow">🃏 Flashcards</h1><span class="diff-badge" id="flash-diff-badge"></span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">🃏 <span class="val" id="f-remaining">0</span> kvar</div>
+    </div>
+  </div>
+  <div class="flash-piles">
+    <div class="pile sure"><div class="pile-icon">🟢</div><div class="pile-label">Säker</div><div class="pile-count" id="f-sure">0</div></div>
+    <div class="pile maybe"><div class="pile-icon">🟡</div><div class="pile-label">Ganska</div><div class="pile-count" id="f-maybe">0</div></div>
+    <div class="pile unsure"><div class="pile-icon">🔴</div><div class="pile-label">Osäker</div><div class="pile-count" id="f-unsure">0</div></div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill fill-yellow" id="flash-progress" style="width:0%"></div></div>
+  <div class="flash-scene" id="flash-scene" onclick="flipFlashCard()">
+    <div class="flash-card-inner" id="flash-inner">
+      <div class="flash-face front">
+        <div class="flash-face-label" id="flash-front-label">Engelska</div>
+        <div class="flash-face-word" id="flash-front-word">–</div>
+        <div class="flash-tap">👆 Klick eller <kbd style="font-size:.7rem">Mellanslag</kbd> för att vända</div>
+      </div>
+      <div class="flash-face back">
+        <div class="flash-face-label" id="flash-back-label">Svenska</div>
+        <div class="flash-face-word" id="flash-back-word">–</div>
+        <div class="flash-tap">Tryck 1–3 eller klicka nedan</div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);margin-bottom:10px">Bläddra och sortera efter säkerhet:</div>
+  <div class="confidence-row">
+    <button class="conf-btn sure"   id="cb-sure"   onclick="rateFlash('sure')"   disabled>🟢 Säker <kbd>1</kbd></button>
+    <button class="conf-btn maybe"  id="cb-maybe"  onclick="rateFlash('maybe')"  disabled>🟡 Ganska <kbd>2</kbd></button>
+    <button class="conf-btn unsure" id="cb-unsure" onclick="rateFlash('unsure')" disabled>🔴 Osäker <kbd>3</kbd></button>
+  </div>
+  <div id="flash-kb-hint" style="display:none;justify-content:center;gap:14px;margin-bottom:12px;flex-wrap:wrap;font-size:.72rem;color:var(--gray);font-weight:700;text-align:center">
+    <span><kbd>Mellanslag</kbd> / <kbd>→</kbd> Vänd &amp; nästa</span>
+    <span><kbd>←</kbd> Föregående</span>
+    <span><kbd>1</kbd> Säker &nbsp;<kbd>2</kbd> Ganska &nbsp;<kbd>3</kbd> Osäker</span>
+  </div>
+  <div style="text-align:center;color:var(--gray);font-size:.84rem;margin-bottom:20px">Kort <span id="flash-idx">1</span> av <span id="flash-total">?</span></div>
+  <div id="flash-done" style="display:none">
+    <div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:var(--radius-sm);padding:13px 16px;text-align:center;margin-bottom:14px">
+      <div style="font-weight:800;margin-bottom:5px">🔁 Du har <span id="flash-unsure-count" style="color:var(--red)">0</span> osäkra kort</div>
+      <div style="font-size:.81rem;color:var(--gray)">Vill du öva på dem igen?</div>
+    </div>
+    <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-pink" onclick="replayUnsure()">🔁 Öva osäkra igen</button>
+      <button class="btn btn-ghost" onclick="showStudentHome()">🏠 Välj läge</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- RAIN VIEW -->
+<div id="rain-view" class="view">
+<div class="game-wrap" style="max-width:640px">
+  <div class="game-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="stopRain();showStudentHome()">← Tillbaka</button>
+        <button class="btn btn-ghost btn-sm dir-ingame-btn" id="rain-dir-btn" onclick="flipInGame('rain')"></button>
+        <button class="diff-ingame-btn easy"   id="rain-d-easy"   onclick="setDiffInGame('rain','easy')">Enkel</button>
+        <button class="diff-ingame-btn medium" id="rain-d-medium" onclick="setDiffInGame('rain','medium')">Medel</button>
+        <button class="diff-ingame-btn hard"   id="rain-d-hard"   onclick="setDiffInGame('rain','hard')">Svår</button>
+      </div>
+      <div class="game-title-row"><h1 style="color:var(--teal)">☔ Ordregnet</h1><span class="diff-badge" id="rain-diff-badge"></span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">⭐ <span class="val" id="rain-score">0</span></div>
+      <div class="rain-lives" id="rain-lives">❤️❤️❤️</div>
+    </div>
+  </div>
+
+  <div id="rain-arena">
+    <canvas class="rain-stars" id="rain-star-canvas"></canvas>
+    <div class="rain-ground"></div>
+    <div id="rain-overlay">
+      <div style="font-size:3rem">☔</div>
+      <h2>Ordregnet</h2>
+      <p id="rain-overlay-txt">Ord faller från ovan. Skriv det markerade ordet och tryck Enter innan det når marken!</p>
+      <div style="font-size:.8rem;color:var(--gray);margin-top:4px">Se vilket ord som är markerat i gult — det är ditt mål!</div>
+      <button class="btn btn-teal" style="margin-top:8px;font-size:1rem;padding:12px 32px" onclick="launchRain()">▶ Starta</button>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;align-items:center">
+    <input type="text" class="rain-input" id="rain-input" placeholder="Skriv svaret här..." autocomplete="off" autocorrect="off" spellcheck="false" disabled/>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap">
+    <div style="font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);white-space:nowrap">📐 Fallhöjd</div>
+    <input type="range" id="rain-height-slider" min="200" max="700" value="360" step="20"
+      style="flex:1;accent-color:var(--teal);cursor:pointer"
+      oninput="setRainHeight(this.value)"/>
+    <div style="font-size:.78rem;color:var(--teal);font-weight:800;width:36px;text-align:right" id="rain-height-label">360</div>
+  </div>
+  <div style="text-align:center;color:var(--gray);font-size:.78rem;margin-top:8px">Tryck <strong style="color:var(--white)">Enter</strong> för att skicka • Aktivt ord visas i <strong style="color:var(--yellow)">gult</strong></div>
+</div>
+</div>
+
+<!-- RACE VIEW -->
+<div id="race-view" class="view">
+<div class="game-wrap" style="max-width:680px">
+  <div class="game-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="stopRace();showStudentHome()">← Tillbaka</button>
+        <button class="btn btn-ghost btn-sm dir-ingame-btn" id="race-dir-btn" onclick="flipInGame('race')"></button>
+        <button class="diff-ingame-btn easy"   id="race-d-easy"   onclick="setDiffInGame('race','easy')">Enkel</button>
+        <button class="diff-ingame-btn medium" id="race-d-medium" onclick="setDiffInGame('race','medium')">Medel</button>
+        <button class="diff-ingame-btn hard"   id="race-d-hard"   onclick="setDiffInGame('race','hard')">Svår</button>
+      </div>
+      <div class="game-title-row"><h1 style="color:var(--orange)">🏎️ Ordjakten</h1><span class="diff-badge" id="race-diff-badge"></span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">⭐ <span class="val" id="race-score-val">0</span></div>
+      <div class="stat-pill">🏁 <span class="val" id="race-dist-val">0.0 km</span></div>
+      <div class="stat-pill">💨 <span class="val" id="race-speed-val">0</span> km/h</div>
+    </div>
+  </div>
+
+  <div style="position:relative;margin-bottom:10px">
+    <canvas id="race-canvas" width="640" height="280" style="width:100%;border-radius:var(--radius);display:block;border:2px solid rgba(255,255,255,.08)"></canvas>
+    <div id="race-overlay" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(8,6,22,.88);backdrop-filter:blur(6px);border-radius:calc(var(--radius) - 2px);z-index:10;gap:10px;text-align:center;padding:20px">
+      <div style="font-size:2.4rem">🏎️</div><h2 style="font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--orange)">Ordjakten</h2>
+      <p style="color:var(--gray);font-size:.86rem;max-width:260px;line-height:1.5">Svara rätt på glosorna för att fylla tanken och hålla farten!</p>
+      <button class="btn btn-orange" style="margin-top:8px;font-size:1rem;padding:12px 32px" onclick="launchRace()">▶ Starta motorn</button>
+    </div>
+  </div>
+
+  <!-- fuel bar -->
+  <div style="background:var(--surface);border-radius:50px;height:10px;overflow:hidden;margin-bottom:14px;border:1px solid rgba(255,255,255,.06);position:relative">
+    <div id="race-fuel-fill" style="height:100%;width:100%;background:var(--teal);border-radius:50px;transition:width .3s,background .3s"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase">⛽ Bränsle</div>
+  </div>
+
+  <div style="background:var(--surface);border:2px solid rgba(247,127,0,.25);border-radius:var(--radius);padding:18px 22px;margin-bottom:12px;text-align:center">
+    <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:8px">Vad heter detta?</div>
+    <div id="race-question" style="font-family:'Fredoka One',cursive;font-size:2.2rem;color:var(--white);margin-bottom:0">–</div>
+  </div>
+
+  <div style="display:flex;gap:10px">
+    <input type="text" class="race-input" id="race-input" placeholder="Skriv svaret och tryck Enter..." autocomplete="off" autocorrect="off" spellcheck="false" disabled
+      style="font-family:'Fredoka One',cursive;font-size:1.2rem;flex:1;background:var(--surface2);border:2px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);color:var(--white);padding:10px 14px;outline:none;text-transform:uppercase;transition:border-color .2s,background .2s"
+      onkeydown="if(event.key==='Enter')submitRace()"/>
+  </div>
+  <div style="text-align:center;color:var(--gray);font-size:.76rem;margin-top:8px">Rätt svar = bränsle + fart ⛽&nbsp;&nbsp;•&nbsp;&nbsp;Fel svar = bränsleförlust 💸</div>
+</div>
+</div>
+
+<!-- MEMORY VIEW -->
+<div id="memory-view" class="view">
+<div class="game-wrap" style="max-width:720px">
+  <div class="game-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="stopMemory();showStudentHome()">← Tillbaka</button>
+        <button class="diff-ingame-btn easy"   id="memory-d-easy"   onclick="setDiffInGame('memory','easy')">6 par</button>
+        <button class="diff-ingame-btn medium" id="memory-d-medium" onclick="setDiffInGame('memory','medium')">10 par</button>
+        <button class="diff-ingame-btn hard"   id="memory-d-hard"   onclick="setDiffInGame('memory','hard')">16 par</button>
+      </div>
+      <div class="game-title-row"><h1 style="color:var(--purple)">🎴 Memory</h1><span class="diff-badge" id="memory-diff-badge"></span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">🔄 <span class="val" id="mem-flips">0</span> vändningar</div>
+      <div class="stat-pill">✅ <span class="val" id="mem-pairs">0</span> par</div>
+      <div class="stat-pill">⏱ <span class="val" id="mem-timer">0:00</span></div>
+    </div>
+  </div>
+  <div id="memory-grid" style="display:grid;gap:8px;margin-bottom:16px"></div>
+  <div style="text-align:center;color:var(--gray);font-size:.8rem">Hitta alla par – en engelska och en svenska hör ihop!</div>
+</div>
+</div>
+
+<!-- RESULTS -->
+<div id="shooter-view" class="view">
+<div class="game-wrap" style="max-width:680px">
+  <div class="game-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="stopShooter();showStudentHome()">← Tillbaka</button>
+        <button class="btn btn-ghost btn-sm dir-ingame-btn" id="shooter-dir-btn" onclick="flipInGame('shooter')"></button>
+        <button class="diff-ingame-btn easy"   id="shooter-d-easy"   onclick="setDiffInGame('shooter','easy')">Enkel</button>
+        <button class="diff-ingame-btn medium" id="shooter-d-medium" onclick="setDiffInGame('shooter','medium')">Medel</button>
+        <button class="diff-ingame-btn hard"   id="shooter-d-hard"   onclick="setDiffInGame('shooter','hard')">Svår</button>
+      </div>
+      <div class="game-title-row"><h1 style="color:var(--teal)">🚀 Ordskjutaren</h1><span class="diff-badge" id="shooter-diff-badge"></span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">⭐ <span class="val" id="sh-score">0</span></div>
+      <div class="stat-pill" id="sh-lives-pill">❤️❤️❤️</div>
+      <div class="stat-pill">🌊 <span class="val" id="sh-wave">1</span></div>
+    </div>
+  </div>
+  <canvas id="shooter-canvas" style="width:100%;border-radius:var(--radius);display:block;border:2px solid rgba(255,255,255,.1);background:#080616;cursor:none"></canvas>
+  <div style="background:var(--surface);border:2px solid rgba(6,214,160,.2);border-radius:var(--radius);padding:14px 20px;margin-top:12px;text-align:center">
+    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Vad heter detta på <span id="sh-target-lang">svenska</span>?</div>
+    <div id="sh-question" style="font-family:'Fredoka One',cursive;font-size:2rem;color:var(--white)">–</div>
+  </div>
+  <div style="text-align:center;color:var(--gray);font-size:.76rem;margin-top:8px">
+    ← → Flytta &nbsp;•&nbsp; Mellanslag / Enter Skjut &nbsp;•&nbsp; Skjut ned rätt översättning!
+  </div>
+</div>
+</div>
+
+<!-- LIBRARY VIEW -->
+<div id="library-view" class="view">
+<div style="max-width:760px;margin:0 auto;padding:36px 20px 80px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px">
+    <div>
+      <button class="btn btn-ghost btn-sm" style="margin-bottom:8px" onclick="showStudentHome()">← Tillbaka</button>
+      <h1 style="font-family:'Fredoka One',cursive;font-size:1.9rem;color:var(--white)">📚 Mitt glossbibliotek</h1>
+    </div>
+    <button class="btn btn-yellow" onclick="document.getElementById('lib-file-input').click()">＋ Ladda in glosset</button>
+    <input type="file" id="lib-file-input" accept=".json" multiple style="display:none" onchange="loadLibraryFiles(event)">
+  </div>
+  <div id="lib-selection-bar" style="display:none;background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.2);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <div style="font-size:.88rem;font-weight:700;color:var(--yellow)" id="lib-selection-text">0 glosset valda</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" onclick="selectAllSets()">Välj alla</button>
+      <button class="btn btn-ghost btn-sm" onclick="deselectAllSets()">Avmarkera alla</button>
+      <button class="btn btn-yellow" onclick="activateSelectedSets()">✅ Aktivera valda</button>
+    </div>
+  </div>
+  <div id="library-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px"></div>
+  <div id="library-empty" style="text-align:center;color:var(--gray);padding:48px 0">
+    <div style="font-size:3rem;margin-bottom:12px">📭</div>
+    <div style="font-weight:800;font-size:1.1rem;margin-bottom:6px">Inga glosset laddade</div>
+    <div style="font-size:.88rem">Ladda in JSON-filer från din lärare för att börja.</div>
+  </div>
+</div>
+</div>
+
+<!-- RESULTS -->
+<div id="results-view" class="view">
+<div style="max-width:640px;margin:0 auto;padding:48px 20px 80px">
+  <div style="text-align:center;margin-bottom:28px">
+    <div class="trophy" id="results-trophy">🏆</div>
+    <h1 id="results-title">Bra jobbat!</h1>
+    <p id="results-sub"></p>
+    <div class="result-stats">
+      <div class="result-stat good"><div class="num" id="r-correct">0</div><div class="lbl">Rätt</div></div>
+      <div class="result-stat bad"><div class="num" id="r-wrong">0</div><div class="lbl">Fel</div></div>
+      <div class="result-stat time"><div class="num" id="r-time">0:00</div><div class="lbl">Tid</div></div>
+    </div>
+    <div class="result-actions" style="margin-bottom:16px">
+      <button class="btn btn-yellow btn-lg" onclick="replayGame()">🔄 Spela igen</button>
+      <button class="btn btn-ghost btn-lg" onclick="showStudentHome()">🏠 Välj läge</button>
+    </div>
+    <button id="retry-weak-btn" class="btn btn-pink" style="display:none" onclick="retryWeak()">🔴 Öva svaga ord igen</button>
+  </div>
+
+  <!-- Session word summary -->
+  <div id="session-summary" style="display:none">
+    <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:12px;text-align:left">📋 Ord du övade på</div>
+    <div id="session-word-list" style="display:flex;flex-direction:column;gap:6px"></div>
+    <div style="margin-top:16px;text-align:center">
+      <button class="btn btn-ghost btn-sm" onclick="showMyWords()">📊 Visa alla mina glosor →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MY WORDS VIEW -->
+<div id="mywords-view" class="view">
+<div style="max-width:680px;margin:0 auto;padding:36px 20px 80px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px">
+    <div>
+      <button class="btn btn-ghost btn-sm" style="margin-bottom:8px" onclick="showStudentHome()">← Tillbaka</button>
+      <h1 style="font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--white)">📊 Mina glosor</h1>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" id="mw-filter-all"    onclick="setMWFilter('all')"   >Alla</button>
+      <button class="btn btn-ghost btn-sm" id="mw-filter-weak"   onclick="setMWFilter('weak')"  >🔴 Svaga</button>
+      <button class="btn btn-ghost btn-sm" id="mw-filter-medium" onclick="setMWFilter('medium')">🟡 Medel</button>
+      <button class="btn btn-ghost btn-sm" id="mw-filter-strong" onclick="setMWFilter('strong')">🟢 Starka</button>
+    </div>
+  </div>
+  <div id="mywords-legend" style="display:flex;gap:16px;margin-bottom:16px;font-size:.76rem;font-weight:700;color:var(--gray);flex-wrap:wrap">
+    <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);margin-right:4px"></span>🃏 = Flashcard &nbsp;<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);margin-right:4px"></span>✍️ = Stavning</span>
+  </div>
+  <div id="mywords-list" style="display:flex;flex-direction:column;gap:6px"></div>
+  <div id="mywords-empty" style="display:none;text-align:center;color:var(--gray);padding:40px 0">
+    <div style="font-size:2rem;margin-bottom:8px">📭</div>
+    <div style="font-weight:700">Inga glosor att visa</div>
+    <div style="font-size:.85rem;margin-top:4px">Öva lite så dyker de upp här!</div>
+  </div>
+  <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+    <button class="btn btn-pink" onclick="retryWeak()">🔴 Öva svaga ord</button>
+    <button class="btn btn-ghost btn-sm" onclick="clearMyWordsData()" style="font-size:.7rem">🗑 Rensa historik</button>
+  </div>
+</div>
+</div>
+
+<div id="toast"></div>
+
+<!-- SIGNATURE FOOTER -->
+<div id="sig-footer" style="position:fixed;bottom:0;left:0;right:0;background:rgba(15,14,23,.97);border-top:1px solid rgba(255,255,255,.07);padding:8px 20px;display:flex;align-items:center;justify-content:space-between;z-index:20;backdrop-filter:blur(8px)">
+  <div style="display:flex;align-items:center;gap:12px">
+    <img src="PT_Logo.png" alt="PT" style="height:28px;width:28px;border-radius:50%;object-fit:cover;opacity:.85" onerror="this.style.display='none'"/>
+    <img src="AD_Colors.jpg" alt="Alfred Dalinskolan" style="height:24px;object-fit:contain;opacity:.75;border-radius:4px" onerror="this.style.display='none'"/>
+    <div style="font-size:.72rem;color:var(--gray);line-height:1.4">
+      <span style="font-weight:800;color:rgba(255,255,255,.6)">Patrick Tegnefur</span>
+      <span style="margin:0 5px;opacity:.4">·</span>
+      <span>Förstelärare matematik &amp; IT-pedagog</span>
+      <span style="margin:0 5px;opacity:.4">·</span>
+      <span>Alfred Dalinskolan, Huskvarna</span>
+    </div>
+  </div>
+  <div style="font-size:.68rem;color:rgba(168,164,192,.35);font-style:italic">Glosträning på AD</div>
+</div>
+<div class="modal-overlay" id="modal-loaded">
+  <div class="modal">
+    <h2>📂 Glosset laddat!</h2>
+    <p id="modal-loaded-text"></p>
+    <div class="modal-actions">
+      <button class="btn btn-yellow" onclick="closeModal('modal-loaded');showStudentHome()">🎮 Börja öva</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-loaded');showView('teacher')">✏️ Redigera</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══ STATE ═══ */
+let words=[], setName="Mina glosor", setSubject="";
+let direction='normal'; // 'normal'=lang1→lang2, 'flipped'=lang2→lang1
+let diff={match:'easy',spell:'easy',mc:'easy',flash:'easy',rain:'easy',race:'easy',memory:'easy',shooter:'easy'};
+
+// Language registry
+const LANGS={
+  sv:  {name:'Svenska',  flag:'🇸🇪', code:'sv'},
+  en:  {name:'Engelska', flag:'🇬🇧', code:'en'},
+  es:  {name:'Spanska',  flag:'🇪🇸', code:'es'},
+  fr:  {name:'Franska',  flag:'🇫🇷', code:'fr'},
+  de:  {name:'Tyska',    flag:'🇩🇪', code:'de'},
+};
+// Special characters shown in spelling mode per language
+const LANG_CHARS={
+  es:['á','é','í','ó','ú','ñ','ü','¡','¿','Á','É','Í','Ó','Ú','Ñ'],
+  fr:['à','â','é','è','ê','ë','î','ï','ô','ù','û','ü','ç','œ','æ','À','Â','É','È','Ê','Ë','Î','Ï','Ô','Ù','Û','Ü','Ç','Œ'],
+  de:['ä','ö','ü','ß','Ä','Ö','Ü'],
+  sv:['å','ä','ö','Å','Ä','Ö'],
+  en:[],
+};
+// Active language pair — always lang1(question) & lang2(answer) in normal dir
+let lang1='en', lang2='sv';
+
+function langObj(code){return LANGS[code]||{name:code,flag:'🏳️',code};}
+function qLangCode(){return direction==='normal'?lang1:lang2;}
+function aLangCode(){return direction==='normal'?lang2:lang1;}
+function q(w){return w[qLangCode()]||w.en||'';}
+function a(w){return w[aLangCode()]||w.sv||'';}
+function qLang(){const l=langObj(qLangCode());return l.flag+' '+l.name;}
+function aLang(){const l=langObj(aLangCode());return l.flag+' '+l.name;}
+let currentMode=null;
+
+// timers
+let mTimer=null, sTimer=null, mcTimer=null;
+let mSeconds=0, sSeconds=0, mcSeconds=0;
+
+// match
+let mSelected=null, mCorrect=0, mWrong=0, mPairs=0;
+// spell
+let spellQueue=[], spellIdx=0, sCorrect=0, sWrong=0, spellHints=0, spellAnswered=false, spellFirstTry=true;
+// mc
+let mcQueue=[], mcIdx=0, mcCorrect=0, mcWrong=0, mcAnswered=false;
+// flash
+let flashQueue=[], flashIdx=0, flashSure=0, flashMaybe=0, flashUnsureCount=0, flashFlipped=false, flashUnsureList=[];
+
+/* ═══ HELPERS ═══ */
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function fmt(s){return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600);}
+function spawnConfetti(n){const colors=['#ffd166','#ef476f','#06d6a0','#118ab2','#a855f7','#f77f00'];for(let i=0;i<n;i++){const el=document.createElement('div');el.className='confetti-piece';el.style.left=(10+Math.random()*80)+'%';el.style.background=colors[Math.floor(Math.random()*colors.length)];el.style.animationDuration=(.8+Math.random()*1.2)+'s';el.style.animationDelay=(Math.random()*.4)+'s';document.body.appendChild(el);setTimeout(()=>el.remove(),2400);}}
+function stopTimers(){clearInterval(mTimer);clearInterval(sTimer);clearInterval(mcTimer);mTimer=sTimer=mcTimer=null;}
+function setBadge(id,d){const el=document.getElementById(id);el.className='diff-badge '+d;el.textContent={easy:'Enkel',medium:'Medel',hard:'Svår'}[d];}
+
+/* ═══ NAVIGATION ═══ */
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const map={teacher:'teacher-view',home:'student-home',match:'match-view',spell:'spell-view',mc:'mc-view',flash:'flash-view',rain:'rain-view',race:'race-view',memory:'memory-view',shooter:'shooter-view',mywords:'mywords-view',library:'library-view',results:'results-view'};
+  document.getElementById(map[name]).classList.add('active');
+  window.scrollTo(0,0);
+  // update nav button state
+  const navOva=document.getElementById('nav-ova');
+  if(navOva){
+    const isStudying=['home','match','spell','mc','flash','rain','race','memory','shooter','mywords','library','results'].includes(name);
+    navOva.className=isStudying?'btn btn-yellow':'btn btn-ghost';
+  }
+}
+function showStudentHome(){
+  stopTimers();syncMeta();
+  document.getElementById('sh-title').textContent=setName;
+  document.getElementById('sh-subject').textContent=setSubject;
+  const active=getActiveWords();
+  const badge=document.getElementById('sh-word-badge');
+  if(badge)badge.textContent=active.length+' ord'+(strengthFilter!=='all'?' (filtrerade)':'');
+  document.getElementById('sh-count').textContent=active.length;
+  renderWordTable(active);
+  updateStrengthFilterCounts();
+  updateDirUI();showView('home');
+}
+
+let wordTableFull=false;
+function toggleWordTableFull(){
+  wordTableFull=!wordTableFull;
+  const btn=document.getElementById('sh-show-all-btn');
+  if(btn)btn.textContent=wordTableFull?'Visa färre':'Visa alla';
+  renderWordTable(getActiveWords());
+}
+
+function renderWordTable(active){
+  const container=document.getElementById('sh-word-table');
+  if(!container)return;
+  const PREVIEW=16;
+  const showFull=wordTableFull||active.length<=PREVIEW;
+  const l1=langObj(qLangCode()),l2=langObj(aLangCode());
+  const sameLang=lang1===lang2;
+
+  // group by category, uncategorised last
+  const groups={};
+  active.forEach(w=>{
+    const k=w.category||'_none';
+    if(!groups[k])groups[k]=[];
+    groups[k].push(w);
+  });
+  const catKeys=Object.keys(groups).sort((a,b)=>{
+    if(a==='_none')return 1;if(b==='_none')return-1;
+    return a.localeCompare(b,'sv');
+  });
+
+  // flatten in order for preview trimming
+  const ordered=[];
+  catKeys.forEach(k=>groups[k].forEach(w=>ordered.push(w)));
+  const visible=showFull?ordered:ordered.slice(0,PREVIEW);
+  // rebuild groups from visible only
+  const visGroups={};
+  visible.forEach(w=>{
+    const k=w.category||'_none';
+    if(!visGroups[k])visGroups[k]=[];
+    visGroups[k].push(w);
+  });
+  const visKeys=catKeys.filter(k=>visGroups[k]);
+
+  let html=`<table class="sh-word-table"><thead><tr>
+    <th style="width:44%">${l1.flag} ${l1.name}</th>
+    <th style="width:44%">${sameLang?'Synonym / förklaring':l2.flag+' '+l2.name}</th>
+    <th class="th-r" style="width:12%">💡</th>
+  </tr></thead><tbody>`;
+
+  visKeys.forEach(k=>{
+    const ws=visGroups[k];
+    const hasCat=k!=='_none';
+    const catColor=hasCat?getCatColor(k):'rgba(255,255,255,.1)';
+    if(hasCat){
+      html+=`<tr><td colspan="3" style="padding:10px 10px 4px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:${catColor};border-bottom:1px solid ${catColor}33">${esc(k)}</td></tr>`;
+    }
+    ws.forEach(w=>{
+      const str=wordStrength(w);
+      const strIcon={strong:'🟢',medium:'🟡',weak:'🔴',unrated:''}[str]||'';
+      const borderStyle=`border-left:3px solid ${catColor}`;
+      html+=`<tr>
+        <td style="${borderStyle};padding-left:13px"><span style="font-weight:700">${esc(q(w))}</span></td>
+        <td class="td-trans">${esc(a(w))}</td>
+        <td class="td-str">${strIcon}</td>
+      </tr>`;
+    });
+  });
+
+  html+='</tbody></table>';
+  if(!showFull&&active.length>PREVIEW){
+    html+=`<div style="text-align:center;padding:8px 0;font-size:.78rem;color:var(--gray)">… och ${active.length-PREVIEW} ord till</div>`;
+  }
+  container.innerHTML=html;
+  const btn=document.getElementById('sh-show-all-btn');
+  if(btn){
+    btn.hidden=active.length<=PREVIEW;
+    btn.textContent=wordTableFull?'Visa färre':'Visa alla';
+  }
+}
+function toggleDirection(){direction=direction==='normal'?'flipped':'normal';showStudentHome();}
+function updateDirUI(){
+  const from=document.getElementById('dir-from');
+  const to=document.getElementById('dir-to');
+  if(!from||!to)return;
+  const ql=langObj(direction==='normal'?lang1:lang2);
+  const al=langObj(direction==='normal'?lang2:lang1);
+  from.textContent=ql.flag+' '+ql.name;
+  to.textContent=al.flag+' '+al.name;
+  from.className='sh-dir-lang sh-dir-active';
+  to.className='sh-dir-lang';
+  const icon=document.getElementById('sh-icon');
+  if(icon)icon.textContent=ql.code.toUpperCase();
+  const lbl=document.getElementById('sh-dir-label');
+  if(lbl)lbl.textContent=`ser ${ql.name.toLowerCase()} → skriver ${al.name.toLowerCase()}`;
+}
+function setDiff(e,mode,level){
+  e.stopPropagation();diff[mode]=level;
+  e.target.closest('.mode-card').querySelectorAll('.diff-pill').forEach(p=>p.classList.remove('active'));
+  e.target.classList.add('active');
+}
+function updateDiffButtons(mode){
+  ['easy','medium','hard'].forEach(l=>{
+    const el=document.getElementById(mode+'-d-'+l);
+    if(el)el.classList.toggle('active', diff[mode]===l);
+  });
+}
+
+/* ═══ TEACHER ═══ */
+function swapLangs(){
+  const s1=document.getElementById('lang1-select');
+  const s2=document.getElementById('lang2-select');
+  const tmp=s1.value;s1.value=s2.value;s2.value=tmp;
+  updateLangPair();
+}
+function updateLangPair(){
+  lang1=document.getElementById('lang1-select').value;
+  lang2=document.getElementById('lang2-select').value;
+  const l1=langObj(lang1),l2=langObj(lang2);
+  // update column labels — if same language, hint that it's synonyms/definitions mode
+  const c1=document.getElementById('col-label-1');
+  const c2=document.getElementById('col-label-2');
+  if(c1)c1.textContent=l1.flag+' '+l1.name+(lang1===lang2?' (ord)':'');
+  if(c2)c2.textContent=l2.flag+' '+l2.name+(lang1===lang2?' (synonym / förklaring)':'');
+  // update paste hint
+  const ph=document.getElementById('paste-hint');
+  if(ph)ph.innerHTML=`Format: <code>${l1.name.toLowerCase()} – ${l2.name.toLowerCase()}</code> eller komma. En rad per par.`;
+  // update preview
+  const lp=document.getElementById('lang-preview');
+  if(lp)lp.textContent=`${l1.flag} ${l1.name} → ${l2.flag} ${l2.name}`;
+  renderWordList();updateDirUI();updateDirButtons();
+}
+function syncMeta(){
+  const n=document.getElementById('set-name').value.trim();
+  const s=document.getElementById('set-subject').value.trim();
+  if(n)setName=n;if(s)setSubject=s;
+  lang1=document.getElementById('lang1-select').value;
+  lang2=document.getElementById('lang2-select').value;
+}
+// Category colour palette
+const CAT_COLORS=[
+  '#06d6a0','#ffd166','#ef476f','#a855f7','#118ab2','#f77f00',
+  '#22c55e','#e879f9','#38bdf8','#fb923c','#84cc16','#f43f5e'
+];
+function getCatColor(name){
+  if(!name)return'rgba(255,255,255,.2)';
+  const cats=getCategories();const idx=cats.indexOf(name);
+  return CAT_COLORS[idx%CAT_COLORS.length]||'#888';
+}
+function getCategories(){
+  const seen=new Set();const out=[];
+  words.forEach(w=>{if(w.category&&!seen.has(w.category)){seen.add(w.category);out.push(w.category);}});
+  return out;
+}
+
+function showPasteModal(){openModal('paste-modal');document.getElementById('paste-area').focus();}
+function openModal(id){document.getElementById(id).classList.add('open');}
+
+function renderWordList(){
+  const list=document.getElementById('word-list');list.innerHTML='';
+  const l1=langObj(lang1),l2=langObj(lang2);
+  words.forEach((w,i)=>{
+    const row=document.createElement('div');
+    row.className='xl-row';row.dataset.idx=i;
+    const catColor=getCatColor(w.category||'');
+    const fRating=w.flashRating||'';const sRating=w.spellRating||'';
+    const fCls=fRating?`flash-${fRating}`:'unset';
+    const sCls=sRating?`spell-${sRating}`:'unset';
+    const lampTip=`🃏 ${fRating||'–'} | ✍️ ${sRating||'–'}`;
+    row.innerHTML=`
+      <div class="xl-cell xl-cell-num" onclick="toggleRowSelect(${i})" title="Klicka för att markera">${i+1}</div>
+      <div class="xl-cell">
+        <input class="xl-input xl-assign-input" value="${esc(w.assign||'')}" placeholder="t.ex. Läxa 7.2"
+          list="assign-list-${i}"
+          oninput="words[${i}].assign=this.value||undefined"
+          onkeydown="xlKeydown(event,${i},'assign')"/>
+        <datalist id="assign-list-${i}">${[...new Set(words.map(w=>w.assign).filter(Boolean))].map(a=>`<option value="${esc(a)}">`).join('')}</datalist>
+      </div>
+      <div class="xl-cell">
+        <input class="xl-input" value="${esc(w[lang1]||w.en||'')}" placeholder="${l1.name}"
+          oninput="words[${i}]['${lang1}']=this.value"
+          onkeydown="xlKeydown(event,${i},'l1')"/>
+      </div>
+      <div class="xl-cell">
+        <input class="xl-input" value="${esc(w[lang2]||w.sv||'')}" placeholder="${l2.name}"
+          oninput="words[${i}]['${lang2}']=this.value"
+          onkeydown="xlKeydown(event,${i},'l2')"/>
+      </div>
+      <div class="xl-cell">
+        <input class="xl-input" value="${esc(w.category||'')}" placeholder="Kategori…"
+          style="color:${w.category?catColor:'inherit'}"
+          oninput="words[${i}].category=this.value||undefined;this.style.color=this.value?getCatColor(this.value):'inherit'"
+          onkeydown="xlKeydown(event,${i},'cat')"
+          list="xl-cats-${i}"/>
+        <datalist id="xl-cats-${i}">${getCategories().map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
+      </div>
+      <div class="xl-cell"><button class="xl-del-btn" onclick="removeWord(${i})" title="Ta bort rad">×</button></div>`;
+    list.appendChild(row);
+  });
+  // buffer rows (alltid 3 tomma rader längst ner)
+  const BUFFER=3;
+  for(let b=0;b<BUFFER;b++){
+    const newRow=document.createElement('div');
+    newRow.className='xl-row xl-buffer-row';
+    newRow.style.opacity=b===0?'.5':b===1?'.3':'.15';
+    const rowNum=words.length+b+1;
+    newRow.innerHTML=`<div class="xl-cell xl-cell-num" style="color:rgba(255,255,255,.15)">${rowNum}</div>
+      <div class="xl-cell"><input class="xl-input xl-assign-input" placeholder="Tilldelning…" data-buf="${b}" onkeydown="bufKeydown(this,event,'assign')" oninput="ensureBufferRows()"/></div>
+      <div class="xl-cell"><input class="xl-input" placeholder="${langObj(lang1).name}…" data-buf="${b}" onkeydown="bufKeydown(this,event,'l1')" oninput="ensureBufferRows()"/></div>
+      <div class="xl-cell"><input class="xl-input" placeholder="${langObj(lang2).name}…" data-buf="${b}" onkeydown="bufKeydown(this,event,'l2')" oninput="ensureBufferRows()"/></div>
+      <div class="xl-cell"><input class="xl-input" placeholder="Kategori…" data-buf="${b}" onkeydown="bufKeydown(this,event,'cat')" oninput="ensureBufferRows()"/></div>
+      <div class="xl-cell"></div>`;
+    list.appendChild(newRow);
+  }
+  document.getElementById('word-count').textContent=words.length;
+}
+
+function bufKeydown(inp,e,col){
+  if(e.key==='Tab'||e.key==='Enter'){
+    // commit any typed value in buffer rows to a real word on Tab/Enter
+    commitBufferRows();
+    if(e.key==='Enter'){e.preventDefault();focusNextRealRow(col);}
+  }
+}
+function commitBufferRows(){
+  // find all buffer rows with any typed value and convert to real words
+  document.querySelectorAll('.xl-buffer-row').forEach(row=>{
+    const ins=[...row.querySelectorAll('input')];
+    const assign=ins[0].value.trim();
+    const v1=ins[1].value.trim();
+    const v2=ins[2].value.trim();
+    const cat=ins[3].value.trim();
+    if(v1||v2){
+      const w={};w[lang1]=v1;w[lang2]=v2;
+      if(cat)w.category=cat;if(assign)w.assign=assign;
+      words.push(w);
+    }
+  });
+  renderWordList();
+}
+function ensureBufferRows(){
+  // called on input — just ensure we always see buffer rows (renderWordList handles it)
+  // also auto-commit first buffer row if both lang fields filled
+  const rows=document.querySelectorAll('.xl-buffer-row');
+  if(!rows.length)return;
+  const first=rows[0];
+  const ins=[...first.querySelectorAll('input')];
+  const v1=ins[1].value.trim(),v2=ins[2].value.trim();
+  if(v1&&v2){
+    // both filled — promote to real row after short delay
+    clearTimeout(ensureBufferRows._t);
+    ensureBufferRows._t=setTimeout(()=>commitBufferRows(),600);
+  }
+}
+function focusNextRealRow(col){
+  const rows=document.querySelectorAll('#word-list .xl-row:not(.xl-buffer-row)');
+  const last=rows[rows.length-1];
+  if(last){const colMap={assign:0,l1:1,l2:2,cat:3};const ins=last.querySelectorAll('input');if(ins[colMap[col]])ins[colMap[col]].focus();}
+}
+
+function xlKeydown(e,i,col){
+  if(e.key==='Enter'){
+    e.preventDefault();
+    if(i===words.length-1){
+      // on last real row — move into first buffer row
+      const buf=document.querySelector('.xl-buffer-row');
+      if(buf){const colMap={assign:0,l1:1,l2:2,cat:3};const ins=buf.querySelectorAll('input');if(ins[colMap[col]])ins[colMap[col]].focus();return;}
+    }
+    setTimeout(()=>{
+      const rows=[...document.querySelectorAll('#word-list .xl-row:not(.xl-buffer-row)')];
+      const nextRow=rows[i+1];
+      if(nextRow){const colMap={assign:0,l1:1,l2:2,cat:3};const inputs=nextRow.querySelectorAll('input');if(inputs[colMap[col]])inputs[colMap[col]].focus();}
+    },20);
+  }
+  if(e.key==='Delete'&&e.altKey){e.preventDefault();removeWord(i);}
+}
+
+let selectedRows=new Set();
+function toggleRowSelect(i){
+  if(selectedRows.has(i))selectedRows.delete(i);else selectedRows.add(i);
+  updateBulkBar();
+}
+function clearSelection(){selectedRows.clear();updateBulkBar();renderWordList();}
+function updateBulkBar(){
+  const bar=document.getElementById('bulk-bar');
+  const count=document.getElementById('bulk-count');
+  const info=document.getElementById('xl-selection-info');
+  document.querySelectorAll('#word-list .xl-row').forEach((r,ri)=>r.classList.toggle('selected-row',selectedRows.has(ri)));
+  if(selectedRows.size){
+    bar.style.display='flex';
+    count.textContent=selectedRows.size+' rader markerade';
+    if(info)info.textContent=selectedRows.size+' markerade';
+    // populate datalists
+    const assigns=[...new Set(words.map(w=>w.assign).filter(Boolean))];
+    const cats=getCategories();
+    document.getElementById('bulk-assign-list').innerHTML=assigns.map(a=>`<option value="${esc(a)}">`).join('');
+    document.getElementById('bulk-cat-list').innerHTML=cats.map(c=>`<option value="${esc(c)}">`).join('');
+  } else {
+    bar.style.display='none';
+    if(info)info.textContent='';
+  }
+}
+function bulkSetAssign(){
+  const val=document.getElementById('bulk-assign-input').value.trim();
+  if(!val){toast('⚠️ Skriv en tilldelning först');return;}
+  selectedRows.forEach(i=>{if(words[i])words[i].assign=val;});
+  document.getElementById('bulk-assign-input').value='';
+  toast(`✅ "${val}" satt på ${selectedRows.size} ord`);
+  clearSelection();renderWordList();
+}
+function bulkSetCategory(){
+  const val=document.getElementById('bulk-cat-input').value.trim();
+  if(!val){toast('⚠️ Skriv en kategori först');return;}
+  selectedRows.forEach(i=>{if(words[i])words[i].category=val;});
+  document.getElementById('bulk-cat-input').value='';
+  toast(`✅ Kategori "${val}" satt på ${selectedRows.size} ord`);
+  clearSelection();renderWordList();
+}
+function bulkDeleteRows(){
+  if(!confirm(`Ta bort ${selectedRows.size} markerade rader?`))return;
+  const toDelete=[...selectedRows].sort((a,b)=>b-a);
+  toDelete.forEach(i=>words.splice(i,1));
+  selectedRows.clear();updateBulkBar();renderWordList();
+}
+
+function onCatInput(inp,i){
+  words[i].category=inp.value.trim()||undefined;
+  const color=getCatColor(inp.value.trim());
+  inp.style.borderColor=inp.value?color:'rgba(255,255,255,.1)';
+  inp.style.color=inp.value?color:'inherit';
+  openCatDropdown(inp,i);
+}
+
+function openCatDropdown(inp,i){
+  const dd=document.getElementById('cat-dd-'+i);if(!dd)return;
+  const typed=(inp.value||'').toLowerCase();
+  const cats=getCategories().filter(c=>c!==words[i].category);
+  const matches=cats.filter(c=>c.toLowerCase().includes(typed));
+  if(!matches.length&&!typed){dd.classList.remove('open');return;}
+  dd.innerHTML='';
+  // "Skapa ny"-option if typed something not exact match
+  const exact=cats.find(c=>c.toLowerCase()===typed);
+  if(typed&&!exact){
+    const o=document.createElement('div');o.className='cat-option';
+    o.innerHTML=`<span class="cat-dot" style="background:${getCatColor(inp.value)};border:1px dashed rgba(255,255,255,.4)"></span><em style="color:var(--yellow)">Skapa "${inp.value}"</em>`;
+    o.onmousedown=()=>setCat(inp,i,inp.value);
+    dd.appendChild(o);
+  }
+  matches.forEach(c=>{
+    const o=document.createElement('div');o.className='cat-option';
+    o.innerHTML=`<span class="cat-dot" style="background:${getCatColor(c)}"></span>${c}`;
+    o.onmousedown=()=>setCat(inp,i,c);
+    dd.appendChild(o);
+  });
+  // Clear option
+  if(words[i].category){
+    const o=document.createElement('div');o.className='cat-option';
+    o.innerHTML=`<span class="cat-dot" style="background:rgba(255,255,255,.2)"></span><span style="color:var(--gray)">Ingen kategori</span>`;
+    o.onmousedown=()=>setCat(inp,i,'');
+    dd.appendChild(o);
+  }
+  dd.classList.add('open');
+}
+
+function setCat(inp,i,val){
+  words[i].category=val||undefined;
+  inp.value=val;
+  const color=getCatColor(val);
+  inp.style.borderColor=val?color:'rgba(255,255,255,.1)';
+  inp.style.color=val?color:'inherit';
+  const dd=document.getElementById('cat-dd-'+i);if(dd)dd.classList.remove('open');
+}
+
+function closeCatDropdown(inp){
+  // small delay so onmousedown on option fires first
+  setTimeout(()=>{document.querySelectorAll('.cat-dropdown').forEach(d=>d.classList.remove('open'));},160);
+}
+
+function catKeydown(e,inp,i){
+  if(e.key==='Enter'||e.key==='Tab'){
+    const dd=document.getElementById('cat-dd-'+i);
+    const first=dd&&dd.querySelector('.cat-option');
+    if(first&&e.key==='Enter'){e.preventDefault();first.onmousedown();}
+    else{words[i].category=inp.value.trim()||undefined;closeCatDropdown(inp);}
+  }
+  if(e.key==='Escape')closeCatDropdown(inp);
+}
+
+function addWordRow(v1='',v2='',cat=''){
+  const w={};w[lang1]=v1;w[lang2]=v2;if(cat)w.category=cat;
+  words.push(w);renderWordList();
+  // focus the lang1 input of the new last real row
+  setTimeout(()=>{
+    const rows=document.querySelectorAll('#word-list .xl-row');
+    if(rows.length>=2){const ins=rows[rows.length-2].querySelectorAll('input');if(ins[1])ins[1].focus();}
+  },30);
+}
+function removeWord(i){words.splice(i,1);renderWordList();}
+function clearAll(){if(!confirm('Rensa hela listan?'))return;words=[];renderWordList();}
+function importPaste(){
+  const raw=document.getElementById('paste-area').value.trim();if(!raw)return;
+  const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);let added=0;
+  lines.forEach(line=>{
+    const sep=line.includes('–')?'–':line.includes('\t')?'\t':',';
+    const parts=line.split(sep).map(p=>p.trim());
+    if(parts.length>=2&&parts[0]&&parts[1]){
+      const w={};
+      w[lang1]=parts[0];
+      w[lang2]=parts[1];
+      if(parts[2])w.category=parts[2];
+      if(parts[3])w.assign=parts[3];
+      words.push(w);added++;
+    }
+  });
+  renderWordList();toast(`✅ ${added} glospar importerade!`);
+}
+function exportHTML(){
+  syncMeta();const valid=words.filter(w=>w[lang1]&&w[lang2]);
+  if(!valid.length){toast('⚠️ Inga glospar att exportera!');return;}
+  const src=document.documentElement.outerHTML;
+  const newInit='/* BEGREPPS_INIT_START */\n'+
+    'words='+JSON.stringify(valid)+';\n'+
+    'setName='+JSON.stringify(setName)+';\n'+
+    'setSubject='+JSON.stringify(setSubject)+';\n'+
+    'lang1='+JSON.stringify(lang1)+';\n'+
+    'lang2='+JSON.stringify(lang2)+';\n'+
+    'document.getElementById(\'set-name\').value=setName;\n'+
+    'document.getElementById(\'set-subject\').value=setSubject;\n'+
+    'setLangSelects(lang1,lang2);\n'+
+    'renderWordList();\n'+
+    'updateDirButtons();\n'+
+    'showStudentHome();\n'+
+    '/* BEGREPPS_INIT_END */';
+  const patched=src.replace(/\/\* BEGREPPS_INIT_START \*\/[\s\S]*?\/\* BEGREPPS_INIT_END \*\//,newInit);
+  const blob=new Blob([patched],{type:'text/html'});
+  const link=document.createElement('a');link.href=URL.createObjectURL(blob);
+  link.download=(setName||'ovning').replace(/\s+/g,'-').toLowerCase()+'.html';link.click();
+  toast('📄 Övningsfil exporterad!');
+}
+
+/* ═══ STUDENT OWN WORDS ═══ */
+let myWordsOpen=false;
+let baseWords=[]; // teacher's original words
+function toggleMyWords(){
+  myWordsOpen=!myWordsOpen;
+  document.getElementById('my-words-panel').style.display=myWordsOpen?'block':'none';
+  document.getElementById('my-words-arrow').style.transform=myWordsOpen?'rotate(180deg)':'rotate(0)';
+  if(myWordsOpen&&document.getElementById('my-word-rows').children.length===0)addMyWordRow();
+}
+function addMyWordRow(){
+  const cont=document.getElementById('my-word-rows');
+  const row=document.createElement('div');row.className='field-row';
+  const l1=langObj(lang1),l2=langObj(lang2);
+  const cats=getCategories();
+  const catOptions=cats.map(c=>`<option value="${esc(c)}">${c}</option>`).join('');
+  row.innerHTML=`
+    <input type="text" placeholder="${l1.flag} ${l1.name}"/>
+    <input type="text" placeholder="${l2.flag} ${l2.name}"/>
+    <div class="cat-wrap">
+      <input type="text" class="cat-input" placeholder="Kategori…" list="my-word-cats"
+        oninput="this.style.borderColor=this.value?getCatColor(this.value):'rgba(255,255,255,.1)';this.style.color=this.value?getCatColor(this.value):'inherit'"/>
+      <datalist id="my-word-cats">${catOptions}</datalist>
+    </div>
+    <button class="del-btn" onclick="this.closest('.field-row').remove()">×</button>`;
+  cont.appendChild(row);row.querySelector('input').focus();
+}
+function saveMyWords(){
+  const rows=document.querySelectorAll('#my-word-rows .field-row');
+  const added=[];
+  rows.forEach(row=>{
+    const ins=[...row.querySelectorAll('input')];
+    const v1=ins[0].value.trim(),v2=ins[1].value.trim(),cat=ins[2]?ins[2].value.trim():'';
+    if(v1&&v2){const w={};w[lang1]=v1;w[lang2]=v2;if(cat)w.category=cat;added.push(w);}
+  });
+  if(!added.length){toast('⚠️ Inga glosor att spara!');return;}
+  const existing=new Set(words.map(w=>(w[lang1]||'').toLowerCase()+'|'+(w[lang2]||'').toLowerCase()));
+  const fresh=added.filter(w=>!existing.has((w[lang1]||'').toLowerCase()+'|'+(w[lang2]||'').toLowerCase()));
+  words=[...words,...fresh];
+  document.getElementById('my-word-rows').innerHTML='';
+  toggleMyWords();showStudentHome();
+  toast(`✅ ${fresh.length} egna glosor tillagda!`);
+}
+function exportJSON(){
+  syncMeta();const valid=words.filter(w=>w[lang1]&&w[lang2]);
+  if(!valid.length){toast('⚠️ Inga glospar!');return;}
+  const blob=new Blob([JSON.stringify({name:setName,subject:setSubject,lang1,lang2,words:valid},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(setName||'glosor').replace(/\s+/g,'-').toLowerCase()+'.json';a.click();toast('💾 JSON sparad!');
+}
+function setLangSelects(l1,l2){
+  lang1=l1;lang2=l2;
+  const s1=document.getElementById('lang1-select');
+  const s2=document.getElementById('lang2-select');
+  if(s1)s1.value=l1;
+  if(s2)s2.value=l2;
+  updateLangPair();
+}
+function loadJSONFile(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(!data.words||!Array.isArray(data.words))throw 0;
+      const l1=data.lang1||'en', l2=data.lang2||'sv';
+      words=data.words.filter(w=>(w[l1]||w.en)&&(w[l2]||w.sv));
+      // normalise keys so old en/sv files still work
+      words=words.map(w=>{const n={};n[l1]=w[l1]||w.en||'';n[l2]=w[l2]||w.sv||'';return n;});
+      setName=data.name||file.name.replace('.json','');
+      setSubject=data.subject||'';
+      document.getElementById('set-name').value=setName;
+      document.getElementById('set-subject').value=setSubject;
+      setLangSelects(l1,l2);
+      renderWordList();
+      document.getElementById('modal-loaded-text').textContent=`"${setName}" med ${words.length} glospar (${langObj(l1).flag} ${langObj(l1).name} → ${langObj(l2).flag} ${langObj(l2).name}) laddades in.`;
+      document.getElementById('modal-loaded').classList.add('open');
+      loadRatingsFromStorage();
+    }catch{toast('❌ Kunde inte läsa filen.');}
+  };
+  reader.readAsText(file);e.target.value='';
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+/* ═══ MATCH ═══ */
+function startMatch(){
+  const valid=getActiveWords();if(valid.length<2){toast('⚠️ Minst 2 glospar behövs!');return;}
+  currentMode='match';const d=diff.match;setBadge('match-diff-badge',d);updateDiffButtons('match');
+  mCorrect=0;mWrong=0;mSelected=null;
+  document.getElementById('m-correct').textContent='0';document.getElementById('m-wrong').textContent='0';document.getElementById('m-timer').textContent='0:00';
+  const pairCount=d==='easy'?Math.min(6,valid.length):d==='medium'?Math.min(8,valid.length):Math.min(10,valid.length);
+  const pool=shuffle(valid).slice(0,pairCount);
+  mPairs=pool.length;
+  // decoys
+  const decoyCount=d==='medium'?2:d==='hard'?4:0;
+  const extras=shuffle(valid.filter(w=>!pool.includes(w))).slice(0,decoyCount);
+  const rights=shuffle([...pool.map((w,i)=>({text:a(w),idx:i,real:true})),...extras.map((w,j)=>({text:a(w),idx:-(j+1),real:false}))]);
+  const lefts=pool.map((w,i)=>({text:q(w),idx:i}));
+  document.getElementById('match-left-label').textContent=qLang();
+  document.getElementById('match-right-label').textContent=aLang();
+  const banner=document.getElementById('decoy-banner');banner.style.display=extras.length?'block':'none';
+  document.getElementById('match-left').innerHTML='';document.getElementById('match-right').innerHTML='';
+  lefts.forEach(item=>document.getElementById('match-left').appendChild(makeMatchCard(item,'left')));
+  rights.forEach(item=>document.getElementById('match-right').appendChild(makeMatchCard(item,'right')));
+  showView('match');
+  mSeconds=0;mTimer=setInterval(()=>{mSeconds++;document.getElementById('m-timer').textContent=fmt(mSeconds);},1000);
+}
+function makeMatchCard(item,side){
+  const el=document.createElement('div');el.className='match-card';el.textContent=item.text;el.dataset.idx=item.idx;el.dataset.side=side;
+  el.addEventListener('click',()=>onMatchClick(el));return el;
+}
+function onMatchClick(el){
+  if(el.classList.contains('matched'))return;
+  if(!mSelected){mSelected=el;el.classList.add('selected');return;}
+  if(mSelected===el){mSelected.classList.remove('selected');mSelected=null;return;}
+  if(mSelected.dataset.side===el.dataset.side){mSelected.classList.remove('selected');mSelected=el;el.classList.add('selected');return;}
+  const ai=parseInt(mSelected.dataset.idx),bi=parseInt(el.dataset.idx);
+  if(ai>=0&&bi>=0&&ai===bi){
+    mSelected.classList.remove('selected');mSelected.classList.add('matched');el.classList.add('matched');
+    mSelected=null;mCorrect++;document.getElementById('m-correct').textContent=mCorrect;spawnConfetti(3);
+    if(mCorrect===mPairs){clearInterval(mTimer);setTimeout(()=>showResults(),600);}
+  } else {
+    const x=mSelected,y=el;x.classList.remove('selected');x.classList.add('wrong');y.classList.add('wrong');
+    mWrong++;document.getElementById('m-wrong').textContent=mWrong;
+    setTimeout(()=>{x.classList.remove('wrong');y.classList.remove('wrong');},500);mSelected=null;
+  }
+}
+
+/* ═══ SPELL ═══ */
+function flipInGame(mode){
+  direction=direction==='normal'?'flipped':'normal';
+  updateDirUI();updateDirButtons();
+  if(mode==='match')startMatch();
+  else if(mode==='spell')startSpell();
+  else if(mode==='mc')startMC();
+  else if(mode==='rain')startRain();
+  else if(mode==='race')startRace();
+  else if(mode==='memory')startMemory();
+  else if(mode==='shooter')startShooter();
+  else startFlash();
+}
+function setDiffInGame(mode,level){
+  diff[mode]=level;updateDiffButtons(mode);
+  if(mode==='match')startMatch();
+  else if(mode==='spell')startSpell();
+  else if(mode==='mc')startMC();
+  else if(mode==='rain')startRain();
+  else if(mode==='race')startRace();
+  else if(mode==='memory')startMemory();
+  else if(mode==='shooter')startShooter();
+  else startFlash();
+}
+function replayGame(){
+  if(currentMode==='match')startMatch();
+  else if(currentMode==='spell')startSpell();
+  else if(currentMode==='mc')startMC();
+  else if(currentMode==='rain')startRain();
+  else if(currentMode==='race')startRace();
+  else if(currentMode==='memory')startMemory();
+  else if(currentMode==='shooter')startShooter();
+  else startFlash();
+}
+function dirBtnHTML(d){
+  const ql=langObj(d==='normal'?lang1:lang2);
+  const al=langObj(d==='normal'?lang2:lang1);
+  return `<span style="font-size:.9rem">${ql.flag}</span> → <span style="font-size:.9rem">${al.flag}</span>`;
+}
+function updateDirButtons(){
+  ['match-dir-btn','spell-dir-btn','mc-dir-btn','flash-dir-btn'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.innerHTML=dirBtnHTML(direction);
+  });
+}
+function startSpell(){
+  const valid=getActiveWords();if(!valid.length){toast('⚠️ Inga glospar!');return;}
+  currentMode='spell';const d=diff.spell;setBadge('spell-diff-badge',d);updateDiffButtons('spell');
+  spellQueue=shuffle(valid);spellIdx=0;sCorrect=0;sWrong=0;
+  document.getElementById('s-correct').textContent='0';document.getElementById('s-wrong').textContent='0';document.getElementById('s-timer').textContent='0:00';
+  document.getElementById('spell-total').textContent=spellQueue.length;
+  document.getElementById('spell-q-label').textContent=`Vad heter detta på ${langObj(aLangCode()).name.toLowerCase()}?`;
+  buildCharPanel();
+  showView('spell');
+  sSeconds=0;sTimer=setInterval(()=>{sSeconds++;document.getElementById('s-timer').textContent=fmt(sSeconds);},1000);
+  loadSpellWord();
+}
+function buildCharPanel(){
+  const chars=LANG_CHARS[aLangCode()]||[];
+  const panel=document.getElementById('spell-char-panel');
+  panel.innerHTML='';
+  if(!chars.length){panel.style.display='none';return;}
+  // only show lowercase + ß (deduplicated display, uppercase on long-press not needed)
+  const show=chars.filter(c=>c===c.toLowerCase()||c==='ß');
+  if(!show.length){panel.style.display='none';return;}
+  panel.style.display='flex';
+  show.forEach(ch=>{
+    const btn=document.createElement('button');
+    btn.className='char-btn';btn.textContent=ch;btn.type='button';
+    btn.onclick=()=>{
+      const inp=document.getElementById('spell-input');
+      const pos=inp.selectionStart??inp.value.length;
+      inp.value=inp.value.slice(0,pos)+ch+inp.value.slice(pos);
+      inp.selectionStart=inp.selectionEnd=pos+ch.length;
+      inp.focus();syncBoxes();
+    };
+    panel.appendChild(btn);
+  });
+}
+function loadSpellWord(){
+  if(spellIdx>=spellQueue.length){clearInterval(sTimer);showResults();return;}
+  document.getElementById('spell-rate-row').style.display='none';
+  const w=spellQueue[spellIdx];const target=a(w);const d=diff.spell;
+  spellHints=0;spellAnswered=false;spellFirstTry=true;
+  document.getElementById('spell-prompt').textContent=q(w);
+  document.getElementById('spell-hint').textContent='';
+  document.getElementById('spell-idx').textContent=spellIdx+1;
+  document.getElementById('spell-progress').style.width=(spellIdx/spellQueue.length*100)+'%';
+  // letter boxes — easy/medium: rutor synliga direkt, hard: helt dolda tills första misstaget
+  const boxes=document.getElementById('letter-boxes');boxes.innerHTML='';
+  target.split('').forEach(ch=>{
+    const b=document.createElement('div');
+    if(ch===' '){b.className='letter-box space';b.textContent=' ';}
+    else{b.className='letter-box'+(d==='hard'?' hidden':'');}
+    boxes.appendChild(b);
+  });
+  const inp=document.getElementById('spell-input');inp.value='';inp.className='spell-input';inp.disabled=false;inp.focus();
+  document.getElementById('spell-feedback').style.display='none';
+  document.getElementById('hint-btn').style.display=d==='hard'?'none':'';
+  document.getElementById('check-btn').style.display='';document.getElementById('next-btn').style.display='none';
+  inp.oninput=()=>syncBoxes();
+  inp.onkeydown=e=>{
+    const rateVisible=document.getElementById('spell-rate-row').style.display!=='none';
+    if(rateVisible){
+      // rating mode — 1/2/3 grade, Enter/→ skip to next
+      if(e.key==='1'){e.preventDefault();rateSpellWord('easy');return;}
+      if(e.key==='2'){e.preventDefault();rateSpellWord('medium');return;}
+      if(e.key==='3'){e.preventDefault();rateSpellWord('hard');return;}
+      if(e.key==='Enter'||e.code==='ArrowRight'){e.preventDefault();nextSpell();return;}
+      return; // block all other keys while rating
+    }
+    if(e.key==='Enter'){
+      const nextVisible=document.getElementById('next-btn').style.display!=='none';
+      if(nextVisible)nextSpell();
+      else if(!spellAnswered)checkSpell();
+    }
+    if(e.code==='ArrowRight'&&document.getElementById('next-btn').style.display!=='none'){
+      e.preventDefault();nextSpell();
+    }
+  };
+}
+function syncBoxes(){
+  const typed=document.getElementById('spell-input').value;
+  const target=a(spellQueue[spellIdx]);
+  const boxes=[...document.querySelectorAll('.letter-box')];
+  let ti=0;
+  boxes.forEach((b,bi)=>{
+    if(target[bi]===' ')return;
+    if(b.classList.contains('hidden')){ti++;return;}
+    const ch=typed[ti]||'';
+    b.textContent=ch.toUpperCase();b.className='letter-box'+(ch?' filled':'');ti++;
+  });
+}
+function checkSpell(){
+  if(spellAnswered)return;
+  const typed=document.getElementById('spell-input').value.trim();
+  const target=a(spellQueue[spellIdx]);const d=diff.spell;
+  const fb=document.getElementById('spell-feedback');const inp=document.getElementById('spell-input');
+  if(typed.toLowerCase()===target.toLowerCase()){
+    spellAnswered=true;inp.className='spell-input correct';
+    inp.disabled=true; // disable so 1/2/3 don't type
+    fb.className='feedback-banner correct';fb.textContent='🎉 Rätt! Hur svår var stavningen?';fb.style.display='block';
+    sCorrect++;document.getElementById('s-correct').textContent=sCorrect;spawnConfetti(2);
+    let ri=0;document.querySelectorAll('.letter-box').forEach((b,bi)=>{if(target[bi]===' ')return;b.className='letter-box correct';b.textContent=target[ri++].toUpperCase();});
+    document.getElementById('hint-btn').style.display='none';
+    document.getElementById('check-btn').style.display='none';
+    document.getElementById('next-btn').style.display='';
+    document.getElementById('spell-rate-row').style.display='block';
+    inp.focus(); // keep focus for keyboard shortcuts
+  } else {
+    // på svår och första försöket: visa rutorna nu som ledtråd
+    if(d==='hard'&&spellFirstTry){
+      spellFirstTry=false;
+      document.querySelectorAll('.letter-box').forEach(b=>{
+        if(b.classList.contains('hidden'))b.className='letter-box';
+      });
+      document.getElementById('hint-btn').style.display='';
+      syncBoxes();
+    }
+    inp.className='spell-input wrong';
+    // svår: avslöja inte svaret i texten
+    const msg=d==='hard'?'❌ Inte rätt – rutorna är nu synliga som ledtråd!':'❌ Inte rätt – rätt svar: "'+target+'"';
+    fb.className='feedback-banner wrong';fb.textContent=msg;fb.style.display='block';
+    sWrong++;document.getElementById('s-wrong').textContent=sWrong;
+    spellAnswered=true;
+    setTimeout(()=>{inp.className='spell-input';fb.style.display='none';inp.value='';syncBoxes();spellAnswered=false;},1800);
+  }
+}
+function showHint(){
+  const target=a(spellQueue[spellIdx]);const inp=document.getElementById('spell-input');
+  if(spellHints===0){document.getElementById('spell-hint').textContent=`💡 Ordet har ${target.replace(/ /g,'').length} bokstäver`;spellHints++;}
+  else if(spellHints===1){document.getElementById('spell-hint').textContent=`💡 Det börjar med "${target[0].toUpperCase()}"`;inp.value=target[0];syncBoxes();spellHints++;}
+  else{const h=target.slice(0,Math.ceil(target.length/2));inp.value=h;syncBoxes();document.getElementById('spell-hint').textContent=`💡 Halva ordet: "${h}"`;}
+}
+function rateSpellWord(level){
+  const w=spellQueue[spellIdx];
+  const orig=words.find(x=>x[lang1]===w[lang1]&&x[lang2]===w[lang2]);
+  if(orig)orig.spellRating=level;
+  document.getElementById('spell-rate-row').style.display='none';
+  nextSpell();
+}
+function nextSpell(){
+  document.getElementById('spell-rate-row').style.display='none';
+  spellIdx++;loadSpellWord();
+}
+/* ═══ MULTIPLE CHOICE ═══ */
+function startMC(){
+  const valid=getActiveWords();if(valid.length<2){toast('⚠️ Minst 2 glospar!');return;}
+  currentMode='mc';const d=diff.mc;setBadge('mc-diff-badge',d);updateDiffButtons('mc');
+  mcQueue=shuffle(valid);mcIdx=0;mcCorrect=0;mcWrong=0;mcAnswered=false;
+  document.getElementById('mc-correct').textContent='0';document.getElementById('mc-wrong').textContent='0';document.getElementById('mc-timer').textContent='0:00';
+  document.getElementById('mc-total').textContent=mcQueue.length;
+  document.getElementById('mc-q-label').textContent=`Välj rätt ${direction==='normal'?'svensk':'engelsk'} översättning`;
+  showView('mc');
+  mcSeconds=0;mcTimer=setInterval(()=>{mcSeconds++;document.getElementById('mc-timer').textContent=fmt(mcSeconds);},1000);
+  loadMCWord();
+}
+function loadMCWord(){
+  if(mcIdx>=mcQueue.length){clearInterval(mcTimer);showResults();return;}
+  mcAnswered=false;const w=mcQueue[mcIdx];const d=diff.mc;
+  document.getElementById('mc-question').textContent=q(w);
+  document.getElementById('mc-idx').textContent=mcIdx+1;
+  document.getElementById('mc-progress').style.width=(mcIdx/mcQueue.length*100)+'%';
+  document.getElementById('mc-feedback').style.display='none';
+  const correct=a(w);
+  // distractors: on hard, pick similar-length words as distractors
+  let pool=words.filter(x=>a(x)!==correct);
+  if(d==='hard')pool.sort((x,y)=>Math.abs(a(x).length-correct.length)-Math.abs(a(y).length-correct.length));
+  else pool=shuffle(pool);
+  const distractors=pool.slice(0,3).map(x=>a(x));
+  while(distractors.length<3)distractors.push('–');
+  const options=shuffle([correct,...distractors]);
+  const cont=document.getElementById('mc-options');cont.innerHTML='';
+  options.forEach(opt=>{const el=document.createElement('div');el.className='mc-option';el.textContent=opt;el.addEventListener('click',()=>onMCClick(el,opt===correct,correct,cont));cont.appendChild(el);});
+}
+function onMCClick(el,isCorrect,correct,cont){
+  if(mcAnswered)return;mcAnswered=true;
+  cont.querySelectorAll('.mc-option').forEach(o=>o.classList.add('locked'));
+  const fb=document.getElementById('mc-feedback');
+  if(isCorrect){
+    el.classList.add('correct');fb.className='feedback-banner correct';fb.textContent='🎉 Rätt!';fb.style.display='block';
+    mcCorrect++;document.getElementById('mc-correct').textContent=mcCorrect;spawnConfetti(2);
+    setTimeout(()=>{mcIdx++;loadMCWord();},850);
+  } else {
+    el.classList.add('wrong');cont.querySelectorAll('.mc-option').forEach(o=>{if(o.textContent===correct)o.classList.add('reveal');});
+    fb.className='feedback-banner wrong';fb.textContent=`❌ Rätt svar: "${correct}"`;fb.style.display='block';
+    mcWrong++;document.getElementById('mc-wrong').textContent=mcWrong;
+    setTimeout(()=>{mcIdx++;loadMCWord();},1600);
+  }
+}
+
+/* ═══ FLASHCARDS ═══ */
+function startFlash(fromUnsure){
+  const valid=fromUnsure?flashUnsureList:getActiveWords();
+  if(!valid.length){toast('⚠️ Inga glospar!');return;}
+  currentMode='flash';const d=diff.flash;setBadge('flash-diff-badge',d);updateDiffButtons('flash');
+  flashQueue=shuffle([...valid]);flashIdx=0;flashSure=0;flashMaybe=0;flashUnsureCount=0;flashUnsureList=[];flashFlipped=false;
+  updatePiles();
+  document.getElementById('f-remaining').textContent=flashQueue.length;
+  document.getElementById('flash-total').textContent=flashQueue.length;
+  document.getElementById('flash-done').style.display='none';
+  document.getElementById('flash-scene').style.display='block';
+  document.getElementById('flash-front-label').textContent=qLang();
+  document.getElementById('flash-back-label').textContent=aLang();
+  document.getElementById('flash-front-label').style.visibility=(d==='hard')?'hidden':'visible';
+  // keyboard hint
+  document.getElementById('flash-kb-hint').style.display='flex';
+  showView('flash');
+  loadFlashCard();
+  // attach keyboard handler
+  document.removeEventListener('keydown',flashKeyHandler);
+  document.addEventListener('keydown',flashKeyHandler);
+}
+
+function flashKeyHandler(e){
+  if(currentMode!=='flash')return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  if(e.code==='Space'){e.preventDefault();flipFlashCard();return;}
+  if(e.code==='ArrowRight'||e.code==='ArrowDown'){
+    e.preventDefault();
+    if(!flashFlipped)flipFlashCard(); else flashAdvance();
+    return;
+  }
+  if(e.code==='ArrowLeft'||e.code==='ArrowUp'){
+    e.preventDefault();goBackFlash();return;
+  }
+  if(e.code==='Enter'){
+    e.preventDefault();
+    if(!flashFlipped)flipFlashCard(); else flashAdvance();
+    return;
+  }
+  if(e.key==='1'){rateFlash('sure');return;}
+  if(e.key==='2'){rateFlash('maybe');return;}
+  if(e.key==='3'){rateFlash('unsure');return;}
+}
+
+function loadFlashCard(){
+  if(flashIdx>=flashQueue.length){
+    document.getElementById('flash-unsure-count').textContent=flashUnsureCount;
+    document.getElementById('flash-done').style.display='block';
+    document.getElementById('flash-scene').style.display='none';
+    document.getElementById('flash-kb-hint').style.display='none';
+    ['cb-unsure','cb-maybe','cb-sure'].forEach(id=>document.getElementById(id).disabled=true);
+    document.removeEventListener('keydown',flashKeyHandler);
+    return;
+  }
+  const w=flashQueue[flashIdx];flashFlipped=false;
+  const inner=document.getElementById('flash-inner');
+  inner.classList.remove('flipped');
+  document.getElementById('flash-front-word').textContent=q(w);
+  document.getElementById('flash-back-word').textContent=a(w);
+  document.getElementById('flash-idx').textContent=flashIdx+1;
+  document.getElementById('f-remaining').textContent=flashQueue.length-flashIdx;
+  document.getElementById('flash-progress').style.width=(flashIdx/flashQueue.length*100)+'%';
+  ['cb-unsure','cb-maybe','cb-sure'].forEach(id=>document.getElementById(id).disabled=true);
+}
+
+function flipFlashCard(){
+  if(flashIdx>=flashQueue.length)return;
+  flashFlipped=!flashFlipped;
+  document.getElementById('flash-inner').classList.toggle('flipped',flashFlipped);
+  if(flashFlipped)['cb-unsure','cb-maybe','cb-sure'].forEach(id=>document.getElementById(id).disabled=false);
+}
+
+function goBackFlash(){
+  if(flashIdx<=0)return;
+  flashIdx--;
+  const inner=document.getElementById('flash-inner');
+  // slide in from left
+  inner.style.transition='none';
+  inner.style.transform='translateX(-60px)';inner.style.opacity='0';
+  loadFlashCard();
+  void inner.offsetWidth;
+  inner.style.transition='transform .3s cubic-bezier(.2,.8,.3,1), opacity .25s ease-out';
+  inner.style.transform='translateX(0)';inner.style.opacity='1';
+}
+function flashAdvance(){
+  // called by Enter on back side or by rating buttons — just go next without rating
+  if(flashIdx>=flashQueue.length)return;
+  flashIdx++;
+  animateNextCard();
+}
+
+function rateFlash(rating){
+  if(flashIdx>=flashQueue.length)return;
+  if(!flashFlipped){flipFlashCard();toast('💡 Vänd kortet först, tryck sedan 1–3');return;}
+  const w=flashQueue[flashIdx];
+  const orig=words.find(x=>x[lang1]===w[lang1]&&x[lang2]===w[lang2]);
+  if(orig)orig.flashRating=rating;
+  if(rating==='sure')flashSure++;
+  else if(rating==='maybe')flashMaybe++;
+  else{flashUnsureCount++;flashUnsureList.push(w);}
+  updatePiles();flashIdx++;
+  animateNextCard();
+}
+
+function animateNextCard(){
+  const scene=document.getElementById('flash-scene');
+  const inner=document.getElementById('flash-inner');
+  // slide out to left
+  inner.style.transition='transform .25s ease-in, opacity .25s ease-in';
+  inner.style.transform=(flashFlipped?'rotateY(180deg) ':'')+'translateX(-60px)';
+  inner.style.opacity='0';
+  setTimeout(()=>{
+    // reset position instantly (off-screen right), then slide in
+    inner.style.transition='none';
+    inner.style.transform='translateX(60px)';
+    inner.style.opacity='0';
+    loadFlashCard();
+    // force reflow
+    void inner.offsetWidth;
+    inner.style.transition='transform .3s cubic-bezier(.2,.8,.3,1), opacity .25s ease-out';
+    inner.style.transform='translateX(0)';
+    inner.style.opacity='1';
+  },250);
+}
+
+function updatePiles(){
+  document.getElementById('f-sure').textContent=flashSure;
+  document.getElementById('f-maybe').textContent=flashMaybe;
+  document.getElementById('f-unsure').textContent=flashUnsureCount;
+}
+function replayUnsure(){if(!flashUnsureList.length){toast('Inga osäkra!');return;}startFlash(true);}
+
+/* ═══ RESULTS ═══ */
+function showResults(){
+  let c,w,t,total,mode;
+  if(currentMode==='match'){c=mCorrect;w=mWrong;t=mSeconds;total=mPairs;mode='Para ihop';}
+  else if(currentMode==='spell'){c=sCorrect;w=sWrong;t=sSeconds;total=spellQueue.length;mode='Stava';}
+  else{c=mcCorrect;w=mcWrong;t=mcSeconds;total=mcQueue.length;mode='Flerval';}
+  const pct=total>0?Math.round(c/total*100):0;
+  let trophy='🏆',title='Bra jobbat!';
+  if(pct===100){trophy='🥇';title='Perfekt!';}else if(pct>=80){trophy='🎉';title='Nästan perfekt!';}else if(pct<50){trophy='💪';title='Öva lite till!';}
+  document.getElementById('results-trophy').textContent=trophy;
+  document.getElementById('results-title').textContent=title;
+  document.getElementById('results-sub').textContent=`${pct}% rätt – ${mode}`;
+  document.getElementById('r-correct').textContent=c;
+  document.getElementById('r-wrong').textContent=w;
+  document.getElementById('r-time').textContent=fmt(t);
+  if(pct>=80)spawnConfetti(20);
+  // save ratings to localStorage and build session summary
+  saveRatingsToStorage();
+  buildSessionSummary();
+  showView('results');
+}
+
+/* ═══ LIBRARY SYSTEM ═══ */
+let library=[]; // [{name,subject,lang1,lang2,words,id}]
+let selectedSetIds=new Set();
+let strengthFilter='all';
+const LIBRARY_KEY='glos_library_v1';
+
+function loadLibraryFromStorage(){
+  try{const d=localStorage.getItem(LIBRARY_KEY);if(d)library=JSON.parse(d);}catch(e){}
+}
+function saveLibraryToStorage(){
+  try{localStorage.setItem(LIBRARY_KEY,JSON.stringify(library));}catch(e){}
+}
+
+function loadLibraryFiles(e){
+  const files=[...e.target.files];
+  let loaded=0;
+  files.forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const data=JSON.parse(ev.target.result);
+        if(!data.words||!Array.isArray(data.words))return;
+        const l1=data.lang1||'en',l2=data.lang2||'sv';
+        const id=data.name+'_'+l1+'_'+l2;
+        // merge ratings from storage
+        const existing=library.find(s=>s.id===id);
+        const ratingMap=existing?Object.fromEntries((existing.words||[]).map(w=>[(w[l1]||'')+'|'+(w[l2]||''),{flashRating:w.flashRating,spellRating:w.spellRating}])):{};
+        const ws=data.words.filter(w=>w[l1]||w.en).map(w=>{
+          const n={};n[l1]=w[l1]||w.en||'';n[l2]=w[l2]||w.sv||'';
+          if(w.category)n.category=w.category;
+          const k=(n[l1]||'')+'|'+(n[l2]||'');
+          if(ratingMap[k]){if(ratingMap[k].flashRating)n.flashRating=ratingMap[k].flashRating;if(ratingMap[k].spellRating)n.spellRating=ratingMap[k].spellRating;}
+          return n;
+        });
+        const set={id,name:data.name||file.name.replace('.json',''),subject:data.subject||'',lang1:l1,lang2:l2,words:ws};
+        const idx=library.findIndex(s=>s.id===id);
+        if(idx>=0)library[idx]=set;else library.push(set);
+        saveLibraryToStorage();
+        loaded++;
+        if(loaded===files.length){renderLibraryGrid();toast(`✅ ${loaded} glosset laddade`);}
+      }catch(err){console.warn(err);}
+    };
+    reader.readAsText(file);
+  });
+  e.target.value='';
+}
+
+function showLibrary(){
+  loadLibraryFromStorage();
+  renderLibraryGrid();
+  showView('library');
+}
+
+function renderLibraryGrid(){
+  const grid=document.getElementById('library-grid');
+  const empty=document.getElementById('library-empty');
+  const bar=document.getElementById('lib-selection-bar');
+  grid.innerHTML='';
+  if(!library.length){empty.style.display='block';bar.style.display='none';return;}
+  empty.style.display='none';
+  bar.style.display='flex';
+  updateSelectionText();
+  library.forEach(set=>{
+    const isSelected=selectedSetIds.has(set.id);
+    const isActive=set.id===activeSetId;
+    const counts=setStrengthCounts(set.words);
+    const total=set.words.length||1;
+    const card=document.createElement('div');
+    card.className='lib-set-card'+(isSelected?' selected':'')+(isActive&&!isSelected?' active-set':'');
+    card.onclick=()=>toggleSetSelection(set.id);
+    const l1=langObj(set.lang1),l2=langObj(set.lang2);
+    card.innerHTML=`
+      <div style="position:absolute;top:10px;right:10px;font-size:1.1rem">${isSelected?'✅':isActive?'▶️':''}</div>
+      <div class="lib-set-title">${esc(set.name)}</div>
+      <div class="lib-set-meta">${l1.flag} ${l1.name} → ${l2.flag} ${l2.name} &nbsp;·&nbsp; ${set.words.length} ord${set.subject?' · '+esc(set.subject):''}</div>
+      <div class="lib-strength-bar">
+        <div style="width:${counts.strong/total*100}%;background:var(--green)"></div>
+        <div style="width:${counts.medium/total*100}%;background:var(--yellow)"></div>
+        <div style="width:${counts.weak/total*100}%;background:var(--red)"></div>
+        <div style="width:${counts.unrated/total*100}%;background:rgba(255,255,255,.15)"></div>
+      </div>
+      <div style="font-size:.72rem;color:var(--gray);margin-bottom:10px">
+        🟢 ${counts.strong} &nbsp; 🟡 ${counts.medium} &nbsp; 🔴 ${counts.weak} &nbsp; ⚪ ${counts.unrated}
+      </div>
+      <div class="lib-set-actions" onclick="event.stopPropagation()">
+        <button class="btn btn-teal btn-sm" onclick="activateSingleSet('${set.id}')">▶ Öva detta</button>
+        <button class="btn btn-ghost btn-sm" onclick="removeSetFromLibrary('${set.id}')">🗑</button>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function setStrengthCounts(ws){
+  const c={strong:0,medium:0,weak:0,unrated:0};
+  ws.forEach(w=>{c[wordStrength(w)]=(c[wordStrength(w)]||0)+1;});
+  return c;
+}
+
+function toggleSetSelection(id){
+  if(selectedSetIds.has(id))selectedSetIds.delete(id);
+  else selectedSetIds.add(id);
+  updateSelectionText();
+  renderLibraryGrid();
+}
+function selectAllSets(){selectedSetIds=new Set(library.map(s=>s.id));updateSelectionText();renderLibraryGrid();}
+function deselectAllSets(){selectedSetIds.clear();updateSelectionText();renderLibraryGrid();}
+function updateSelectionText(){
+  document.getElementById('lib-selection-text').textContent=
+    selectedSetIds.size?`${selectedSetIds.size} glosset valda – klicka "Aktivera" för att öva`:'Välj ett eller flera glosset';
+}
+
+let activeSetId='';
+
+function activateSingleSet(id){
+  selectedSetIds.clear();selectedSetIds.add(id);
+  activateSelectedSets();
+}
+function activateSelectedSets(){
+  if(!selectedSetIds.size){toast('⚠️ Välj minst ett glosset!');return;}
+  const sets=library.filter(s=>selectedSetIds.has(s.id));
+  if(!sets.length)return;
+  // merge words from all selected sets
+  const merged=[];const seen=new Set();
+  sets.forEach(s=>{
+    s.words.forEach(w=>{
+      const k=(w[s.lang1]||'')+'|'+(w[s.lang2]||'');
+      if(!seen.has(k)){seen.add(k);merged.push(w);}
+    });
+  });
+  words=merged;
+  const first=sets[0];
+  lang1=first.lang1;lang2=first.lang2;
+  setName=sets.length===1?first.name:sets.map(s=>s.name).join(' + ');
+  setSubject=sets.length===1?first.subject:'Kombinerat set';
+  activeSetId=sets.length===1?first.id:'combined';
+  document.getElementById('set-name').value=setName;
+  document.getElementById('set-subject').value=setSubject;
+  setLangSelects(lang1,lang2);
+  renderWordList();
+  loadRatingsFromStorage();
+  strengthFilter='all';
+  showStudentHome();
+  toast(`✅ ${words.length} ord aktiverade`);
+}
+function removeSetFromLibrary(id){
+  if(!confirm('Ta bort detta glosset från biblioteket?'))return;
+  library=library.filter(s=>s.id!==id);
+  selectedSetIds.delete(id);
+  saveLibraryToStorage();
+  renderLibraryGrid();
+}
+
+/* Strength filter for practice */
+function setStrengthFilter(f){
+  strengthFilter=f;
+  ['all','weak','medium','strong','unrated'].forEach(k=>{
+    const el=document.getElementById('sf-'+k);
+    if(el){el.className=k===f?'sh-fpill active':'sh-fpill';}
+  });
+  updateStrengthFilterCounts();
+  showStudentHome();
+}
+function updateStrengthFilterCounts(){
+  const c={all:words.length,strong:0,medium:0,weak:0,unrated:0};
+  words.forEach(w=>{const s=wordStrength(w);c[s]=(c[s]||0)+1;});
+  Object.keys(c).forEach(k=>{const el=document.getElementById('sf-'+k+'-n');if(el)el.textContent=c[k]?'('+c[k]+')':'';});
+}
+function getActiveWords(){
+  if(strengthFilter==='all')return words.filter(w=>w[lang1]&&w[lang2]);
+  return words.filter(w=>w[lang1]&&w[lang2]&&wordStrength(w)===strengthFilter);
+}
+
+/* ═══ MY WORDS / RATING STORAGE ═══ */
+let mwFilter='all';
+
+function storageKey(){return'glos_ratings_'+setName.replace(/\s/g,'_');}
+
+function saveRatingsToStorage(){
+  try{
+    const existing=JSON.parse(localStorage.getItem(storageKey())||'{}');
+    words.forEach(w=>{
+      const k=(w[lang1]||'')+'|'+(w[lang2]||'');
+      if(!existing[k])existing[k]={word:w[lang1]||'',trans:w[lang2]||'',category:w.category||''};
+      if(w.flashRating)existing[k].flashRating=w.flashRating;
+      if(w.spellRating)existing[k].spellRating=w.spellRating;
+      existing[k].lastSeen=Date.now();
+    });
+    localStorage.setItem(storageKey(),JSON.stringify(existing));
+  }catch(e){console.warn('localStorage not available');}
+}
+
+function loadRatingsFromStorage(){
+  try{
+    const stored=JSON.parse(localStorage.getItem(storageKey())||'{}');
+    words.forEach(w=>{
+      const k=(w[lang1]||'')+'|'+(w[lang2]||'');
+      if(stored[k]){
+        if(stored[k].flashRating&&!w.flashRating)w.flashRating=stored[k].flashRating;
+        if(stored[k].spellRating&&!w.spellRating)w.spellRating=stored[k].spellRating;
+      }
+    });
+  }catch(e){}
+}
+
+function wordStrength(w){
+  // combines flash + spell rating into a single traffic-light strength
+  const fr=w.flashRating, sr=w.spellRating;
+  const score=(r)=>r==='sure'||r==='easy'?2:r==='maybe'||r==='medium'?1:r==='unsure'||r==='hard'?0:null;
+  const fs=score(fr), ss=score(sr);
+  const vals=[fs,ss].filter(v=>v!==null);
+  if(!vals.length)return'unrated';
+  const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+  if(avg>=1.5)return'strong';
+  if(avg>=0.5)return'medium';
+  return'weak';
+}
+
+function strengthIcon(s){
+  return{strong:'🟢',medium:'🟡',weak:'🔴',unrated:'⚪'}[s]||'⚪';
+}
+function strengthColor(s){
+  return{strong:'var(--green)',medium:'var(--yellow)',weak:'var(--red)',unrated:'rgba(255,255,255,.25)'}[s];
+}
+
+function buildSessionSummary(){
+  // collect the words that were actually practiced this session
+  let practiced=[];
+  if(currentMode==='spell')practiced=spellQueue;
+  else if(currentMode==='flash')practiced=flashQueue;
+  else practiced=words.filter(w=>w[lang1]&&w[lang2]);
+
+  const summary=document.getElementById('session-summary');
+  const list=document.getElementById('session-word-list');
+  const retryBtn=document.getElementById('retry-weak-btn');
+  if(!practiced.length){summary.style.display='none';return;}
+
+  list.innerHTML='';
+  let hasWeak=false;
+  practiced.forEach(w=>{
+    const str=wordStrength(w);
+    if(str==='weak'||str==='medium')hasWeak=true;
+    const catColor=getCatColor(w.category||'');
+    const catBadge=w.category?`<span class="cat-badge" style="background:${catColor}22;color:${catColor};border:1px solid ${catColor}55">${esc(w.category)}</span>`:'';
+    const fIcon=w.flashRating?{sure:'🟢',maybe:'🟡',unsure:'🔴'}[w.flashRating]:'⚪';
+    const sIcon=w.spellRating?{easy:'🟢',medium:'🟡',hard:'🔴'}[w.spellRating]:'⚪';
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:9px 14px';
+    row.innerHTML=`
+      <span style="font-size:1.1rem">${strengthIcon(str)}</span>
+      <span style="font-weight:800;flex:1">${esc(w[lang1]||'')} <span style="color:var(--gray);font-weight:600">– ${esc(w[lang2]||'')}</span></span>
+      ${catBadge}
+      <span style="font-size:.72rem;color:var(--gray);display:flex;gap:4px;align-items:center">
+        <span title="Flashcards">🃏${fIcon}</span>
+        <span title="Stavning">✍️${sIcon}</span>
+      </span>`;
+    list.appendChild(row);
+  });
+
+  retryBtn.style.display=hasWeak?'inline-flex':'none';
+  summary.style.display='block';
+}
+
+function showMyWords(){
+  loadRatingsFromStorage();
+  renderMyWordsList();
+  showView('mywords');
+}
+
+function setMWFilter(f){
+  mwFilter=f;
+  ['all','weak','medium','strong'].forEach(k=>{
+    const el=document.getElementById('mw-filter-'+k);
+    if(el)el.style.background=k===f?'rgba(255,255,255,.1)':'';
+  });
+  renderMyWordsList();
+}
+
+function renderMyWordsList(){
+  const list=document.getElementById('mywords-list');
+  const empty=document.getElementById('mywords-empty');
+  list.innerHTML='';
+  let filtered=words.filter(w=>w[lang1]&&w[lang2]);
+  filtered=filtered.filter(w=>{
+    const s=wordStrength(w);
+    if(mwFilter==='all')return true;
+    if(mwFilter==='weak')return s==='weak';
+    if(mwFilter==='medium')return s==='medium';
+    if(mwFilter==='strong')return s==='strong';
+    return true;
+  });
+  if(!filtered.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  // group by category
+  const cats={};
+  filtered.forEach(w=>{const c=w.category||'_';if(!cats[c])cats[c]=[];cats[c].push(w);});
+  Object.keys(cats).sort((a,b)=>a==='_'?1:b==='_'?-1:a.localeCompare(b)).forEach(cat=>{
+    if(cat!=='_'){
+      const hdr=document.createElement('div');
+      const cc=getCatColor(cat);
+      hdr.style.cssText=`font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:${cc};margin:14px 0 6px;padding-left:4px`;
+      hdr.textContent=cat;
+      list.appendChild(hdr);
+    }
+    cats[cat].forEach(w=>{
+      const str=wordStrength(w);
+      const catColor=getCatColor(w.category||'');
+      const catBadge=w.category?`<span class="cat-badge" style="background:${catColor}22;color:${catColor};border:1px solid ${catColor}55">${esc(w.category)}</span>`:'';
+      const fIcon=w.flashRating?{sure:'🟢',maybe:'🟡',unsure:'🔴'}[w.flashRating]:'⚪';
+      const sIcon=w.spellRating?{easy:'🟢',medium:'🟡',hard:'🔴'}[w.spellRating]:'⚪';
+      const row=document.createElement('div');
+      row.style.cssText=`display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid ${strengthColor(str)}33;border-left:3px solid ${strengthColor(str)};border-radius:10px;padding:9px 14px`;
+      row.innerHTML=`
+        <span style="font-size:1.05rem">${strengthIcon(str)}</span>
+        <span style="font-weight:800;flex:1">${esc(w[lang1]||'')} <span style="color:var(--gray);font-weight:600">– ${esc(w[lang2]||'')}</span></span>
+        ${catBadge}
+        <span style="font-size:.72rem;color:var(--gray);display:flex;gap:4px;align-items:center">
+          <span title="Flashcards">🃏${fIcon}</span>
+          <span title="Stavning">✍️${sIcon}</span>
+        </span>`;
+      list.appendChild(row);
+    });
+  });
+}
+
+function retryWeak(){
+  const weak=words.filter(w=>wordStrength(w)==='weak'||wordStrength(w)==='medium');
+  if(!weak.length){toast('Inga svaga ord just nu!');return;}
+  // launch flashcards with only weak words
+  const save=words;
+  words=weak;
+  startFlash();
+  words=save; // restore full list after starting
+}
+
+function clearMyWordsData(){
+  if(!confirm('Rensa all graderingshistorik för det här setet?'))return;
+  try{localStorage.removeItem(storageKey());}catch(e){}
+  words.forEach(w=>{delete w.flashRating;delete w.spellRating;});
+  renderWordList();
+  renderMyWordsList();
+  toast('🗑 Historik rensad');
+}
+/* ═══ RAIN GAME ═══ */
+let rainWords=[],rainActive=null,rainLoop=null,rainSpawnTimer=null;
+let rainScore=0,rainLives=3,rainRunning=false;
+const RAIN_CFG={
+  easy:  {speed:38,spawnMs:3400,maxWords:3,cols:3},
+  medium:{speed:58,spawnMs:2400,maxWords:4,cols:4},
+  hard:  {speed:82,spawnMs:1600,maxWords:5,cols:5}
+};
+function startRain(){
+  const valid=words.filter(w=>w[lang1]&&w[lang2]);
+  if(!valid.length){toast('⚠️ Inga glospar!');return;}
+  currentMode='rain';const d=diff.rain;
+  setBadge('rain-diff-badge',d);updateDiffButtons('rain');
+  stopRain();
+  const canvas=document.getElementById('rain-star-canvas');
+  const arena=document.getElementById('rain-arena');
+  canvas.width=arena.offsetWidth||600;canvas.height=arena.offsetHeight||360;
+  const ctx=canvas.getContext('2d');
+  for(let i=0;i<60;i++){ctx.beginPath();ctx.arc(Math.random()*canvas.width,Math.random()*canvas.height,Math.random()*1.2+.2,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${Math.random()*.35+.05})`;ctx.fill();}
+  const overlay=document.getElementById('rain-overlay');
+  const desc={easy:'Enkel – ord faller lugnt',medium:'Medel – högre fart, fler ord',hard:'Svår – snabbt och många ord!'};
+  overlay.style.display='flex';
+  overlay.innerHTML=`<div style="font-size:2.4rem">☔</div><h2>Ordregnet</h2><p>${desc[d]}</p><p style="font-size:.78rem;color:rgba(168,164,192,.7)">Skriv det <strong style="color:var(--yellow)">gula</strong> ordet och tryck Enter!</p><button class="btn btn-teal" style="margin-top:10px;font-size:1rem;padding:12px 32px" onclick="launchRain()">▶ Starta</button>`;
+  const inp=document.getElementById('rain-input');
+  inp.value='';inp.disabled=true;inp.className='rain-input';
+  inp.onkeydown=e=>{if(e.key==='Enter')submitRain();};
+  inp.oninput=()=>highlightRainWord();
+  showView('rain');updateDirButtons();
+}
+function launchRain(){
+  const valid=words.filter(w=>w[lang1]&&w[lang2]);
+  const d=diff.rain;const cfg=RAIN_CFG[d];
+  rainWords=[];rainScore=0;rainLives=3;rainRunning=true;
+  document.getElementById('rain-score').textContent='0';
+  updateRainLives();
+  document.getElementById('rain-overlay').style.display='none';
+  document.querySelectorAll('.rain-word').forEach(e=>e.remove());
+  const inp=document.getElementById('rain-input');inp.disabled=false;inp.focus();
+  const pool=shuffle([...valid]);let poolIdx=0;
+  function spawnWord(){
+    if(!rainRunning||rainWords.length>=cfg.maxWords)return;
+    const w=pool[poolIdx%pool.length];poolIdx++;
+    const arena=document.getElementById('rain-arena');
+    const aW=arena.offsetWidth;
+    const colW=Math.floor(aW/cfg.cols);
+    const usedCols=new Set(rainWords.map(rw=>rw.col));
+    const free=[...Array(cfg.cols).keys()].filter(c=>!usedCols.has(c));
+    if(!free.length)return;
+    const col=free[Math.floor(Math.random()*free.length)];
+    const el=document.createElement('div');
+    el.className='rain-word inactive';el.textContent=q(w);
+    const x=col*colW+8;
+    el.style.left=x+'px';el.style.top='-44px';
+    arena.appendChild(el);
+    const rw={el,w,col,y:-44,speed:cfg.speed*(0.82+Math.random()*.36)};
+    rainWords.push(rw);
+    if(!rainActive)pickActiveWord();
+  }
+  spawnWord();
+  rainSpawnTimer=setInterval(spawnWord,cfg.spawnMs);
+  let last=null;
+  function frame(ts){
+    if(!rainRunning)return;
+    const dt=last?Math.min((ts-last)/1000,.05):0;last=ts;
+    const aH=document.getElementById('rain-arena').offsetHeight;
+    for(let i=rainWords.length-1;i>=0;i--){
+      const rw=rainWords[i];
+      rw.y+=rw.speed*dt;
+      rw.el.style.top=Math.round(rw.y)+'px';
+      if(rw.y>=aH-24){
+        rw.el.classList.add('miss');
+        const dead=rw.el;setTimeout(()=>dead.remove(),350);
+        rainWords.splice(i,1);
+        if(rw===rainActive)rainActive=null;
+        rainLives--;updateRainLives();
+        if(rainLives<=0){gameOverRain();return;}
+        pickActiveWord();
+      }
+    }
+    rainLoop=requestAnimationFrame(frame);
+  }
+  rainLoop=requestAnimationFrame(frame);
+}
+function pickActiveWord(){
+  if(!rainWords.length){rainActive=null;return;}
+  rainActive=rainWords.reduce((a,b)=>a.y>b.y?a:b);
+  rainWords.forEach(rw=>rw.el.className='rain-word '+(rw===rainActive?'active':'inactive'));
+  document.getElementById('rain-input').value='';
+}
+function highlightRainWord(){
+  if(!rainActive)return;
+  const typed=document.getElementById('rain-input').value.toLowerCase();
+  const target=a(rainActive.w).toLowerCase();
+  rainActive.el.style.borderColor=typed&&target.startsWith(typed)?'var(--teal)':'';
+}
+function submitRain(){
+  const inp=document.getElementById('rain-input');
+  const typed=inp.value.trim();
+  if(!typed||!rainActive)return;
+  const target=a(rainActive.w);
+  if(typed.toLowerCase()===target.toLowerCase()){
+    rainScore+=Math.max(1,Math.round(10*(1-Math.min(rainActive.y/320,1))));
+    document.getElementById('rain-score').textContent=rainScore;
+    rainActive.el.classList.remove('active','inactive');rainActive.el.classList.add('hit');
+    spawnConfetti(3);
+    const dead=rainActive.el;setTimeout(()=>dead.remove(),400);
+    rainWords=rainWords.filter(rw=>rw!==rainActive);
+    rainActive=null;inp.value='';inp.className='rain-input';
+    pickActiveWord();
+  } else {
+    inp.className='rain-input miss';
+    rainActive.el.classList.add('miss');
+    setTimeout(()=>{inp.className='rain-input';if(rainActive)rainActive.el.classList.remove('miss');},350);
+  }
+}
+function updateRainLives(){
+  document.getElementById('rain-lives').textContent='❤️'.repeat(Math.max(0,rainLives))+'🤍'.repeat(Math.max(0,3-rainLives));
+}
+function gameOverRain(){
+  rainRunning=false;
+  clearInterval(rainSpawnTimer);cancelAnimationFrame(rainLoop);
+  document.querySelectorAll('.rain-word').forEach(e=>e.remove());
+  rainWords=[];rainActive=null;
+  document.getElementById('rain-input').disabled=true;
+  const overlay=document.getElementById('rain-overlay');
+  overlay.style.display='flex';
+  overlay.innerHTML=`<div style="font-size:2.4rem">💥</div><h2 style="color:var(--pink)">Game Over!</h2><p>Du fick <strong style="color:var(--yellow);font-size:1.4rem">${rainScore}</strong> poäng</p><div style="display:flex;gap:10px;margin-top:10px"><button class="btn btn-teal" onclick="launchRain()">🔄 Igen</button><button class="btn btn-ghost" onclick="stopRain();showStudentHome()">🏠 Hem</button></div>`;
+}
+function stopRain(){
+  rainRunning=false;
+  clearInterval(rainSpawnTimer);
+  if(rainLoop){cancelAnimationFrame(rainLoop);rainLoop=null;}
+  document.querySelectorAll('.rain-word').forEach(e=>e.remove());
+  rainWords=[];rainActive=null;
+}
+function setRainHeight(v){
+  document.getElementById('rain-arena').style.height=v+'px';
+  document.getElementById('rain-height-label').textContent=v;
+}
+
+/* ═══ ORDJAKTEN – RACING GAME ═══ */
+let raceRunning=false,raceLoop=null,raceSpawnTimer=null;
+let raceFuel=100,raceSpeed=0,raceDist=0,raceGlosas=[],raceGlosaIdx=0;
+let raceCurrent=null,raceAnswered=false,raceCar=0,raceScore=0;
+const RACE_CFG={
+  easy:  {maxSpeed:180,accel:18,fuelDrain:3.5,fuelGain:28,spawnMs:5000},
+  medium:{maxSpeed:260,accel:26,fuelDrain:5,  fuelGain:22,spawnMs:3800},
+  hard:  {maxSpeed:360,accel:36,fuelDrain:7,  fuelGain:16,spawnMs:2800}
+};
+
+function startRace(){
+  const valid=words.filter(w=>w[lang1]&&w[lang2]);
+  if(!valid.length){toast('⚠️ Inga glospar!');return;}
+  currentMode='race';const d=diff.race||'easy';
+  setBadge('race-diff-badge',d);updateDiffButtons('race');
+  stopRace();
+  raceGlosas=shuffle([...valid]);raceGlosaIdx=0;
+  showView('race');updateDirButtons();
+  // draw init canvas
+  drawRaceScene(0,0,100);
+  const overlay=document.getElementById('race-overlay');
+  overlay.style.display='flex';
+  const desc={easy:'Enkel – gott om bränsle',medium:'Medel – håll tempot uppe',hard:'Svår – det bränner!'};
+  overlay.innerHTML=`<div style="font-size:2.4rem">🏎️</div><h2>Ordjakten</h2><p>${desc[d]}</p><p style="font-size:.78rem;color:rgba(168,164,192,.7)">Svara rätt på glosorna för att fylla tanken och hålla farten!</p><button class="btn btn-orange" style="margin-top:10px;font-size:1rem;padding:12px 32px" onclick="launchRace()">▶ Starta motorn</button>`;
+  document.getElementById('race-input').value='';
+  document.getElementById('race-input').disabled=true;
+}
+function launchRace(){
+  const d=diff.race||'easy';const cfg=RACE_CFG[d];
+  raceFuel=100;raceSpeed=0;raceDist=0;raceScore=0;raceAnswered=false;raceCar=0;
+  raceRunning=true;
+  document.getElementById('race-overlay').style.display='none';
+  document.getElementById('race-input').disabled=false;
+  document.getElementById('race-input').focus();
+  document.getElementById('race-input').value='';
+  nextRaceGlosa();
+  let last=null;
+  function frame(ts){
+    if(!raceRunning)return;
+    const dt=last?Math.min((ts-last)/1000,.05):0;last=ts;
+    const cfg2=RACE_CFG[diff.race||'easy'];
+    // drain fuel
+    raceFuel=Math.max(0,raceFuel-cfg2.fuelDrain*dt);
+    // accelerate up to max based on fuel
+    const targetSpeed=raceFuel>0?cfg2.maxSpeed*(raceFuel/100)*0.6+cfg2.maxSpeed*0.4:0;
+    raceSpeed+=(targetSpeed-raceSpeed)*cfg2.accel*dt*0.1;
+    if(raceFuel<=0)raceSpeed=Math.max(0,raceSpeed-60*dt);
+    raceDist+=raceSpeed*dt;
+    raceCar=raceDist;
+    // update UI
+    document.getElementById('race-fuel-fill').style.width=raceFuel+'%';
+    document.getElementById('race-fuel-fill').style.background=raceFuel>50?'var(--teal)':raceFuel>25?'var(--yellow)':'var(--pink)';
+    document.getElementById('race-speed-val').textContent=Math.round(raceSpeed);
+    document.getElementById('race-dist-val').textContent=(raceDist/1000).toFixed(1)+' km';
+    document.getElementById('race-score-val').textContent=raceScore;
+    drawRaceScene(raceDist,raceSpeed,raceFuel);
+    if(raceFuel<=0&&raceSpeed<2){gameOverRace();return;}
+    raceLoop=requestAnimationFrame(frame);
+  }
+  raceLoop=requestAnimationFrame(frame);
+  raceSpawnTimer=setInterval(()=>{if(raceRunning&&raceFuel>0)nudgeFuel(-8);},3000);
+}
+function nextRaceGlosa(){
+  if(!raceGlosas.length)return;
+  raceCurrent=raceGlosas[raceGlosaIdx%raceGlosas.length];raceGlosaIdx++;
+  document.getElementById('race-question').textContent=q(raceCurrent);
+  document.getElementById('race-input').value='';
+  raceAnswered=false;
+}
+function submitRace(){
+  const inp=document.getElementById('race-input');
+  const typed=inp.value.trim();if(!typed||!raceCurrent||raceAnswered)return;
+  const target=a(raceCurrent);
+  if(typed.toLowerCase()===target.toLowerCase()){
+    raceAnswered=true;
+    const cfg=RACE_CFG[diff.race||'easy'];
+    nudgeFuel(cfg.fuelGain);
+    raceScore+=Math.round(raceSpeed/10)+5;
+    inp.className='race-input correct';spawnConfetti(3);
+    setTimeout(()=>{inp.className='race-input';nextRaceGlosa();},400);
+  } else {
+    inp.className='race-input wrong';
+    nudgeFuel(-12);
+    setTimeout(()=>{inp.className='race-input';inp.value='';},500);
+  }
+}
+function nudgeFuel(amount){
+  raceFuel=Math.min(100,Math.max(0,raceFuel+amount));
+}
+function drawRaceScene(dist,speed,fuel){
+  const canvas=document.getElementById('race-canvas');
+  const W=canvas.width,H=canvas.height;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  // sky gradient
+  const sky=ctx.createLinearGradient(0,0,0,H*0.55);
+  sky.addColorStop(0,'#0a0618');sky.addColorStop(1,'#1a0f35');
+  ctx.fillStyle=sky;ctx.fillRect(0,0,W,H*0.55);
+  // stars
+  ctx.fillStyle='rgba(255,255,255,0.6)';
+  const starSeed=42;
+  for(let i=0;i<40;i++){
+    const sx=((i*137+starSeed)%W);const sy=(i*73)%(H*0.45);
+    ctx.beginPath();ctx.arc(sx,sy,Math.random()<0.3?1.2:.5,0,Math.PI*2);ctx.fill();
+  }
+  // road
+  const roadTop=H*0.52,roadBot=H;
+  const roadGrad=ctx.createLinearGradient(0,roadTop,0,roadBot);
+  roadGrad.addColorStop(0,'#1a1a2e');roadGrad.addColorStop(1,'#0d0d1a');
+  ctx.fillStyle=roadGrad;
+  ctx.beginPath();
+  ctx.moveTo(W*0.2,roadTop);ctx.lineTo(W*0.8,roadTop);
+  ctx.lineTo(W,roadBot);ctx.lineTo(0,roadBot);ctx.closePath();ctx.fill();
+  // road markings
+  const mCount=6;const offset=(dist*0.4)%((H-roadTop)/mCount);
+  ctx.strokeStyle='rgba(255,209,102,0.5)';ctx.lineWidth=2;ctx.setLineDash([10,14]);
+  for(let i=0;i<mCount+1;i++){
+    const t=(i*(H-roadTop)/mCount+offset)/(H-roadTop);
+    const lx=W*0.2+(W*0.3)*t,rx=W*0.8-(W*0.3)*t;
+    const cx=(lx+rx)/2,cy=roadTop+(H-roadTop)*t;
+    const hw=(rx-lx)*0.02;
+    ctx.beginPath();ctx.moveTo(cx-hw,cy);ctx.lineTo(cx+hw,cy);ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  // horizon glow
+  const glow=ctx.createLinearGradient(0,roadTop-20,0,roadTop+30);
+  glow.addColorStop(0,'rgba(168,85,247,0)');glow.addColorStop(0.5,'rgba(168,85,247,0.18)');glow.addColorStop(1,'rgba(168,85,247,0)');
+  ctx.fillStyle=glow;ctx.fillRect(0,roadTop-20,W,50);
+  // trees / scenery
+  const treeSpacing=160;
+  for(let side=0;side<2;side++){
+    for(let t=0;t<5;t++){
+      const tOff=((dist*0.6+t*treeSpacing+(side*80))%((5*treeSpacing)))/((5*treeSpacing));
+      const ty=roadTop+(H-roadTop)*tOff*0.85;
+      const tx=side===0?W*0.18-tOff*W*0.12:W*0.82+tOff*W*0.12;
+      const th=18+tOff*30;const tw=th*0.55;
+      // trunk
+      ctx.fillStyle='#3d2b1f';ctx.fillRect(tx-tw*0.15,ty,tw*0.3,th*0.4);
+      // canopy
+      ctx.fillStyle=`hsl(${140+side*20},50%,${15+tOff*12}%)`;
+      ctx.beginPath();ctx.arc(tx,ty,tw*0.7,0,Math.PI*2);ctx.fill();
+    }
+  }
+  // car
+  const carW=64,carH=28;const carX=W/2-carW/2;const carY=H-carH-18;
+  const wobble=raceRunning&&speed>20?Math.sin(dist*0.15)*1.2:0;
+  // shadow
+  ctx.fillStyle='rgba(0,0,0,0.4)';
+  ctx.beginPath();ctx.ellipse(carX+carW/2,carY+carH+4,carW*0.45,6,0,0,Math.PI*2);ctx.fill();
+  // body
+  ctx.fillStyle='#ef476f';ctx.beginPath();
+  ctx.roundRect(carX,carY+wobble,carW,carH,6);ctx.fill();
+  // roof
+  ctx.fillStyle='#c73055';ctx.beginPath();
+  ctx.roundRect(carX+12,carY-10+wobble,carW-24,14,4);ctx.fill();
+  // windows
+  ctx.fillStyle='rgba(100,200,255,0.6)';
+  ctx.beginPath();ctx.roundRect(carX+14,carY-9+wobble,carW-28,10,3);ctx.fill();
+  // wheels
+  [[carX+8,carY+carH],[carX+carW-8,carY+carH]].forEach(([wx,wy])=>{
+    ctx.fillStyle='#111';ctx.beginPath();ctx.ellipse(wx,wy+wobble,7,5,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#555';ctx.beginPath();ctx.ellipse(wx,wy+wobble,3,2.5,0,0,Math.PI*2);ctx.fill();
+  });
+  // headlights
+  if(fuel<30){
+    const hl=ctx.createRadialGradient(carX+carW,carY+carH*0.4+wobble,1,carX+carW+20,carY+carH*0.4+wobble,40);
+    hl.addColorStop(0,'rgba(255,230,80,0.5)');hl.addColorStop(1,'rgba(255,230,80,0)');
+    ctx.fillStyle=hl;ctx.beginPath();ctx.ellipse(carX+carW+20,carY+carH*0.4+wobble,40,20,0,0,Math.PI*2);ctx.fill();
+  }
+  // speed lines when fast
+  if(speed>180){
+    ctx.strokeStyle=`rgba(168,85,247,${Math.min(0.4,(speed-180)/200)})`;ctx.lineWidth=1.5;
+    for(let l=0;l<6;l++){
+      const ly=carY+4+l*(carH/6)+wobble;
+      const lx=carX-(20+l*8);
+      ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(lx-30,ly);ctx.stroke();
+    }
+  }
+}
+function gameOverRace(){
+  raceRunning=false;
+  clearInterval(raceSpawnTimer);cancelAnimationFrame(raceLoop);
+  document.getElementById('race-input').disabled=true;
+  const km=(raceDist/1000).toFixed(2);
+  const overlay=document.getElementById('race-overlay');
+  overlay.style.display='flex';
+  overlay.innerHTML=`<div style="font-size:2.2rem">⛽</div><h2 style="color:var(--pink)">Bränslet tog slut!</h2><p>Du körde <strong style="color:var(--yellow)">${km} km</strong></p><p>Poäng: <strong style="color:var(--yellow);font-size:1.3rem">${raceScore}</strong></p><div style="display:flex;gap:10px;margin-top:10px"><button class="btn btn-orange" onclick="launchRace()">🔄 Igen</button><button class="btn btn-ghost" onclick="stopRace();showStudentHome()">🏠 Hem</button></div>`;
+}
+function stopRace(){
+  raceRunning=false;
+  clearInterval(raceSpawnTimer);
+  if(raceLoop){cancelAnimationFrame(raceLoop);raceLoop=null;}
+}
+
+/* ═══ MEMORY GAME ═══ */
+let memCards=[],memRevealed=[],memMatched=0,memFlips=0,memLocked=false;
+let memTimer=null,memSeconds=0,memTotal=0;
+const MEM_PAIRS={easy:6,medium:10,hard:16};
+
+function startMemory(){
+  const valid=words.filter(w=>w[lang1]&&w[lang2]);
+  if(valid.length<3){toast('⚠️ Minst 3 glospar behövs!');return;}
+  currentMode='memory';const d=diff.memory;
+  setBadge('memory-diff-badge',{easy:'6 par',medium:'10 par',hard:'16 par'}[d]);
+  updateDiffButtons('memory');
+  stopMemory();
+  const pairCount=Math.min(MEM_PAIRS[d],valid.length);
+  const pool=shuffle([...valid]).slice(0,pairCount);
+  memTotal=pairCount;memMatched=0;memFlips=0;memLocked=false;memRevealed=[];
+  document.getElementById('mem-flips').textContent='0';
+  document.getElementById('mem-pairs').textContent='0';
+  document.getElementById('mem-timer').textContent='0:00';
+  // build card data: each pair gets en+sv card
+  const cardData=[];
+  pool.forEach((w,i)=>{
+    cardData.push({id:i,side:lang1,word:q(w),label:qLang(),pairIdx:i});
+    cardData.push({id:i,side:lang2,word:a(w),label:aLang(),pairIdx:i});
+  });
+  shuffle(cardData);
+  // grid columns: easy=4, medium=5, hard=8
+  const cols={easy:4,medium:5,hard:8}[d];
+  const grid=document.getElementById('memory-grid');
+  grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  grid.className='';
+  grid.classList.add('cols-'+cols);
+  grid.innerHTML='';
+  memCards=[];
+  cardData.forEach((cd,idx)=>{
+    const el=document.createElement('div');
+    el.className='mem-card';
+    el.innerHTML=`<div class="mem-card-inner">
+      <div class="mem-face mem-back">🧠</div>
+      <div class="mem-face mem-front ${cd.side}">${cd.word}</div>
+    </div>`;
+    el.addEventListener('click',()=>onMemClick(idx));
+    grid.appendChild(el);
+    memCards.push({el,cd,matched:false,revealed:false});
+  });
+  showView('memory');
+  // start timer on first click
+  memSeconds=0;
+}
+
+function onMemClick(idx){
+  if(memLocked)return;
+  const mc=memCards[idx];
+  if(mc.matched||mc.revealed)return;
+  // reveal
+  mc.el.classList.add('revealed');
+  mc.revealed=true;
+  memRevealed.push(idx);
+  if(memRevealed.length===1){
+    // start timer on first card
+    if(!memTimer){memTimer=setInterval(()=>{memSeconds++;document.getElementById('mem-timer').textContent=fmt(memSeconds);},1000);}
+    return;
+  }
+  // second card — check match
+  memFlips++;
+  document.getElementById('mem-flips').textContent=memFlips;
+  const [a,b]=[memRevealed[0],memRevealed[1]];
+  const ca=memCards[a].cd,cb=memCards[b].cd;
+  if(ca.pairIdx===cb.pairIdx&&ca.side!==cb.side){
+    // match!
+    memCards[a].matched=true;memCards[b].matched=true;
+    memCards[a].el.classList.add('matched');memCards[b].el.classList.add('matched');
+    memCards[a].revealed=false;memCards[b].revealed=false;
+    memRevealed=[];
+    memMatched++;
+    document.getElementById('mem-pairs').textContent=memMatched;
+    spawnConfetti(2);
+    if(memMatched===memTotal){
+      clearInterval(memTimer);memTimer=null;
+      setTimeout(()=>showMemoryResults(),600);
+    }
+  } else {
+    // no match — flip back after delay
+    memLocked=true;
+    memCards[a].el.classList.add('wrong-flash');
+    memCards[b].el.classList.add('wrong-flash');
+    setTimeout(()=>{
+      memCards[a].el.classList.remove('revealed','wrong-flash');
+      memCards[b].el.classList.remove('revealed','wrong-flash');
+      memCards[a].revealed=false;memCards[b].revealed=false;
+      memRevealed=[];memLocked=false;
+    },900);
+  }
+}
+
+function showMemoryResults(){
+  // rating based on flips vs pairs
+  const ratio=memFlips/memTotal;
+  let trophy='🥇',title='Perfekt minne!';
+  if(ratio>3){trophy='👍';title='Bra jobbat!';}
+  else if(ratio>2){trophy='🎉';title='Riktigt bra!';}
+  document.getElementById('results-trophy').textContent=trophy;
+  document.getElementById('results-title').textContent=title;
+  document.getElementById('results-sub').textContent=`${memTotal} par hittade på ${memFlips} vändningar`;
+  document.getElementById('r-correct').textContent=memTotal;
+  document.getElementById('r-wrong').textContent=Math.max(0,memFlips-memTotal);
+  document.getElementById('r-time').textContent=fmt(memSeconds);
+  if(ratio<=1.5)spawnConfetti(20);
+  showView('results');
+}
+
+function stopMemory(){
+  clearInterval(memTimer);memTimer=null;
+  memCards=[];memRevealed=[];memLocked=false;
+  const grid=document.getElementById('memory-grid');
+  if(grid)grid.innerHTML='';
+}
+
+/* ═══ ORDSKJUTAREN ═══ */
+let shLoop=null,shRunning=false;
+let shScore=0,shLives=3,shWave=1,shKills=0;
+let shCanon={x:0.5,moving:0}; // x is 0-1 fraction of width
+let shBullet=null; // {x,y}
+let shInvaders=[]; // {x,y,vx,word,pairIdx,isTarget}
+let shCurrent=null; // current word pair to answer
+let shKeys={};
+let shExplosions=[]; // {x,y,t,color}
+let shStars=[];
+
+const SH_CFG={
+  easy:  {rows:2,cols:4,speed:28, bulletSpeed:420,lives:3},
+  medium:{rows:3,cols:5,speed:44, bulletSpeed:460,lives:3},
+  hard:  {rows:3,cols:6,speed:62, bulletSpeed:500,lives:3}
+};
+
+function startShooter(){
+  const valid=words.filter(w=>w[lang1]&&w[lang2]);
+  if(valid.length<3){toast('⚠️ Minst 3 glospar behövs!');return;}
+  currentMode='shooter';const d=diff.shooter;
+  setBadge('shooter-diff-badge',d);updateDiffButtons('shooter');
+  stopShooter();
+  shScore=0;shLives=3;shWave=1;shKills=0;shBullet=null;shExplosions=[];shKeys={};
+  shCanon={x:0.5,moving:0};
+  document.getElementById('sh-score').textContent='0';
+  document.getElementById('sh-wave').textContent='1';
+  document.getElementById('sh-lives-pill').textContent='❤️'.repeat(3);
+  document.getElementById('sh-target-lang').textContent=direction==='normal'?'svenska':'engelska';
+  // init stars
+  shStars=Array.from({length:60},()=>({x:Math.random(),y:Math.random(),r:Math.random()*.8+.2,o:Math.random()*.5+.1}));
+  showView('shooter');updateDirButtons();
+  // size canvas
+  const canvas=document.getElementById('shooter-canvas');
+  const wrap=canvas.parentElement;
+  canvas.width=640;canvas.height=420;
+  // setup controls
+  document.addEventListener('keydown',shKeyDown);
+  document.addEventListener('keyup',shKeyUp);
+  spawnShooterWave(valid);
+  shRunning=true;
+  let last=null;
+  function frame(ts){
+    if(!shRunning)return;
+    const dt=last?Math.min((ts-last)/1000,.05):0;last=ts;
+    updateShooter(dt,valid);
+    drawShooter();
+    shLoop=requestAnimationFrame(frame);
+  }
+  shLoop=requestAnimationFrame(frame);
+}
+
+function spawnShooterWave(valid){
+  const d=diff.shooter;const cfg=SH_CFG[d];
+  const pool=shuffle([...valid]);
+  // pick words for this wave — fill grid, one is the target answer
+  const count=cfg.rows*cfg.cols;
+  const wordPool=[];
+  while(wordPool.length<count)wordPool.push(...pool);
+  const waveWords=wordPool.slice(0,count);
+  // pick target
+  const targetIdx=Math.floor(Math.random()*waveWords.length);
+  shCurrent=waveWords[targetIdx];
+  document.getElementById('sh-question').textContent=q(shCurrent);
+  // build invaders grid
+  const canvas=document.getElementById('shooter-canvas');
+  const W=canvas.width,H=canvas.height;
+  const colW=W/(cfg.cols+1);
+  const rowH=50;
+  shInvaders=[];
+  for(let r=0;r<cfg.rows;r++){
+    for(let c=0;c<cfg.cols;c++){
+      const wi=r*cfg.cols+c;
+      const word=waveWords[wi];
+      const isTarget=wi===targetIdx;
+      shInvaders.push({
+        x:colW*(c+1),y:60+r*rowH,
+        vx:cfg.speed*(r%2===0?1:-1),
+        word:a(word),pairIdx:wi,isTarget,
+        alive:true,flash:0
+      });
+    }
+  }
+}
+
+function shKeyDown(e){
+  shKeys[e.code]=true;
+  if((e.code==='Space'||e.code==='Enter')&&shRunning){e.preventDefault();fireShot();}
+}
+function shKeyUp(e){shKeys[e.code]=false;}
+
+function fireShot(){
+  if(shBullet)return; // one bullet at a time
+  const canvas=document.getElementById('shooter-canvas');
+  const W=canvas.width;
+  shBullet={x:shCanon.x*W,y:canvas.height-36};
+}
+
+function updateShooter(dt,valid){
+  const canvas=document.getElementById('shooter-canvas');
+  const W=canvas.width,H=canvas.height;
+  const cfg=SH_CFG[diff.shooter];
+
+  // move canon
+  const canonSpeed=320;
+  if(shKeys['ArrowLeft']||shKeys['KeyA'])shCanon.x=Math.max(.04,shCanon.x-canonSpeed/W*dt);
+  if(shKeys['ArrowRight']||shKeys['KeyD'])shCanon.x=Math.min(.96,shCanon.x+canonSpeed/W*dt);
+
+  // move bullet
+  if(shBullet){
+    shBullet.y-=cfg.bulletSpeed*dt;
+    if(shBullet.y<0)shBullet=null;
+  }
+
+  // move invaders + bounce off walls
+  shInvaders.forEach(inv=>{
+    if(!inv.alive)return;
+    inv.x+=inv.vx*dt;
+    if(inv.x<30||inv.x>W-30){inv.vx*=-1;inv.y+=14;}
+    if(inv.flash>0)inv.flash-=dt;
+    // invader reaches bottom → lose life
+    if(inv.y>H-50){
+      inv.alive=false;shLives--;updateShLives();
+      addExplosion(inv.x,inv.y,'#ef476f');
+      if(shLives<=0){gameOverShooter();return;}
+      // pick new target if dead target
+      if(inv.isTarget)newShooterTarget(valid);
+    }
+  });
+
+  // bullet vs invader collision
+  if(shBullet){
+    for(const inv of shInvaders){
+      if(!inv.alive)continue;
+      const dx=Math.abs(shBullet.x-inv.x),dy=Math.abs(shBullet.y-inv.y);
+      if(dx<44&&dy<16){
+        shBullet=null;
+        if(inv.isTarget){
+          // correct hit!
+          inv.alive=false;
+          shScore+=10+shWave*5;
+          document.getElementById('sh-score').textContent=shScore;
+          addExplosion(inv.x,inv.y,'#06d6a0');spawnConfetti(4);
+          shKills++;
+          const alive=shInvaders.filter(i=>i.alive);
+          if(alive.length===0){nextShooterWave(valid);}
+          else{newShooterTarget(valid);}
+        } else {
+          // wrong hit — flash invader, lose a life
+          inv.flash=0.35;
+          shLives--;updateShLives();
+          addExplosion(inv.x,inv.y,'#ffd166');
+          if(shLives<=0){gameOverShooter();return;}
+        }
+        break;
+      }
+    }
+  }
+
+  // update explosions
+  shExplosions=shExplosions.filter(e=>{e.t-=dt;return e.t>0;});
+}
+
+function newShooterTarget(valid){
+  const alive=shInvaders.filter(i=>i.alive);
+  if(!alive.length)return;
+  shInvaders.forEach(i=>i.isTarget=false);
+  // pick a random alive invader as the new target, using a word from valid
+  const tgt=alive[Math.floor(Math.random()*alive.length)];
+  tgt.isTarget=true;
+  // find the matching word pair
+  const match=valid.find(w=>a(w)===tgt.word)||valid[0];
+  shCurrent=match;
+  tgt.word=a(match);
+  document.getElementById('sh-question').textContent=q(match);
+}
+
+function nextShooterWave(valid){
+  shWave++;document.getElementById('sh-wave').textContent=shWave;
+  setTimeout(()=>spawnShooterWave(valid),800);
+}
+
+function addExplosion(x,y,color){
+  shExplosions.push({x,y,color,t:.5});
+}
+
+function updateShLives(){
+  document.getElementById('sh-lives-pill').textContent='❤️'.repeat(Math.max(0,shLives))+'🤍'.repeat(Math.max(0,3-shLives));
+}
+
+function drawShooter(){
+  const canvas=document.getElementById('shooter-canvas');
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  // background
+  ctx.fillStyle='#080616';ctx.fillRect(0,0,W,H);
+
+  // stars
+  shStars.forEach(s=>{
+    ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${s.o})`;ctx.fill();
+  });
+
+  // ground line
+  ctx.strokeStyle='rgba(6,214,160,0.3)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,H-22);ctx.lineTo(W,H-22);ctx.stroke();
+
+  // invaders
+  shInvaders.forEach(inv=>{
+    if(!inv.alive)return;
+    const flash=inv.flash>0;
+    const isTarget=inv.isTarget;
+    // pill background
+    const tw=ctx.measureText(inv.word).width+24;
+    ctx.save();
+    ctx.translate(inv.x,inv.y);
+    // glow for target
+    if(isTarget){
+      ctx.shadowColor='#ffd166';ctx.shadowBlur=12;
+    }
+    const bg=flash?'rgba(239,71,111,0.4)':isTarget?'rgba(255,209,102,0.15)':'rgba(168,85,247,0.12)';
+    const border=flash?'#ef476f':isTarget?'#ffd166':'rgba(168,85,247,0.5)';
+    roundRect(ctx,-tw/2,-13,tw,26,8,bg,border,2);
+    ctx.shadowBlur=0;
+    ctx.fillStyle=flash?'#ef476f':isTarget?'#ffd166':'rgba(255,255,255,0.85)';
+    ctx.font=`bold ${isTarget?14:12}px Nunito,sans-serif`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(inv.word,0,0);
+    // target marker
+    if(isTarget){
+      ctx.fillStyle='#ffd166';ctx.font='10px sans-serif';
+      ctx.fillText('▼',0,18);
+    }
+    ctx.restore();
+  });
+
+  // bullet
+  if(shBullet){
+    ctx.save();
+    ctx.shadowColor='#06d6a0';ctx.shadowBlur=10;
+    ctx.fillStyle='#06d6a0';
+    ctx.beginPath();ctx.ellipse(shBullet.x,shBullet.y,3,8,0,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+
+  // explosions
+  shExplosions.forEach(e=>{
+    const r=28*(1-e.t/0.5);
+    const alpha=e.t/0.5;
+    ctx.beginPath();ctx.arc(e.x,e.y,r,0,Math.PI*2);
+    ctx.strokeStyle=e.color.replace(')',`,${alpha})`).replace('rgb','rgba');
+    ctx.lineWidth=2;ctx.stroke();
+    // inner glow
+    ctx.beginPath();ctx.arc(e.x,e.y,r*0.4,0,Math.PI*2);
+    ctx.fillStyle=e.color.replace(')',`,${alpha*0.6})`).replace('rgb','rgba');
+    ctx.fill();
+  });
+
+  // canon
+  const cx=shCanon.x*W,cy=H-14;
+  ctx.save();
+  // base
+  ctx.fillStyle='#a855f7';roundRect(ctx,cx-18,cy-8,36,16,6,'#a855f7','#c084fc',2);
+  // barrel
+  ctx.fillStyle='#c084fc';roundRect(ctx,cx-4,cy-22,8,18,3,'#c084fc','#e9d5ff',1);
+  // engine glow
+  ctx.shadowColor='#a855f7';ctx.shadowBlur=16;
+  ctx.beginPath();ctx.ellipse(cx,cy+6,10,4,0,0,Math.PI*2);
+  ctx.fillStyle='rgba(168,85,247,0.4)';ctx.fill();
+  ctx.restore();
+}
+
+function roundRect(ctx,x,y,w,h,r,fill,stroke,lw){
+  ctx.beginPath();ctx.roundRect(x,y,w,h,r);
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}
+}
+
+function gameOverShooter(){
+  shRunning=false;
+  document.removeEventListener('keydown',shKeyDown);
+  document.removeEventListener('keyup',shKeyUp);
+  if(shLoop){cancelAnimationFrame(shLoop);shLoop=null;}
+  // draw final frame with overlay
+  const canvas=document.getElementById('shooter-canvas');
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='rgba(8,6,22,0.85)';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#ef476f';ctx.font='bold 32px Fredoka One,cursive';ctx.textAlign='center';
+  ctx.fillText('GAME OVER',canvas.width/2,canvas.height/2-20);
+  ctx.fillStyle='#ffd166';ctx.font='bold 20px Nunito,sans-serif';
+  ctx.fillText(`Poäng: ${shScore}  •  Våg: ${shWave}`,canvas.width/2,canvas.height/2+16);
+  ctx.fillStyle='rgba(168,164,192,0.8)';ctx.font='14px Nunito,sans-serif';
+  ctx.fillText('Tryck på Tillbaka för att spela igen',canvas.width/2,canvas.height/2+48);
+}
+
+function stopShooter(){
+  shRunning=false;
+  document.removeEventListener('keydown',shKeyDown);
+  document.removeEventListener('keyup',shKeyUp);
+  if(shLoop){cancelAnimationFrame(shLoop);shLoop=null;}
+}
+
+/* BEGREPPS_INIT_START */
+// ── Mockup: flera glosset förinstallerade i biblioteket ──
+(function(){
+const mockSets=[
+  {
+    id:'Engelska – Kroppen_en_sv',name:'Engelska – Kroppen',subject:'Engelska åk 7',lang1:'en',lang2:'sv',
+    words:[
+      {en:'head',sv:'huvud',category:'Huvud & ansikte'},
+      {en:'eye',sv:'öga',category:'Huvud & ansikte'},
+      {en:'ear',sv:'öra',category:'Huvud & ansikte'},
+      {en:'nose',sv:'näsa',category:'Huvud & ansikte'},
+      {en:'mouth',sv:'mun',category:'Huvud & ansikte'},
+      {en:'tooth',sv:'tand',category:'Huvud & ansikte'},
+      {en:'arm',sv:'arm',category:'Kropp'},
+      {en:'leg',sv:'ben',category:'Kropp'},
+      {en:'hand',sv:'hand',category:'Kropp'},
+      {en:'shoulder',sv:'axel',category:'Kropp'},
+      {en:'knee',sv:'knä',category:'Kropp'},
+      {en:'finger',sv:'finger',category:'Kropp'},
+      {en:'back',sv:'rygg',category:'Kropp'},
+      {en:'chest',sv:'bröst',category:'Kropp'},
+      {en:'foot',sv:'fot',category:'Kropp'},
+    ]
+  },
+  {
+    id:'Engelska – Djur_en_sv',name:'Engelska – Djur',subject:'Engelska åk 7',lang1:'en',lang2:'sv',
+    words:[
+      {en:'dog',sv:'hund',category:'Husdjur'},
+      {en:'cat',sv:'katt',category:'Husdjur'},
+      {en:'rabbit',sv:'kanin',category:'Husdjur'},
+      {en:'hamster',sv:'hamster',category:'Husdjur'},
+      {en:'fish',sv:'fisk',category:'Husdjur'},
+      {en:'horse',sv:'häst',category:'Husdjur'},
+      {en:'lion',sv:'lejon',category:'Vilda djur'},
+      {en:'tiger',sv:'tiger',category:'Vilda djur'},
+      {en:'elephant',sv:'elefant',category:'Vilda djur'},
+      {en:'giraffe',sv:'giraff',category:'Vilda djur'},
+      {en:'wolf',sv:'varg',category:'Vilda djur'},
+      {en:'bear',sv:'björn',category:'Vilda djur'},
+      {en:'eagle',sv:'örn',category:'Fåglar'},
+      {en:'owl',sv:'uggla',category:'Fåglar'},
+      {en:'penguin',sv:'pingvin',category:'Fåglar'},
+    ]
+  },
+  {
+    id:'Engelska – Mat & dryck_en_sv',name:'Engelska – Mat & dryck',subject:'Engelska åk 7',lang1:'en',lang2:'sv',
+    words:[
+      {en:'bread',sv:'bröd',category:'Bakverk'},
+      {en:'cake',sv:'kaka',category:'Bakverk'},
+      {en:'biscuit',sv:'kex',category:'Bakverk'},
+      {en:'apple',sv:'äpple',category:'Frukt'},
+      {en:'banana',sv:'banan',category:'Frukt'},
+      {en:'orange',sv:'apelsin',category:'Frukt'},
+      {en:'strawberry',sv:'jordgubbe',category:'Frukt'},
+      {en:'potato',sv:'potatis',category:'Grönsaker'},
+      {en:'carrot',sv:'morot',category:'Grönsaker'},
+      {en:'onion',sv:'lök',category:'Grönsaker'},
+      {en:'milk',sv:'mjölk',category:'Dryck'},
+      {en:'juice',sv:'juice',category:'Dryck'},
+      {en:'water',sv:'vatten',category:'Dryck'},
+      {en:'coffee',sv:'kaffe',category:'Dryck'},
+      {en:'tea',sv:'te',category:'Dryck'},
+    ]
+  },
+  {
+    id:'Spanska – Hälsningsfraser_es_sv',name:'Spanska – Hälsningar',subject:'Spanska åk 8',lang1:'es',lang2:'sv',
+    words:[
+      {es:'hola',sv:'hej',category:'Hälsningar'},
+      {es:'buenos días',sv:'god morgon',category:'Hälsningar'},
+      {es:'buenas tardes',sv:'god eftermiddag',category:'Hälsningar'},
+      {es:'buenas noches',sv:'god natt',category:'Hälsningar'},
+      {es:'adiós',sv:'hejdå',category:'Hälsningar'},
+      {es:'hasta luego',sv:'vi ses',category:'Hälsningar'},
+      {es:'por favor',sv:'snälla / tack',category:'Artighetsfraser'},
+      {es:'gracias',sv:'tack',category:'Artighetsfraser'},
+      {es:'de nada',sv:'varsågod',category:'Artighetsfraser'},
+      {es:'perdón',sv:'förlåt',category:'Artighetsfraser'},
+      {es:'sí',sv:'ja',category:'Vanliga ord'},
+      {es:'no',sv:'nej',category:'Vanliga ord'},
+      {es:'bien',sv:'bra',category:'Vanliga ord'},
+      {es:'mal',sv:'dålig',category:'Vanliga ord'},
+      {es:'mucho',sv:'mycket',category:'Vanliga ord'},
+    ]
+  },
+  {
+    id:'Tyska – Siffror & tid_de_sv',name:'Tyska – Siffror & tid',subject:'Tyska åk 8',lang1:'de',lang2:'sv',
+    words:[
+      {de:'eins',sv:'ett',category:'Siffror'},
+      {de:'zwei',sv:'två',category:'Siffror'},
+      {de:'drei',sv:'tre',category:'Siffror'},
+      {de:'vier',sv:'fyra',category:'Siffror'},
+      {de:'fünf',sv:'fem',category:'Siffror'},
+      {de:'sechs',sv:'sex',category:'Siffror'},
+      {de:'sieben',sv:'sju',category:'Siffror'},
+      {de:'acht',sv:'åtta',category:'Siffror'},
+      {de:'neun',sv:'nio',category:'Siffror'},
+      {de:'zehn',sv:'tio',category:'Siffror'},
+      {de:'Montag',sv:'måndag',category:'Veckodagar'},
+      {de:'Dienstag',sv:'tisdag',category:'Veckodagar'},
+      {de:'Mittwoch',sv:'onsdag',category:'Veckodagar'},
+      {de:'Donnerstag',sv:'torsdag',category:'Veckodagar'},
+      {de:'Freitag',sv:'fredag',category:'Veckodagar'},
+    ]
+  },
+  {
+    id:'Franska – Färger & former_fr_sv',name:'Franska – Färger & former',subject:'Franska åk 9',lang1:'fr',lang2:'sv',
+    words:[
+      {fr:'rouge',sv:'röd',category:'Färger'},
+      {fr:'bleu',sv:'blå',category:'Färger'},
+      {fr:'vert',sv:'grön',category:'Färger'},
+      {fr:'jaune',sv:'gul',category:'Färger'},
+      {fr:'noir',sv:'svart',category:'Färger'},
+      {fr:'blanc',sv:'vit',category:'Färger'},
+      {fr:'orange',sv:'orange',category:'Färger'},
+      {fr:'violet',sv:'lila',category:'Färger'},
+      {fr:'cercle',sv:'cirkel',category:'Former'},
+      {fr:'carré',sv:'kvadrat',category:'Former'},
+      {fr:'triangle',sv:'triangel',category:'Former'},
+      {fr:'rectangle',sv:'rektangel',category:'Former'},
+      {fr:'étoile',sv:'stjärna',category:'Former'},
+      {fr:'cœur',sv:'hjärta',category:'Former'},
+      {fr:'losange',sv:'romb',category:'Former'},
+    ]
+  }
+];
+// seed some ratings for demo realism
+const ratings=[
+  ['Engelska – Kroppen_en_sv','en|sv',{head:'sure',eye:'sure',ear:'maybe',nose:'sure',mouth:'sure',tooth:'hard',arm:'sure',leg:'sure',hand:'sure',shoulder:'maybe',knee:'maybe',finger:'sure',back:'unsure',chest:'unsure',foot:'maybe'}],
+];
+mockSets.forEach(set=>{
+  const existing=localStorage.getItem('glos_library_v1');
+  const lib=existing?JSON.parse(existing):[];
+  if(!lib.find(s=>s.id===set.id))lib.push(set);
+  localStorage.setItem('glos_library_v1',JSON.stringify(lib));
+});
+})();
+
+words=[{en:'head',sv:'huvud',category:'Huvud & ansikte'},{en:'eye',sv:'öga',category:'Huvud & ansikte'},{en:'arm',sv:'arm',category:'Kropp'},{en:'leg',sv:'ben',category:'Kropp'},{en:'hand',sv:'hand',category:'Kropp'},{en:'mouth',sv:'mun',category:'Huvud & ansikte'},{en:'nose',sv:'näsa',category:'Huvud & ansikte'},{en:'ear',sv:'öra',category:'Huvud & ansikte'},{en:'shoulder',sv:'axel',category:'Kropp'},{en:'knee',sv:'knä',category:'Kropp'},{en:'finger',sv:'finger',category:'Kropp'},{en:'tooth',sv:'tand',category:'Huvud & ansikte'}];
+setName='Engelska – Kroppen';setSubject='Engelska åk 7';
+lang1='en';lang2='sv';
+document.getElementById('set-name').value=setName;document.getElementById('set-subject').value=setSubject;
+setLangSelects(lang1,lang2);
+renderWordList();
+updateDirButtons();
+loadLibraryFromStorage();
+loadRatingsFromStorage();
+showStudentHome();
+/* BEGREPPS_INIT_END */
+(function(){const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'>${Array.from({length:90},()=>`<circle cx='${Math.random()*800}' cy='${Math.random()*600}' r='${Math.random()*1.4+.3}' fill='white' opacity='${Math.random()*.45+.08}'/>`).join('')}</svg>`;document.getElementById('stars').style.backgroundImage=`url("data:image/svg+xml,${encodeURIComponent(svg)}")`;})();
+</script>
+</body>
+</html>
