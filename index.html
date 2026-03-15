@@ -18,7 +18,7 @@ header{position:relative;z-index:10;display:flex;align-items:center;justify-cont
 /* Student home clean design */
 .sh-set-card{background:var(--surface);border:1px solid rgba(255,209,102,.2);border-radius:var(--radius);padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .sh-set-left{display:flex;align-items:center;gap:14px}
-.sh-set-icon{width:38px;height:38px;border-radius:10px;background:rgba(255,209,102,.15);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;color:var(--yellow);flex-shrink:0}
+.sh-set-icon{width:38px;height:38px;border-radius:10px;background:rgba(255,209,102,.15);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
 .sh-set-name{font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:2px}
 .sh-set-meta{font-size:.78rem;color:var(--gray);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .sh-dot{opacity:.4}
@@ -47,6 +47,7 @@ header{position:relative;z-index:10;display:flex;align-items:center;justify-cont
 
 /* Mode grid clean */
 .sh-mode-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.sh-mode-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 .sh-mode-card{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:14px 12px;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s}
 .sh-mode-card:hover{border-color:rgba(255,209,102,.35);background:var(--surface2);box-shadow:0 4px 20px rgba(255,209,102,.08)}
 .sh-mc-icon{font-size:1.3rem;margin-bottom:7px}
@@ -55,7 +56,7 @@ header{position:relative;z-index:10;display:flex;align-items:center;justify-cont
 .sh-mc-tag{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:50px}
 .sh-tag-study{background:rgba(17,138,178,.15);color:var(--blue)}
 .sh-tag-game{background:rgba(6,214,160,.12);color:var(--teal)}
-@media(max-width:580px){.sh-mode-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:580px){.sh-mode-grid,.sh-mode-grid-3{grid-template-columns:1fr 1fr!important}}
 .header-btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .btn-teacher-link{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;background:transparent;border:none;color:rgba(168,164,192,.45);cursor:pointer;padding:6px 10px;border-radius:50px;letter-spacing:.3px;text-transform:uppercase;transition:color .2s}
 .btn-teacher-link:hover{color:var(--gray)}
@@ -90,9 +91,9 @@ header{position:relative;z-index:10;display:flex;align-items:center;justify-cont
 .view.active{display:block}
 
 /* TEACHER */
-#teacher-view{max-width:760px;margin:0 auto;padding:36px 20px 80px}
+#teacher-view{width:100%;padding:0}
 /* Spreadsheet teacher view */
-.xl-header{display:grid;grid-template-columns:36px 160px 1fr 1fr 160px 32px;gap:0;background:var(--surface2);border-bottom:2px solid rgba(255,255,255,.12);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);flex-shrink:0;position:sticky;top:57px;z-index:5}
+.xl-header{display:grid;grid-template-columns:36px 160px 1fr 1fr 160px 32px;gap:0;background:var(--surface2);border-bottom:2px solid rgba(255,255,255,.12);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);flex-shrink:0}
 .xl-header>div{padding:7px 10px;border-right:1px solid rgba(255,255,255,.06)}
 .xl-row{display:grid;grid-template-columns:36px 160px 1fr 1fr 160px 32px;gap:0;border-bottom:1px solid rgba(255,255,255,.05);transition:background .1s}
 .xl-row:hover{background:rgba(255,255,255,.03)}
@@ -167,9 +168,25 @@ textarea:focus{border-color:var(--teal)}
 .strength-filter:hover{border-color:rgba(255,255,255,.3);color:var(--white)}
 .strength-filter.active{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:var(--white)}
 .strength-filter span{font-size:.68rem;opacity:.7;margin-left:2px}
-/* Library cards */
-.lib-set-card{background:var(--surface);border:2px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:18px;cursor:pointer;transition:all .2s;position:relative}
-.lib-set-card:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
+/* Library row view */
+.lib-row{display:grid;grid-template-columns:auto 1fr auto auto auto;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;transition:background .12s}
+.lib-row:first-child{border-radius:var(--radius) var(--radius) 0 0}
+.lib-row:last-child{border-bottom:none;border-radius:0 0 var(--radius) var(--radius)}
+.lib-row:hover{background:var(--surface2)}
+.lib-row.lib-selected{background:rgba(255,209,102,.07);border-left:3px solid var(--yellow)}
+.lib-row.lib-active{border-left:3px solid var(--teal)}
+.lib-row-flags{font-size:1rem;white-space:nowrap;flex-shrink:0;line-height:1}
+.lib-row-name{font-size:.88rem;font-weight:700;color:var(--white)}
+.lib-row-sub{font-size:.72rem;color:var(--gray)}
+.lib-mini-bar{width:56px;height:5px;border-radius:3px;overflow:hidden;display:flex;gap:1px;flex-shrink:0}
+.lib-row-meta{font-size:.72rem;color:var(--gray);white-space:nowrap;text-align:right;flex-shrink:0}
+.lib-row-btn{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:50px;border:1px solid rgba(255,255,255,.15);background:transparent;color:var(--gray);cursor:pointer;flex-shrink:0;white-space:nowrap}
+.lib-row-btn:hover{background:var(--teal);border-color:var(--teal);color:#0f0e17}
+/* lang filter pill */
+.lib-lang-pill{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;padding:3px 11px;border-radius:50px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--gray);cursor:pointer;white-space:nowrap}
+.lib-lang-pill.active{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);color:var(--white)}
+.lib-set-card{background:var(--surface);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:16px;cursor:pointer;transition:all .2s;position:relative}
+.lib-set-card:hover{border-color:rgba(255,255,255,.25);transform:translateY(-2px);background:var(--surface2)}
 .lib-set-card.selected{border-color:var(--yellow);background:rgba(255,209,102,.06)}
 .lib-set-card.active-set{border-color:var(--teal);background:rgba(6,214,160,.06)}
 .lib-set-title{font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--white);margin-bottom:3px}
@@ -328,7 +345,7 @@ h1.teal{color:var(--teal)}h1.purple{color:var(--purple)}h1.yellow{color:var(--ye
 .mc-option.locked{cursor:default}
 
 /* FLASHCARDS */
-.flash-scene{perspective:1000px;margin-bottom:20px;cursor:pointer}
+.flash-scene{perspective:1000px;margin-bottom:20px;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-tap-highlight-color:transparent}
 .flash-card-inner{position:relative;width:100%;transition:transform .5s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
 .flash-card-inner.flipped{transform:rotateY(180deg)}
 .flash-face{background:var(--surface);border:2px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:44px 30px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:210px;text-align:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
@@ -338,7 +355,7 @@ h1.teal{color:var(--teal)}h1.purple{color:var(--purple)}h1.yellow{color:var(--ye
 .flash-face.back .flash-face-word{color:var(--yellow)}
 .flash-tap{font-size:.78rem;color:var(--gray);margin-top:9px}
 .confidence-row{display:flex;gap:9px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
-.conf-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;padding:8px 18px;border-radius:50px;border:2px solid;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.conf-btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;padding:8px 18px;border-radius:50px;border:2px solid;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .conf-btn:hover:not([disabled]){transform:scale(1.05)}
 .conf-btn.sure{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.1)}
 .conf-btn.sure:hover:not([disabled]){background:var(--green);color:#0f0e17}
@@ -380,88 +397,118 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
 .modal p{color:var(--gray);font-size:.86rem;margin-bottom:12px}
 .modal-actions{display:flex;gap:8px;margin-top:12px;justify-content:flex-end;flex-wrap:wrap}
 .decoy-banner{background:rgba(239,71,111,.1);border:1px solid rgba(239,71,111,.25);border-radius:var(--radius-sm);padding:8px 14px;margin-bottom:14px;font-size:.8rem;font-weight:700;color:var(--pink);text-align:center;display:none}
-@media(max-width:580px){.mode-grid{grid-template-columns:1fr 1fr}.match-grid{grid-template-columns:1fr}.meta-grid{grid-template-columns:1fr}.mc-options{grid-template-columns:1fr}.spell-prompt{font-size:1.9rem}.mc-question{font-size:2rem}}
+/* bigger match cards on mobile */
+@media(max-width:580px){
+  .mode-grid{grid-template-columns:1fr 1fr}
+  .match-grid{grid-template-columns:1fr}
+  .match-card{padding:16px 18px;font-size:1.05rem;min-height:52px}
+  .meta-grid{grid-template-columns:1fr}
+  .mc-options{grid-template-columns:1fr}
+  .spell-prompt{font-size:1.9rem}
+  .mc-question{font-size:2rem}
+}
 @media(max-width:380px){.mode-grid{grid-template-columns:1fr}}
+
+/* Swipe game */
+.swipe-opt{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;padding:16px 12px;border-radius:var(--radius-sm);border:2px solid rgba(255,255,255,.12);background:var(--surface);color:var(--white);cursor:pointer;text-align:center;transition:all .18s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:56px}
+.swipe-opt:active{transform:scale(.96)}
+.swipe-opt.opt-correct{border-color:var(--teal);background:rgba(6,214,160,.15);color:var(--teal)}
+.swipe-opt.opt-wrong{border-color:var(--pink);background:rgba(239,71,111,.12);color:var(--pink)}
+/* Quickpick */
+.qp-opt{font-family:'Nunito',sans-serif;font-weight:800;font-size:1.05rem;padding:20px 14px;border-radius:var(--radius-sm);border:2px solid rgba(255,255,255,.12);background:var(--surface);color:var(--white);cursor:pointer;text-align:center;transition:all .18s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:64px;display:flex;align-items:center;justify-content:center}
+.qp-opt:active{transform:scale(.96)}
+.qp-opt.qp-correct{border-color:var(--teal);background:rgba(6,214,160,.15);color:var(--teal);animation:matchPop .35s cubic-bezier(.175,.885,.32,1.275)}
+.qp-opt.qp-wrong{border-color:var(--pink);background:rgba(239,71,111,.12);color:var(--pink);animation:shake .35s ease}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 <div id="stars"></div>
 
 <header>
   <div style="display:flex;align-items:center;gap:10px">
-    <img src="AD_Colors.jpg" alt="" style="height:28px;border-radius:4px;object-fit:contain" onerror="this.style.display='none'"/>
+    <img src="https://raw.githubusercontent.com/PatrickTegnefur/glosor/main/AD_Color.png" alt="Alfred Dalinskolan" style="height:28px;border-radius:4px;object-fit:contain" onerror="this.style.display='none'"/>
     <div class="logo"><strong>Glosträning</strong> <em>på AD</em></div>
   </div>
   <div class="header-btns">
     <button class="btn btn-yellow" id="nav-ova" onclick="showStudentHome()">🎮 Öva</button>
     <button class="btn btn-ghost" onclick="showLibrary()">📚 Bibliotek</button>
     <button class="btn-teacher-link" onclick="showView('teacher')" title="Lärarvyn">⚙️ Lärare</button>
+    <button class="btn-teacher-link" onclick="openModal('welcome-modal')" title="Hjälp &amp; kom igång" style="font-size:.85rem;padding:6px 8px">?</button>
   </div>
 </header>
 
 <!-- TEACHER -->
 <div id="teacher-view" class="view active">
-<div style="display:flex;flex-direction:column;height:calc(100vh - 57px);min-height:500px">
+<div style="display:flex;flex-direction:column;height:calc(100vh - 57px);min-height:500px;overflow:hidden">
 
   <!-- TOP BAR -->
-  <div style="background:var(--surface);border-bottom:1px solid rgba(255,255,255,.08);padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex-shrink:0">
-    <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;flex-wrap:wrap;gap:8px">
-      <input type="text" id="set-name" placeholder="Namn på glosset, t.ex. Läxa 7.2 – Kroppen" style="flex:1;min-width:180px;font-size:.95rem;font-weight:800;background:transparent;border:none;border-bottom:2px solid rgba(255,255,255,.15);border-radius:0;padding:4px 0;color:var(--white)" onfocus="this.style.borderBottomColor='var(--yellow)'" onblur="this.style.borderBottomColor='rgba(255,255,255,.15)'"/>
-      <input type="text" id="set-subject" placeholder="Ämne / Klass" style="width:160px;font-size:.82rem;font-weight:600;background:transparent;border:none;border-bottom:2px solid rgba(255,255,255,.1);border-radius:0;padding:4px 0;color:var(--gray)" onfocus="this.style.borderBottomColor='var(--yellow)'" onblur="this.style.borderBottomColor='rgba(255,255,255,.1)'"/>
+  <div style="background:var(--surface);border-bottom:1px solid rgba(255,255,255,.08);padding:10px 20px;display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+    <!-- Row 1: metadata + language -->
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <input type="text" id="set-name" placeholder="Namn på glosset, t.ex. Läxa 7.2 – Kroppen" style="flex:1;min-width:200px;font-size:.95rem;font-weight:800;background:transparent;border:none;border-bottom:2px solid rgba(255,255,255,.15);border-radius:0;padding:4px 0;color:var(--white)" onfocus="this.style.borderBottomColor='var(--yellow)'" onblur="this.style.borderBottomColor='rgba(255,255,255,.15)'"/>
+      <input type="text" id="set-subject" placeholder="Ämne / Klass" style="width:150px;font-size:.82rem;font-weight:600;background:transparent;border:none;border-bottom:2px solid rgba(255,255,255,.1);border-radius:0;padding:4px 0;color:var(--gray)" onfocus="this.style.borderBottomColor='var(--yellow)'" onblur="this.style.borderBottomColor='rgba(255,255,255,.1)'"/>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+        <select class="lang-select" id="lang1-select" onchange="updateLangPair()" style="width:auto;padding:5px 10px;font-size:.82rem">
+          <option value="en">🇬🇧 Engelska</option>
+          <option value="es">🇪🇸 Spanska</option>
+          <option value="fr">🇫🇷 Franska</option>
+          <option value="de">🇩🇪 Tyska</option>
+          <option value="sv">🇸🇪 Svenska</option>
+        </select>
+        <button onclick="swapLangs()" title="Byt" style="background:var(--surface2);border:2px solid rgba(255,255,255,.15);color:var(--white);border-radius:50%;width:28px;height:28px;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">⇄</button>
+        <select class="lang-select" id="lang2-select" onchange="updateLangPair()" style="width:auto;padding:5px 10px;font-size:.82rem">
+          <option value="sv" selected>🇸🇪 Svenska</option>
+          <option value="en">🇬🇧 Engelska</option>
+          <option value="es">🇪🇸 Spanska</option>
+          <option value="fr">🇫🇷 Franska</option>
+          <option value="de">🇩🇪 Tyska</option>
+        </select>
+      </div>
     </div>
-    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-      <select class="lang-select" id="lang1-select" onchange="updateLangPair()" style="width:auto;padding:5px 10px;font-size:.82rem">
-        <option value="en">🇬🇧 Engelska</option>
-        <option value="es">🇪🇸 Spanska</option>
-        <option value="fr">🇫🇷 Franska</option>
-        <option value="de">🇩🇪 Tyska</option>
-        <option value="sv">🇸🇪 Svenska</option>
-      </select>
-      <button onclick="swapLangs()" title="Byt" style="background:var(--surface2);border:2px solid rgba(255,255,255,.15);color:var(--white);border-radius:50%;width:28px;height:28px;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">⇄</button>
-      <select class="lang-select" id="lang2-select" onchange="updateLangPair()" style="width:auto;padding:5px 10px;font-size:.82rem">
-        <option value="sv" selected>🇸🇪 Svenska</option>
-        <option value="en">🇬🇧 Engelska</option>
-        <option value="es">🇪🇸 Spanska</option>
-        <option value="fr">🇫🇷 Franska</option>
-        <option value="de">🇩🇪 Tyska</option>
-      </select>
-    </div>
-    <div style="display:flex;gap:6px;flex-shrink:0">
+    <!-- Row 2: action buttons -->
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
       <button class="btn btn-yellow btn-sm" onclick="addWordRow()">＋ Rad</button>
-      <button class="btn btn-teal btn-sm" onclick="showPasteModal()">📋 Klistra in</button>
-      <button class="btn btn-teal btn-sm" onclick="exportHTML()">📤 Dela HTML</button>
+      <button class="btn btn-ghost btn-sm" onclick="showPasteModal()">📋 Klistra in</button>
+      <span style="width:1px;height:20px;background:rgba(255,255,255,.1);flex-shrink:0"></span>
+      <button class="btn btn-teal btn-sm" onclick="exportHTML()">📤 Dela med elever</button>
       <button class="btn btn-purple btn-sm" onclick="exportJSON()">💾 Spara JSON</button>
-      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('json-import').click()">📂 Öppna</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('json-import').click()">📂 Öppna JSON</button>
       <input type="file" id="json-import" accept=".json" style="display:none" onchange="loadJSONFile(event)">
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('excel-import').click()">📊 Öppna Excel</button>
+      <input type="file" id="excel-import" accept=".xlsx,.xls,.csv" style="display:none" onchange="loadExcelFile(event)">
+      <button class="btn btn-ghost btn-sm" onclick="exportExcel()" title="Exportera till Excel för backup eller delning">📊 Exportera Excel</button>
+      <span style="width:1px;height:20px;background:rgba(255,255,255,.1);flex-shrink:0"></span>
+      <button class="btn btn-ghost btn-sm" onclick="exportBlankTool()" title="Exportera en tom version av verktyget att dela med kollegor">🆕 Tomt verktyg</button>
       <button class="btn btn-ghost btn-sm" onclick="openModal('help-modal')" title="Hjälp">❓</button>
     </div>
   </div>
 
-  <!-- BULK ACTION BAR (visas när rader är markerade) -->
-  <div id="bulk-bar" style="display:none;background:rgba(255,209,102,.08);border-bottom:1px solid rgba(255,209,102,.2);padding:7px 20px;align-items:center;gap:16px;flex-shrink:0;overflow-x:auto;white-space:nowrap">
-    <span style="font-size:.82rem;font-weight:800;color:var(--yellow);flex-shrink:0" id="bulk-count">0 rader markerade</span>
-    <div style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0">
-      <span style="font-size:.75rem;color:var(--gray)">Tilldelning:</span>
+  <!-- BULK ACTION BAR -->
+  <div id="bulk-bar" style="display:none;background:rgba(255,209,102,.09);border-bottom:2px solid rgba(255,209,102,.25);padding:10px 20px;align-items:center;gap:12px;flex-shrink:0;flex-wrap:wrap;min-height:52px">
+    <span style="font-size:.85rem;font-weight:800;color:var(--yellow);flex-shrink:0;white-space:nowrap" id="bulk-count">0 rader markerade</span>
+    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:wrap">
+      <span style="font-size:.78rem;color:var(--gray);white-space:nowrap">Tilldelning:</span>
       <input type="text" id="bulk-assign-input" placeholder="t.ex. Läxa 7.2" list="bulk-assign-list"
-        style="font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;background:var(--surface2);border:1px solid rgba(255,255,255,.15);color:var(--teal);border-radius:6px;padding:4px 10px;outline:none;width:140px"/>
+        style="font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;background:var(--surface);border:1px solid rgba(255,255,255,.2);color:var(--teal);border-radius:6px;padding:5px 12px;outline:none;width:160px"/>
       <datalist id="bulk-assign-list"></datalist>
-      <button class="btn btn-ghost btn-sm" onclick="bulkSetAssign()">✅</button>
+      <button class="btn btn-ghost btn-sm" onclick="bulkSetAssign()" style="white-space:nowrap">✅ Tillämpa</button>
     </div>
-    <div style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0">
-      <span style="font-size:.75rem;color:var(--gray)">Kategori:</span>
+    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:wrap">
+      <span style="font-size:.78rem;color:var(--gray);white-space:nowrap">Kategori:</span>
       <input type="text" id="bulk-cat-input" placeholder="t.ex. Kroppen" list="bulk-cat-list"
-        style="font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;background:var(--surface2);border:1px solid rgba(255,255,255,.15);color:var(--teal);border-radius:6px;padding:4px 10px;outline:none;width:140px"/>
+        style="font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;background:var(--surface);border:1px solid rgba(255,255,255,.2);color:var(--teal);border-radius:6px;padding:5px 12px;outline:none;width:160px"/>
       <datalist id="bulk-cat-list"></datalist>
-      <button class="btn btn-ghost btn-sm" onclick="bulkSetCategory()">✅</button>
+      <button class="btn btn-ghost btn-sm" onclick="bulkSetCategory()" style="white-space:nowrap">✅ Tillämpa</button>
     </div>
-    <div style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto">
-      <button class="btn btn-pink btn-sm" onclick="bulkDeleteRows()">🗑 Ta bort</button>
-      <button class="btn btn-ghost btn-sm" onclick="clearSelection()">✕</button>
+    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto">
+      <button class="btn btn-pink btn-sm" onclick="bulkDeleteRows()" style="white-space:nowrap">🗑 Ta bort</button>
+      <button class="btn btn-ghost btn-sm" onclick="clearSelection()">✕ Avmarkera</button>
     </div>
   </div>
 
-  <!-- COLUMN HEADERS -->
-  <div class="xl-header">
+  <!-- COLUMN HEADERS — fixed, never scrolls -->
+  <div class="xl-header" style="position:static">
     <div class="xl-col-num">#</div>
     <div class="xl-col-assign">Tilldelning</div>
     <div class="xl-col-l1" id="col-label-1">🇬🇧 Engelska</div>
@@ -470,12 +517,12 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
     <div class="xl-col-del"></div>
   </div>
 
-  <!-- TABLE BODY -->
-  <div id="word-list" style="flex:1;overflow-y:visible;background:var(--bg)"></div>
+  <!-- TABLE BODY — scrolls independently -->
+  <div id="word-list" style="flex:1;overflow-y:auto;background:var(--bg)"></div>
 
-  <!-- STATUS BAR -->
+  <!-- STATUS BAR — always at bottom -->
   <div style="background:var(--surface);border-top:1px solid rgba(255,255,255,.06);padding:6px 20px;display:flex;align-items:center;justify-content:space-between;font-size:.76rem;color:var(--gray);flex-shrink:0">
-    <span><span id="word-count">0</span> ord &nbsp;·&nbsp; <kbd style="font-size:.68rem">Enter</kbd> ny rad &nbsp;·&nbsp; <kbd style="font-size:.68rem">Tab</kbd> nästa cell &nbsp;·&nbsp; Klicka <strong style="color:var(--white)">#</strong> för att markera rad &nbsp;·&nbsp; <kbd style="font-size:.68rem">❓</kbd> för hjälp</span>
+    <span><span id="word-count">0</span> ord &nbsp;·&nbsp; <kbd style="font-size:.68rem">Enter</kbd> ny rad &nbsp;·&nbsp; <kbd style="font-size:.68rem">Tab</kbd> nästa cell &nbsp;·&nbsp; Klicka på <strong style="color:var(--yellow)">#</strong> för att markera rader → sätt tilldelning på flera på en gång &nbsp;·&nbsp; <kbd style="font-size:.68rem">❓</kbd> hjälp</span>
     <span id="xl-selection-info" style="color:var(--yellow)"></span>
   </div>
 </div>
@@ -559,7 +606,7 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
   <!-- Set + direction row -->
   <div class="sh-set-card">
     <div class="sh-set-left">
-      <div class="sh-set-icon" id="sh-icon">EN</div>
+      <div class="sh-set-icon" id="sh-icon">🇬🇧</div>
       <div>
         <div class="sh-set-name" id="sh-title">Mina glosor</div>
         <div class="sh-set-meta"><span id="sh-subject"></span><span class="sh-dot">·</span><span id="sh-word-badge">0 ord</span></div>
@@ -581,19 +628,26 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
   </div>
 
   <!-- Filter row -->
+  <!-- Assignment filter (visas när tilldelningar finns) -->
+  <div id="assign-filter-row" style="display:none;margin-bottom:10px;background:rgba(6,214,160,.06);border:1px solid rgba(6,214,160,.18);border-radius:10px;padding:10px 14px">
+    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--teal);margin-bottom:8px">📋 Välj läxa / uppgift</div>
+    <div id="assign-filter-pills" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+  </div>
+
   <div class="sh-filter-row">
-    <span class="sh-filter-label">Öva:</span>
+    <span class="sh-filter-label">Styrka:</span>
     <button class="sh-fpill active" id="sf-all"     onclick="setStrengthFilter('all')"    >Alla <span id="sf-all-n"></span></button>
-    <button class="sh-fpill" id="sf-weak"            onclick="setStrengthFilter('weak')"   >🔴 Svaga <span id="sf-weak-n"></span></button>
-    <button class="sh-fpill" id="sf-medium"          onclick="setStrengthFilter('medium')" >🟡 Medel <span id="sf-medium-n"></span></button>
-    <button class="sh-fpill" id="sf-strong"          onclick="setStrengthFilter('strong')" >🟢 Starka <span id="sf-strong-n"></span></button>
+    <button class="sh-fpill" id="sf-weak"            onclick="setStrengthFilter('weak')"   >🔴 Osäkra <span id="sf-weak-n"></span></button>
+    <button class="sh-fpill" id="sf-medium"          onclick="setStrengthFilter('medium')" >🟡 Lite osäkra <span id="sf-medium-n"></span></button>
+    <button class="sh-fpill" id="sf-strong"          onclick="setStrengthFilter('strong')" >🟢 Säkra <span id="sf-strong-n"></span></button>
     <button class="sh-fpill" id="sf-unrated"         onclick="setStrengthFilter('unrated')">⚪ Ej graderade <span id="sf-unrated-n"></span></button>
     <button class="sh-info-pill" onclick="openModal('color-info-modal')">Vad betyder färgerna? ℹ</button>
+    <button class="sh-info-pill" onclick="openModal('student-help-modal')" style="margin-left:0">Kom igång ℹ</button>
   </div>
 
   <!-- Study modes -->
   <div class="sh-section-label">Läsa &amp; förstå</div>
-  <div class="sh-mode-grid">
+  <div class="sh-mode-grid sh-mode-grid-3">
     <div class="sh-mode-card" onclick="startFlash()">
       <div class="sh-mc-icon">🃏</div>
       <div class="sh-mc-name">Flashcards</div>
@@ -618,10 +672,16 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
       <div class="sh-mc-desc">Skriv rätt stavning</div>
       <span class="sh-mc-tag sh-tag-study">Enkel · Medel · Svår</span>
     </div>
+    <div class="sh-mode-card" onclick="startMemory()">
+      <div class="sh-mc-icon">🎴</div>
+      <div class="sh-mc-name">Memory</div>
+      <div class="sh-mc-desc">Vänd kort och matcha par</div>
+      <span class="sh-mc-tag sh-tag-study">Enkel · Medel · Svår</span>
+    </div>
   </div>
 
   <div class="sh-section-label" style="margin-top:20px">Spel</div>
-  <div class="sh-mode-grid">
+  <div class="sh-mode-grid sh-mode-grid-3">
     <div class="sh-mode-card" onclick="startRain()">
       <div class="sh-mc-icon">☔</div>
       <div class="sh-mc-name">Ordregnet</div>
@@ -634,17 +694,23 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
       <div class="sh-mc-desc">Fyll tanken med rätta svar</div>
       <span class="sh-mc-tag sh-tag-game">Racing</span>
     </div>
-    <div class="sh-mode-card" onclick="startMemory()">
-      <div class="sh-mc-icon">🎴</div>
-      <div class="sh-mc-name">Memory</div>
-      <div class="sh-mc-desc">Vänd kort och matcha par</div>
-      <span class="sh-mc-tag sh-tag-game">Minne</span>
-    </div>
     <div class="sh-mode-card" onclick="startShooter()">
       <div class="sh-mc-icon">🚀</div>
       <div class="sh-mc-name">Ordskjutaren</div>
       <div class="sh-mc-desc">Skjut ned rätt översättning</div>
       <span class="sh-mc-tag sh-tag-game">Arkad</span>
+    </div>
+    <div class="sh-mode-card" onclick="startSwipe()">
+      <div class="sh-mc-icon">👆</div>
+      <div class="sh-mc-name">Svep</div>
+      <div class="sh-mc-desc">Svep höger = rätt, vänster = fel</div>
+      <span class="sh-mc-tag" style="background:rgba(239,71,111,.15);color:var(--pink)">📱 Mobil</span>
+    </div>
+    <div class="sh-mode-card" onclick="startQuickpick()">
+      <div class="sh-mc-icon">⚡</div>
+      <div class="sh-mc-name">Snabbval</div>
+      <div class="sh-mc-desc">Tryck rätt svar bland fyra stora knappar</div>
+      <span class="sh-mc-tag" style="background:rgba(247,127,0,.15);color:var(--orange)">📱 Mobil</span>
     </div>
   </div>
 
@@ -684,12 +750,12 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
   <div class="modal" style="max-width:440px">
     <h2>ℹ️ Vad betyder färgerna?</h2>
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;font-size:.88rem">
-      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">🟢</span><div><strong>Starka</strong> – ord du graderat som lätta (flashcards) eller enkel stavning</div></div>
-      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">🟡</span><div><strong>Medel</strong> – ord du är ganska säker på men inte helt</div></div>
-      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">🔴</span><div><strong>Svaga</strong> – ord du tyckt är svåra – fokusera på dessa!</div></div>
-      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">⚪</span><div><strong>Ej graderade</strong> – ord du ännu inte övat med gradering</div></div>
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">🟢</span><div><strong>Säker</strong> – du kan det här ordet utan att tveka</div></div>
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">🟡</span><div><strong>Lite osäker</strong> – du är på rätt spår men behöver lite mer träning</div></div>
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">🔴</span><div><strong>Osäker</strong> – öva extra på dessa!</div></div>
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:1.2rem">⚪</span><div><strong>Ej graderat</strong> – du har inte övat det här ordet med gradering än</div></div>
     </div>
-    <p style="font-size:.8rem;color:var(--gray);margin-top:12px">Graderingarna sätts automatiskt när du övar Flashcards eller Stava.</p>
+    <p style="font-size:.8rem;color:var(--gray);margin-top:12px">Du sätter färgen själv när du övar Flashcards (tryck 1–3) eller Stava.</p>
     <div class="modal-actions"><button class="btn btn-yellow" onclick="closeModal('color-info-modal')">Förstått!</button></div>
   </div>
 </div>
@@ -812,6 +878,10 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
         <button class="diff-ingame-btn easy" id="flash-d-easy"   onclick="setDiffInGame('flash','easy')">Enkel</button>
         <button class="diff-ingame-btn medium" id="flash-d-medium" onclick="setDiffInGame('flash','medium')">Medel</button>
         <button class="diff-ingame-btn hard"   id="flash-d-hard"   onclick="setDiffInGame('flash','hard')">Svår</button>
+        <button id="flash-pace-btn" onclick="toggleFlashPace()" title="Byt tempo"
+          style="font-family:'Nunito',sans-serif;font-weight:800;font-size:.78rem;padding:4px 12px;border-radius:50px;border:2px solid rgba(255,255,255,.2);background:transparent;color:var(--white);cursor:pointer;transition:all .2s;white-space:nowrap">
+          🐢 Lugnt
+        </button>
       </div>
       <div class="game-title-row"><h1 class="yellow">🃏 Flashcards</h1><span class="diff-badge" id="flash-diff-badge"></span></div>
     </div>
@@ -825,7 +895,7 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
     <div class="pile unsure"><div class="pile-icon">🔴</div><div class="pile-label">Osäker</div><div class="pile-count" id="f-unsure">0</div></div>
   </div>
   <div class="progress-bar-wrap"><div class="progress-bar-fill fill-yellow" id="flash-progress" style="width:0%"></div></div>
-  <div class="flash-scene" id="flash-scene" onclick="flipFlashCard()">
+  <div class="flash-scene" id="flash-scene" onclick="flipFlashCard()" ontouchend="handleFlashTouch(event)">
     <div class="flash-card-inner" id="flash-inner">
       <div class="flash-face front">
         <div class="flash-face-label" id="flash-front-label">Engelska</div>
@@ -839,14 +909,18 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
       </div>
     </div>
   </div>
-  <div style="text-align:center;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);margin-bottom:10px">Bläddra och sortera efter säkerhet:</div>
+  <div id="flash-rate-label" style="text-align:center;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);margin-bottom:10px">Sortera efter säkerhet:</div>
   <div class="confidence-row">
     <button class="conf-btn sure"   id="cb-sure"   onclick="rateFlash('sure')"   disabled>🟢 Säker <kbd>1</kbd></button>
     <button class="conf-btn maybe"  id="cb-maybe"  onclick="rateFlash('maybe')"  disabled>🟡 Ganska <kbd>2</kbd></button>
     <button class="conf-btn unsure" id="cb-unsure" onclick="rateFlash('unsure')" disabled>🔴 Osäker <kbd>3</kbd></button>
   </div>
+  <!-- Slow mode: explicit next button -->
+  <div id="flash-next-row" style="display:none;text-align:center;margin-top:10px">
+    <button class="btn btn-ghost" onclick="flashAdvance()" style="font-size:.85rem">Nästa kort →</button>
+  </div>
   <div id="flash-kb-hint" style="display:none;justify-content:center;gap:14px;margin-bottom:12px;flex-wrap:wrap;font-size:.72rem;color:var(--gray);font-weight:700;text-align:center">
-    <span><kbd>Mellanslag</kbd> / <kbd>→</kbd> Vänd &amp; nästa</span>
+    <span id="flash-kb-flip"><kbd>Mellanslag</kbd> Vänd</span>
     <span><kbd>←</kbd> Föregående</span>
     <span><kbd>1</kbd> Säker &nbsp;<kbd>2</kbd> Ganska &nbsp;<kbd>3</kbd> Osäker</span>
   </div>
@@ -1017,29 +1091,124 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
 
 <!-- LIBRARY VIEW -->
 <div id="library-view" class="view">
-<div style="max-width:760px;margin:0 auto;padding:36px 20px 80px">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px">
+<div style="max-width:860px;margin:0 auto;padding:28px 20px 80px">
+
+  <!-- Header row -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
     <div>
-      <button class="btn btn-ghost btn-sm" style="margin-bottom:8px" onclick="showStudentHome()">← Tillbaka</button>
-      <h1 style="font-family:'Fredoka One',cursive;font-size:1.9rem;color:var(--white)">📚 Mitt glossbibliotek</h1>
+      <button class="btn btn-ghost btn-sm" style="margin-bottom:6px" onclick="showStudentHome()">← Tillbaka</button>
+      <h1 style="font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--white)">📚 Mitt glossbibliotek</h1>
     </div>
-    <button class="btn btn-yellow" onclick="document.getElementById('lib-file-input').click()">＋ Ladda in glosset</button>
-    <input type="file" id="lib-file-input" accept=".json" multiple style="display:none" onchange="loadLibraryFiles(event)">
+    <div style="display:flex;gap:8px;align-items:center">
+      <!-- View toggle -->
+      <div style="display:flex;border:1px solid rgba(255,255,255,.15);border-radius:8px;overflow:hidden">
+        <button id="lib-view-rows" onclick="setLibView('rows')" style="font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;padding:6px 12px;border:none;cursor:pointer;background:rgba(255,255,255,.12);color:var(--white)">☰ Lista</button>
+        <button id="lib-view-cards" onclick="setLibView('cards')" style="font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;padding:6px 12px;border:none;cursor:pointer;background:transparent;color:var(--gray)">⊞ Kort</button>
+      </div>
+      <button class="btn btn-yellow" onclick="document.getElementById('lib-file-input').click()">＋ Ladda in</button>
+      <input type="file" id="lib-file-input" accept=".json" multiple style="display:none" onchange="loadLibraryFiles(event)">
+    </div>
   </div>
-  <div id="lib-selection-bar" style="display:none;background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.2);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-    <div style="font-size:.88rem;font-weight:700;color:var(--yellow)" id="lib-selection-text">0 glosset valda</div>
+
+  <!-- Search + language filter -->
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+    <input type="text" id="lib-search" placeholder="🔍  Sök på namn eller ämne…"
+      style="flex:1;min-width:180px;font-family:'Nunito',sans-serif;font-size:.85rem;background:var(--surface);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 12px;color:var(--white);outline:none"
+      oninput="renderLibraryGrid()"/>
+    <div id="lib-lang-filters" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+  </div>
+
+  <!-- Selection bar -->
+  <div id="lib-selection-bar" style="display:none;background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.2);border-radius:var(--radius-sm);padding:10px 16px;margin-bottom:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <div style="font-size:.85rem;font-weight:700;color:var(--yellow)" id="lib-selection-text">0 valda</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn btn-ghost btn-sm" onclick="selectAllSets()">Välj alla</button>
-      <button class="btn btn-ghost btn-sm" onclick="deselectAllSets()">Avmarkera alla</button>
+      <button class="btn btn-ghost btn-sm" onclick="deselectAllSets()">Avmarkera</button>
       <button class="btn btn-yellow" onclick="activateSelectedSets()">✅ Aktivera valda</button>
     </div>
   </div>
-  <div id="library-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px"></div>
-  <div id="library-empty" style="text-align:center;color:var(--gray);padding:48px 0">
+
+  <div id="library-grid" style="margin-bottom:24px"></div>
+  <div id="library-empty" style="text-align:center;color:var(--gray);padding:48px 0;display:none">
     <div style="font-size:3rem;margin-bottom:12px">📭</div>
-    <div style="font-weight:800;font-size:1.1rem;margin-bottom:6px">Inga glosset laddade</div>
-    <div style="font-size:.88rem">Ladda in JSON-filer från din lärare för att börja.</div>
+    <div style="font-weight:800;font-size:1.1rem;margin-bottom:6px">Inga glosset hittades</div>
+    <div style="font-size:.88rem">Ladda in JSON-filer eller justera sökningen.</div>
   </div>
+</div>
+</div>
+
+<!-- SWIPE VIEW -->
+<div id="swipe-view" class="view">
+<div class="game-wrap" style="max-width:480px">
+  <div class="game-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="stopSwipe();showStudentHome()">← Tillbaka</button>
+        <button class="btn btn-ghost btn-sm dir-ingame-btn" id="swipe-dir-btn" onclick="flipInGame('swipe')"></button>
+        <button class="diff-ingame-btn easy"   id="swipe-d-easy"   onclick="setDiffInGame('swipe','easy')">Enkel</button>
+        <button class="diff-ingame-btn medium" id="swipe-d-medium" onclick="setDiffInGame('swipe','medium')">Medel</button>
+        <button class="diff-ingame-btn hard"   id="swipe-d-hard"   onclick="setDiffInGame('swipe','hard')">Svår</button>
+      </div>
+      <div class="game-title-row"><h1 style="color:var(--pink)">👆 Svep</h1><span class="diff-badge" id="swipe-diff-badge"></span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">✅ <span class="val" id="swipe-correct">0</span></div>
+      <div class="stat-pill">❌ <span class="val" id="swipe-wrong">0</span></div>
+      <div class="stat-pill">📦 <span class="val" id="swipe-left">0</span> kvar</div>
+    </div>
+  </div>
+
+  <div id="swipe-progress-bar" style="height:4px;background:var(--surface2);border-radius:2px;margin-bottom:20px"><div id="swipe-progress" style="height:100%;background:var(--pink);border-radius:2px;transition:width .3s;width:0%"></div></div>
+
+  <div id="swipe-hint" style="text-align:center;font-size:.78rem;color:var(--gray);margin-bottom:8px"></div>
+
+  <!-- Card stage -->
+  <div id="swipe-stage" style="position:relative;height:220px;margin-bottom:24px;touch-action:none">
+    <div id="swipe-card" style="position:absolute;inset:0;background:var(--surface);border:2px solid rgba(255,255,255,.12);border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:grab;user-select:none;transition:box-shadow .2s;touch-action:none">
+      <div id="swipe-question" style="font-family:'Fredoka One',cursive;font-size:2.4rem;color:var(--white);text-align:center;padding:0 20px"></div>
+      <div id="swipe-sub" style="font-size:.8rem;color:var(--gray)"></div>
+      <div id="swipe-yes-label" style="position:absolute;top:14px;right:16px;font-size:.85rem;font-weight:800;color:var(--teal);opacity:0;border:2px solid var(--teal);border-radius:6px;padding:3px 10px;transform:rotate(8deg)">RÄTT ✓</div>
+      <div id="swipe-no-label"  style="position:absolute;top:14px;left:16px; font-size:.85rem;font-weight:800;color:var(--pink);opacity:0;border:2px solid var(--pink);border-radius:6px;padding:3px 10px;transform:rotate(-8deg)">FEL ✗</div>
+    </div>
+  </div>
+
+  <!-- Answer options -->
+  <div id="swipe-options" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"></div>
+
+  <!-- Swipe hint row -->
+  <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--gray);padding:0 4px">
+    <span>← Fel</span>
+    <span style="font-size:.7rem;opacity:.6">eller tryck på ett alternativ</span>
+    <span>Rätt →</span>
+  </div>
+</div>
+</div>
+
+<!-- QUICKPICK VIEW -->
+<div id="quickpick-view" class="view">
+<div class="game-wrap" style="max-width:480px">
+  <div class="game-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="stopQuickpick();showStudentHome()">← Tillbaka</button>
+        <button class="btn btn-ghost btn-sm dir-ingame-btn" id="qp-dir-btn" onclick="flipInGame('quickpick')"></button>
+        <button class="diff-ingame-btn easy"   id="qp-d-easy"   onclick="setDiffInGame('quickpick','easy')">Enkel</button>
+        <button class="diff-ingame-btn medium" id="qp-d-medium" onclick="setDiffInGame('quickpick','medium')">Medel</button>
+        <button class="diff-ingame-btn hard"   id="qp-d-hard"   onclick="setDiffInGame('quickpick','hard')">Svår</button>
+      </div>
+      <div class="game-title-row"><h1 style="color:var(--orange)">⚡ Snabbval</h1><span class="diff-badge" id="qp-diff-badge"></span></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">✅ <span class="val" id="qp-correct">0</span></div>
+      <div class="stat-pill">❌ <span class="val" id="qp-wrong">0</span></div>
+      <div class="stat-pill">⏱ <span class="val" id="qp-timer">0:00</span></div>
+    </div>
+  </div>
+  <div id="qp-progress-bar" style="height:4px;background:var(--surface2);border-radius:2px;margin-bottom:20px"><div id="qp-progress" style="height:100%;background:var(--orange);border-radius:2px;transition:width .3s;width:0%"></div></div>
+  <div id="qp-word" style="font-family:'Fredoka One',cursive;font-size:2.8rem;color:var(--white);text-align:center;margin-bottom:10px;min-height:80px;display:flex;align-items:center;justify-content:center;padding:0 10px"></div>
+  <div id="qp-feedback" class="feedback-banner" style="display:none;margin-bottom:14px"></div>
+  <div id="qp-options" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"></div>
+  <div style="text-align:center;margin-top:14px;font-size:.8rem;color:var(--gray)">Ord <span id="qp-idx">1</span> av <span id="qp-total">?</span></div>
 </div>
 </div>
 
@@ -1059,7 +1228,7 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
       <button class="btn btn-yellow btn-lg" onclick="replayGame()">🔄 Spela igen</button>
       <button class="btn btn-ghost btn-lg" onclick="showStudentHome()">🏠 Välj läge</button>
     </div>
-    <button id="retry-weak-btn" class="btn btn-pink" style="display:none" onclick="retryWeak()">🔴 Öva svaga ord igen</button>
+    <button id="retry-weak-btn" class="btn btn-pink" style="display:none" onclick="retryWeak()">🔴 Öva osäkra ord igen</button>
   </div>
 
   <!-- Session word summary -->
@@ -1083,9 +1252,9 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn btn-ghost btn-sm" id="mw-filter-all"    onclick="setMWFilter('all')"   >Alla</button>
-      <button class="btn btn-ghost btn-sm" id="mw-filter-weak"   onclick="setMWFilter('weak')"  >🔴 Svaga</button>
+      <button class="btn btn-ghost btn-sm" id="mw-filter-weak"   onclick="setMWFilter('weak')"  >🔴 Osäkra</button>
       <button class="btn btn-ghost btn-sm" id="mw-filter-medium" onclick="setMWFilter('medium')">🟡 Medel</button>
-      <button class="btn btn-ghost btn-sm" id="mw-filter-strong" onclick="setMWFilter('strong')">🟢 Starka</button>
+      <button class="btn btn-ghost btn-sm" id="mw-filter-strong" onclick="setMWFilter('strong')">🟢 Säkra</button>
     </div>
   </div>
   <div id="mywords-legend" style="display:flex;gap:16px;margin-bottom:16px;font-size:.76rem;font-weight:700;color:var(--gray);flex-wrap:wrap">
@@ -1098,10 +1267,158 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
     <div style="font-size:.85rem;margin-top:4px">Öva lite så dyker de upp här!</div>
   </div>
   <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-    <button class="btn btn-pink" onclick="retryWeak()">🔴 Öva svaga ord</button>
+    <button class="btn btn-pink" onclick="retryWeak()">🔴 Öva osäkra ord</button>
     <button class="btn btn-ghost btn-sm" onclick="clearMyWordsData()" style="font-size:.7rem">🗑 Rensa historik</button>
   </div>
 </div>
+</div>
+
+<!-- STUDENT HELP MODAL -->
+<div class="modal-overlay" id="student-help-modal">
+  <div class="modal" style="max-width:520px;max-height:85vh;overflow-y:auto">
+    <h2>👋 Kom igång – så här övar du</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:6px">
+
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px">
+        <div style="font-weight:800;color:var(--yellow);margin-bottom:5px">1. Välj ett glosset</div>
+        <div style="font-size:.85rem;color:var(--gray);line-height:1.6">
+          Klicka <strong style="color:var(--white)">📚 Byt glosset</strong> uppe på sidan. Ladda in en JSON-fil du fått av din lärare, eller välj bland de set som redan finns i biblioteket. Vill du öva flera ämnen på en gång? Bocka i flera set och klicka "Aktivera valda".
+        </div>
+      </div>
+
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px">
+        <div style="font-weight:800;color:var(--teal);margin-bottom:5px">2. Välj läxa eller uppgift</div>
+        <div style="font-size:.85rem;color:var(--gray);line-height:1.6">
+          Om din lärare har märkt upp orden med t.ex. <em style="color:var(--teal)">Läxa 7.2</em> syns en grön rad ovanför filtren. Klicka på läxans namn för att bara öva <em>de</em> orden – perfekt när du har prov på ett specifikt avsnitt.
+        </div>
+      </div>
+
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px">
+        <div style="font-weight:800;color:var(--purple);margin-bottom:5px">3. Välj ett övningsläge</div>
+        <div style="font-size:.85rem;color:var(--gray);line-height:1.6">
+          Börja gärna med <strong style="color:var(--white)">Flashcards</strong> för att bekanta dig med orden. Graderar du varje kort (1 = Säker, 2 = Ganska, 3 = Osäker) sparas ditt resultat. Sedan kan du filtrera på <span style="color:var(--red)">🔴 Osäkra</span> ord och öva extra på just dem.
+        </div>
+      </div>
+
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px">
+        <div style="font-weight:800;color:var(--pink);margin-bottom:5px">4. På mobilen</div>
+        <div style="font-size:.85rem;color:var(--gray);line-height:1.6">
+          <strong style="color:var(--white)">👆 Svep</strong> och <strong style="color:var(--white)">⚡ Snabbval</strong> är gjorda för att spelas med tummen. Perfekta på bussen eller i korridoren!
+        </div>
+      </div>
+
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px">
+        <div style="font-weight:800;color:var(--green);margin-bottom:5px">5. Din progress sparas automatiskt</div>
+        <div style="font-size:.85rem;color:var(--gray);line-height:1.6">
+          Dina graderingar sparas i den här webbläsaren. Öppnar du samma glosset igen nästa gång är dina 🟢🟡🔴 kvar. Under <strong style="color:var(--white)">📊 Mina glosor</strong> ser du en samlad bild av alla ord och hur det går.
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn btn-yellow" onclick="closeModal('student-help-modal');localStorage.setItem('glos_seen_help','1')">Förstått, kör igång! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME MODAL (first visit) -->
+<div class="modal-overlay" id="welcome-modal">
+  <div class="modal" style="max-width:480px;text-align:center">
+    <div style="font-size:2.8rem;margin-bottom:12px">📚</div>
+    <h2 style="font-family:'Fredoka One',cursive;font-size:1.8rem;margin-bottom:6px">
+      <span style="color:var(--white)">Välkommen till</span><br>
+      <span style="background:linear-gradient(90deg,#06d6a0,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Glosträning på AD!</span>
+    </h2>
+    <p style="color:var(--gray);font-size:.9rem;margin-bottom:20px;line-height:1.6">Här övar du glosor med flashcards, spel och mycket mer. Din lärare delar ett glosset med dig — eller ladda in en fil direkt.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+      <div style="background:var(--surface2);border-radius:10px;padding:12px 16px;text-align:left;display:flex;gap:12px;align-items:flex-start">
+        <span style="font-size:1.3rem">📂</span>
+        <div>
+          <div style="font-weight:800;font-size:.88rem;color:var(--white);margin-bottom:2px">Har du fått en fil av din lärare?</div>
+          <div style="font-size:.8rem;color:var(--gray)">Klicka "📚 Byt glosset" → "＋ Ladda in glosset" och välj filen.</div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border-radius:10px;padding:12px 16px;text-align:left;display:flex;gap:12px;align-items:flex-start">
+        <span style="font-size:1.3rem">🎮</span>
+        <div>
+          <div style="font-weight:800;font-size:.88rem;color:var(--white);margin-bottom:2px">Vill du testa direkt?</div>
+          <div style="font-size:.8rem;color:var(--gray)">Exempelglosor finns redan inladdade. Välj ett övningsläge och kör!</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions" style="justify-content:center">
+      <button class="btn btn-yellow btn-lg" onclick="closeModal('welcome-modal');localStorage.setItem('glos_seen_welcome','1')">Börja öva 🚀</button>
+      <button class="btn btn-ghost" onclick="closeModal('welcome-modal');openModal('student-help-modal');localStorage.setItem('glos_seen_welcome','1')">Visa guide först</button>
+    </div>
+  </div>
+</div>
+
+<!-- GROUP MANAGER MODAL -->
+<div class="modal-overlay" id="group-manager-modal">
+  <div class="modal" style="max-width:500px;max-height:80vh;overflow-y:auto">
+    <h2>📝 Hantera prov &amp; grupper</h2>
+    <p style="font-size:.83rem;color:var(--gray);margin-bottom:14px">Skapa en grupp som samlar flera tilldelningar — t.ex. "Prov 1" som innehåller Läxa 7.1 + Läxa 7.2.</p>
+    <div id="gm-list"></div>
+    <button class="btn btn-yellow btn-sm" onclick="addNewGroup()" style="margin-top:8px">＋ Ny grupp</button>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn btn-ghost" onclick="closeModal('group-manager-modal');renderAssignFilterRow()">Stäng</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE MODAL -->
+<div class="modal-overlay" id="share-modal">
+  <div class="modal" style="max-width:560px">
+    <h2>📤 Dela med elever</h2>
+    <p style="font-size:.84rem;color:var(--gray);margin-bottom:16px">Välj hur du vill dela <strong style="color:var(--white)" id="share-setname"></strong> med dina elever.</p>
+
+    <!-- Option 1: HTML via Teams -->
+    <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;border:1px solid rgba(255,255,255,.07)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:1.4rem">📁</span>
+        <div>
+          <div style="font-weight:800;color:var(--white);font-size:.92rem">HTML-fil via Teams</div>
+          <div style="font-size:.76rem;color:var(--gray)">Rekommenderas · Eleven behöver bara klicka på filen</div>
+        </div>
+      </div>
+      <div style="font-size:.8rem;color:var(--gray);line-height:1.8;margin-bottom:12px;padding-left:2px">
+        <div>1. Klicka <strong style="color:var(--white)">Ladda ned HTML-fil</strong> nedan</div>
+        <div>2. Gå till din Teams-kanal → klicka på 📎 bifoga fil</div>
+        <div>3. Välj den nedladdade filen och skicka</div>
+        <div>4. Eleven klickar på filen → väljer <em style="color:var(--teal)">"Öppna i webbläsare"</em> → klar!</div>
+      </div>
+      <button class="btn btn-teal" onclick="doDownloadHTML();closeModal('share-modal')">⬇️ Ladda ned HTML-fil</button>
+    </div>
+
+    <!-- Option 2: URL via GitHub -->
+    <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:16px;border:1px solid rgba(255,255,255,.07)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:1.4rem">🔗</span>
+        <div>
+          <div style="font-weight:800;color:var(--white);font-size:.92rem">Länk via GitHub Pages</div>
+          <div style="font-size:.76rem;color:var(--gray)">Kräver GitHub · Eleven klickar en länk — ingenting att ladda ned</div>
+        </div>
+      </div>
+      <div style="font-size:.8rem;color:var(--gray);line-height:1.8;margin-bottom:12px;padding-left:2px">
+        <div>1. Spara JSON-filen och ladda upp den till ditt GitHub-repo</div>
+        <div>2. Dela länken nedan i Teams — eleven klickar och glosset öppnas direkt</div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <input id="share-json-filename" type="text" placeholder="filnamn.json (t.ex. kroppen-ak7.json)"
+          style="flex:1;font-family:'Nunito',sans-serif;font-size:.8rem;background:var(--surface);border:1px solid rgba(255,255,255,.15);color:var(--white);border-radius:6px;padding:6px 10px;outline:none;min-width:200px"
+          oninput="updateShareUrl()"/>
+        <button class="btn btn-purple btn-sm" onclick="copyShareUrl()">📋 Kopiera länk</button>
+      </div>
+      <div id="share-url-preview" style="font-size:.72rem;color:var(--teal);margin-top:7px;word-break:break-all;display:none"></div>
+      <div style="font-size:.72rem;color:var(--gray);margin-top:6px">
+        💡 <a href="https://github.com/PatrickTegnefur/glosor" target="_blank" style="color:var(--teal)">Öppna ditt GitHub-repo</a> för att ladda upp JSON-filen.
+      </div>
+    </div>
+
+    <div class="modal-actions" style="margin-top:14px">
+      <button class="btn btn-ghost" onclick="closeModal('share-modal')">Stäng</button>
+      <button class="btn btn-purple btn-sm" onclick="exportJSON()">💾 Spara JSON först</button>
+    </div>
+  </div>
 </div>
 
 <div id="toast"></div>
@@ -1109,8 +1426,8 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
 <!-- SIGNATURE FOOTER -->
 <div id="sig-footer" style="position:fixed;bottom:0;left:0;right:0;background:rgba(15,14,23,.97);border-top:1px solid rgba(255,255,255,.07);padding:8px 20px;display:flex;align-items:center;justify-content:space-between;z-index:20;backdrop-filter:blur(8px)">
   <div style="display:flex;align-items:center;gap:12px">
-    <img src="PT_Logo.png" alt="PT" style="height:28px;width:28px;border-radius:50%;object-fit:cover;opacity:.85" onerror="this.style.display='none'"/>
-    <img src="AD_Colors.jpg" alt="Alfred Dalinskolan" style="height:24px;object-fit:contain;opacity:.75;border-radius:4px" onerror="this.style.display='none'"/>
+    <img src="https://raw.githubusercontent.com/PatrickTegnefur/glosor/main/pt_logo.jpg" alt="PT" style="height:28px;width:28px;border-radius:50%;object-fit:cover;opacity:.9" onerror="this.style.display='none'"/>
+    <img src="https://raw.githubusercontent.com/PatrickTegnefur/glosor/main/AD_Color.png" alt="Alfred Dalinskolan" style="height:24px;object-fit:contain;opacity:.8;border-radius:4px" onerror="this.style.display='none'"/>
     <div style="font-size:.72rem;color:var(--gray);line-height:1.4">
       <span style="font-weight:800;color:rgba(255,255,255,.6)">Patrick Tegnefur</span>
       <span style="margin:0 5px;opacity:.4">·</span>
@@ -1136,7 +1453,7 @@ kbd{display:inline-block;font-family:'Nunito',sans-serif;font-size:.68rem;font-w
 /* ═══ STATE ═══ */
 let words=[], setName="Mina glosor", setSubject="";
 let direction='normal'; // 'normal'=lang1→lang2, 'flipped'=lang2→lang1
-let diff={match:'easy',spell:'easy',mc:'easy',flash:'easy',rain:'easy',race:'easy',memory:'easy',shooter:'easy'};
+let diff={match:'easy',spell:'easy',mc:'easy',flash:'easy',rain:'easy',race:'easy',memory:'easy',shooter:'easy',swipe:'easy',quickpick:'easy'};
 
 // Language registry
 const LANGS={
@@ -1191,7 +1508,7 @@ function setBadge(id,d){const el=document.getElementById(id);el.className='diff-
 /* ═══ NAVIGATION ═══ */
 function showView(name){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  const map={teacher:'teacher-view',home:'student-home',match:'match-view',spell:'spell-view',mc:'mc-view',flash:'flash-view',rain:'rain-view',race:'race-view',memory:'memory-view',shooter:'shooter-view',mywords:'mywords-view',library:'library-view',results:'results-view'};
+  const map={teacher:'teacher-view',home:'student-home',match:'match-view',spell:'spell-view',mc:'mc-view',flash:'flash-view',rain:'rain-view',race:'race-view',memory:'memory-view',shooter:'shooter-view',mywords:'mywords-view',library:'library-view',swipe:'swipe-view',quickpick:'quickpick-view',results:'results-view'};
   document.getElementById(map[name]).classList.add('active');
   window.scrollTo(0,0);
   // update nav button state
@@ -1207,8 +1524,12 @@ function showStudentHome(){
   document.getElementById('sh-subject').textContent=setSubject;
   const active=getActiveWords();
   const badge=document.getElementById('sh-word-badge');
-  if(badge)badge.textContent=active.length+' ord'+(strengthFilter!=='all'?' (filtrerade)':'');
+  const filterDesc=assignFilter?` – ${assignFilter}`:strengthFilter!=='all'?' (filtrerade)':'';
+  if(badge)badge.textContent=active.length+' ord'+filterDesc;
   document.getElementById('sh-count').textContent=active.length;
+  const icon=document.getElementById('sh-icon');
+  if(icon)icon.textContent=langObj(qLangCode()).flag;
+  renderAssignFilterRow();
   renderWordTable(active);
   updateStrengthFilterCounts();
   updateDirUI();showView('home');
@@ -1303,7 +1624,7 @@ function updateDirUI(){
   from.className='sh-dir-lang sh-dir-active';
   to.className='sh-dir-lang';
   const icon=document.getElementById('sh-icon');
-  if(icon)icon.textContent=ql.code.toUpperCase();
+  if(icon)icon.textContent=ql.flag;
   const lbl=document.getElementById('sh-dir-label');
   if(lbl)lbl.textContent=`ser ${ql.name.toLowerCase()} → skriver ${al.name.toLowerCase()}`;
 }
@@ -1415,7 +1736,7 @@ function renderWordList(){
   for(let b=0;b<BUFFER;b++){
     const newRow=document.createElement('div');
     newRow.className='xl-row xl-buffer-row';
-    newRow.style.opacity=b===0?'.5':b===1?'.3':'.15';
+    newRow.style.opacity=b===0?'.85':b===1?'.4':'.18';
     const rowNum=words.length+b+1;
     newRow.innerHTML=`<div class="xl-cell xl-cell-num" style="color:rgba(255,255,255,.15)">${rowNum}</div>
       <div class="xl-cell"><input class="xl-input xl-assign-input" placeholder="Tilldelning…" data-buf="${b}" onkeydown="bufKeydown(this,event,'assign')" oninput="ensureBufferRows()"/></div>
@@ -1637,18 +1958,90 @@ function exportHTML(){
     'setSubject='+JSON.stringify(setSubject)+';\n'+
     'lang1='+JSON.stringify(lang1)+';\n'+
     'lang2='+JSON.stringify(lang2)+';\n'+
+    (assignGroups.length?'assignGroups='+JSON.stringify(assignGroups)+';\n':'')+
     'document.getElementById(\'set-name\').value=setName;\n'+
     'document.getElementById(\'set-subject\').value=setSubject;\n'+
     'setLangSelects(lang1,lang2);\n'+
     'renderWordList();\n'+
     'updateDirButtons();\n'+
+    'loadLibraryFromStorage();\n'+
+    'loadRatingsFromStorage();\n'+
     'showStudentHome();\n'+
+    'checkFirstVisit();\n'+
     '/* BEGREPPS_INIT_END */';
   const patched=src.replace(/\/\* BEGREPPS_INIT_START \*\/[\s\S]*?\/\* BEGREPPS_INIT_END \*\//,newInit);
   const blob=new Blob([patched],{type:'text/html'});
-  const link=document.createElement('a');link.href=URL.createObjectURL(blob);
-  link.download=(setName||'ovning').replace(/\s+/g,'-').toLowerCase()+'.html';link.click();
-  toast('📄 Övningsfil exporterad!');
+  const url=URL.createObjectURL(blob);
+  // store for share modal
+  window._exportBlob=blob;
+  window._exportFilename=(setName||'ovning').replace(/\s+/g,'-').toLowerCase()+'.html';
+  window._exportUrl=url;
+  openModal('share-modal');
+}
+
+function updateShareUrl(){
+  const filename=document.getElementById('share-json-filename').value.trim();
+  const preview=document.getElementById('share-url-preview');
+  if(!filename){preview.style.display='none';return;}
+  const base=window.location.origin+window.location.pathname;
+  const url=base+'?set='+encodeURIComponent(filename.replace(/\.json$/,''));
+  preview.textContent=url;
+  preview.style.display='block';
+}
+function copyShareUrl(){
+  const filename=document.getElementById('share-json-filename').value.trim();
+  if(!filename){toast('⚠️ Ange filnamnet först');return;}
+  const base=window.location.origin+window.location.pathname;
+  const url=base+'?set='+encodeURIComponent(filename.replace(/\.json$/,''));
+  navigator.clipboard.writeText(url).then(()=>toast('✅ Länk kopierad!')).catch(()=>{
+    prompt('Kopiera länken:',url);
+  });
+}
+function openShareModal(){
+  document.getElementById('share-setname').textContent=setName||'glosset';
+  document.getElementById('share-json-filename').value=(setName||'ovning').replace(/\s+/g,'-').toLowerCase()+'.json';
+  updateShareUrl();
+  openModal('share-modal');
+}
+
+// Auto-load set from URL parameter ?set=filename
+function checkUrlParam(){
+  try{
+    const params=new URLSearchParams(window.location.search);
+    const set=params.get('set');
+    if(!set)return;
+    // try to fetch JSON from same directory
+    const jsonFile=set.endsWith('.json')?set:set+'.json';
+    const base=window.location.href.split('?')[0].replace(/[^/]*$/,'');
+    fetch(base+jsonFile)
+      .then(r=>{if(!r.ok)throw new Error('not found');return r.json();})
+      .then(data=>{
+        if(!data.words||!Array.isArray(data.words))return;
+        const l1=data.lang1||'en',l2=data.lang2||'sv';
+        words=data.words.filter(w=>(w[l1]||w.en)&&(w[l2]||w.sv)).map(w=>{
+          const n={};n[l1]=w[l1]||w.en||'';n[l2]=w[l2]||w.sv||'';
+          if(w.category)n.category=w.category;if(w.assign)n.assign=w.assign;
+          if(w.flashRating)n.flashRating=w.flashRating;if(w.spellRating)n.spellRating=w.spellRating;
+          return n;
+        });
+        setName=data.name||set;setSubject=data.subject||'';
+        assignGroups=data.groups||[];
+        document.getElementById('set-name').value=setName;
+        document.getElementById('set-subject').value=setSubject;
+        setLangSelects(l1,l2);renderWordList();
+        loadRatingsFromStorage();
+        showStudentHome();
+        toast(`✅ "${setName}" laddades från länken`);
+      })
+      .catch(()=>toast('⚠️ Kunde inte ladda set från länken'));
+  }catch(e){}
+}
+function doDownloadHTML(){
+  const link=document.createElement('a');
+  link.href=window._exportUrl;
+  link.download=window._exportFilename;
+  link.click();
+  toast('📄 Övningsfil nedladdad!');
 }
 
 /* ═══ STUDENT OWN WORDS ═══ */
@@ -1696,8 +2089,142 @@ function saveMyWords(){
 function exportJSON(){
   syncMeta();const valid=words.filter(w=>w[lang1]&&w[lang2]);
   if(!valid.length){toast('⚠️ Inga glospar!');return;}
-  const blob=new Blob([JSON.stringify({name:setName,subject:setSubject,lang1,lang2,words:valid},null,2)],{type:'application/json'});
+  const payload={name:setName,subject:setSubject,lang1,lang2,words:valid};
+  if(assignGroups.length)payload.groups=assignGroups;
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(setName||'glosor').replace(/\s+/g,'-').toLowerCase()+'.json';a.click();toast('💾 JSON sparad!');
+}
+/* ═══ EXCEL IMPORT / EXPORT ═══ */
+function loadExcelFile(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      if(typeof XLSX==='undefined'){toast('⚠️ Excel-biblioteket laddas – försök igen om en sekund');return;}
+      const wb=XLSX.read(ev.target.result,{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      if(!rows.length){toast('⚠️ Filen verkar tom');return;}
+
+      // Find header row — look for a row containing "ord" or "fråga" (case-insensitive)
+      let headerIdx=0;
+      for(let i=0;i<Math.min(rows.length,5);i++){
+        const r=rows[i].map(c=>String(c||'').toLowerCase());
+        if(r.some(c=>c.includes('ord')||c.includes('fråga')||c.includes('word'))){headerIdx=i;break;}
+      }
+      const headers=rows[headerIdx].map(c=>String(c||'').toLowerCase().trim());
+
+      // Map columns flexibly
+      const colIdx=(candidates)=>candidates.reduce((found,c)=>{
+        if(found>=0)return found;
+        const i=headers.findIndex(h=>h.includes(c));
+        return i>=0?i:-1;
+      },-1);
+
+      const iL1 = colIdx(['ord','fråga','word','term','engelska','franska','spanska','tyska']);
+      const iL2 = colIdx(['översättning','svar','translation','svenska']);
+      const iCat= colIdx(['kategori','category','ämne']);
+      const iAss= colIdx(['tilldelning','assign','läxa','prov','uppgift']);
+      const iLC1= colIdx(['språk 1','lang1','language 1']);
+      const iLC2= colIdx(['språk 2','lang2','language 2']);
+
+      if(iL1<0||iL2<0){toast('⚠️ Kunde inte hitta kolumner för ord och översättning');return;}
+
+      // Detect language codes from first data row or dedicated columns
+      let detectedL1=lang1, detectedL2=lang2;
+      const firstData=rows[headerIdx+1];
+      if(firstData&&iLC1>=0&&firstData[iLC1])detectedL1=String(firstData[iLC1]).trim().toLowerCase();
+      if(firstData&&iLC2>=0&&firstData[iLC2])detectedL2=String(firstData[iLC2]).trim().toLowerCase();
+
+      const added=[];
+      for(let i=headerIdx+1;i<rows.length;i++){
+        const row=rows[i];
+        const v1=String(row[iL1]||'').trim();
+        const v2=String(row[iL2]||'').trim();
+        if(!v1||!v2)continue;
+        const w={};
+        w[detectedL1]=v1;w[detectedL2]=v2;
+        if(iCat>=0&&row[iCat])w.category=String(row[iCat]).trim();
+        if(iAss>=0&&row[iAss])w.assign=String(row[iAss]).trim();
+        // per-row language override
+        if(iLC1>=0&&row[iLC1]){const l=String(row[iLC1]).trim().toLowerCase();if(l)detectedL1=l;}
+        if(iLC2>=0&&row[iLC2]){const l=String(row[iLC2]).trim().toLowerCase();if(l)detectedL2=l;}
+        added.push(w);
+      }
+      if(!added.length){toast('⚠️ Inga ord hittades i filen');return;}
+
+      // Confirm if words already exist
+      const action=words.length?confirm(`Lägg till ${added.length} ord till befintliga ${words.length} ord?\n\nOK = lägg till   Avbryt = ersätt alla`):true;
+      if(action===false)words=[];else if(action===null)return;
+      lang1=detectedL1;lang2=detectedL2;
+      added.forEach(w=>words.push(w));
+      setLangSelects(lang1,lang2);
+      renderWordList();
+      toast(`✅ ${added.length} ord importerade från Excel!`);
+    }catch(err){console.error(err);toast('❌ Kunde inte läsa Excel-filen');}
+  };
+  reader.readAsArrayBuffer(file);
+  e.target.value='';
+}
+
+function exportExcel(){
+  syncMeta();
+  const valid=words.filter(w=>w[lang1]&&w[lang2]);
+  if(!valid.length){toast('⚠️ Inga ord att exportera');return;}
+  if(typeof XLSX==='undefined'){toast('⚠️ Excel-biblioteket laddas – försök igen');return;}
+
+  const l1=langObj(lang1),l2=langObj(lang2);
+  const rows=[
+    // Header row
+    ['Ord / Fråga','Översättning / Svar','Kategori','Tilldelning','Språk 1','Språk 2']
+  ];
+  valid.forEach(w=>{
+    rows.push([
+      w[lang1]||'',
+      w[lang2]||'',
+      w.category||'',
+      w.assign||'',
+      lang1,
+      lang2
+    ]);
+  });
+
+  const ws=XLSX.utils.aoa_to_sheet(rows);
+  // Column widths
+  ws['!cols']=[{wch:22},{wch:22},{wch:18},{wch:16},{wch:8},{wch:8}];
+
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Glosor');
+  const filename=(setName||'glosor').replace(/\s+/g,'-').toLowerCase()+'.xlsx';
+  XLSX.writeFile(wb,filename);
+  toast('📊 Excel-fil exporterad!');
+}
+
+function exportBlankTool(){
+  const src=document.documentElement.outerHTML;
+  const blankInit=
+    '/* BEGREPPS_INIT_START */\n'+
+    'words=[];\n'+
+    'setName=\'\';setSubject=\'\';\n'+
+    'lang1=\'en\';lang2=\'sv\';\n'+
+    'document.getElementById(\'set-name\').value=\'\';\n'+
+    'document.getElementById(\'set-subject\').value=\'\';\n'+
+    'setLangSelects(lang1,lang2);\n'+
+    'renderWordList();\n'+
+    'updateDirButtons();\n'+
+    'loadLibraryFromStorage();\n'+
+    'loadRatingsFromStorage();\n'+
+    'loadGroups();\n'+
+    'checkUrlParam();\n'+
+    'showView(\'teacher\');\n'+
+    '/* BEGREPPS_INIT_END */';
+  const patched=src.replace(/\/\* BEGREPPS_INIT_START \*\/[\s\S]*?\/\* BEGREPPS_INIT_END \*\//,blankInit);
+  const blob=new Blob([patched],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='glosträning-tomt-verktyg.html';
+  a.click();
+  toast('✅ Tomt verktyg exporterat!');
 }
 function setLangSelects(l1,l2){
   lang1=l1;lang2=l2;
@@ -1715,11 +2242,19 @@ function loadJSONFile(e){
       const data=JSON.parse(ev.target.result);
       if(!data.words||!Array.isArray(data.words))throw 0;
       const l1=data.lang1||'en', l2=data.lang2||'sv';
-      words=data.words.filter(w=>(w[l1]||w.en)&&(w[l2]||w.sv));
-      // normalise keys so old en/sv files still work
-      words=words.map(w=>{const n={};n[l1]=w[l1]||w.en||'';n[l2]=w[l2]||w.sv||'';return n;});
+      words=data.words.filter(w=>(w[l1]||w.en)&&(w[l2]||w.sv)).map(w=>{
+        const n={};
+        n[l1]=w[l1]||w.en||'';
+        n[l2]=w[l2]||w.sv||'';
+        if(w.category)n.category=w.category;
+        if(w.assign)n.assign=w.assign;
+        if(w.flashRating)n.flashRating=w.flashRating;
+        if(w.spellRating)n.spellRating=w.spellRating;
+        return n;
+      });
       setName=data.name||file.name.replace('.json','');
       setSubject=data.subject||'';
+      assignGroups=data.groups||[];
       document.getElementById('set-name').value=setName;
       document.getElementById('set-subject').value=setSubject;
       setLangSelects(l1,l2);
@@ -1788,6 +2323,8 @@ function flipInGame(mode){
   else if(mode==='race')startRace();
   else if(mode==='memory')startMemory();
   else if(mode==='shooter')startShooter();
+  else if(mode==='swipe')startSwipe();
+  else if(mode==='quickpick')startQuickpick();
   else startFlash();
 }
 function setDiffInGame(mode,level){
@@ -1799,6 +2336,8 @@ function setDiffInGame(mode,level){
   else if(mode==='race')startRace();
   else if(mode==='memory')startMemory();
   else if(mode==='shooter')startShooter();
+  else if(mode==='swipe')startSwipe();
+  else if(mode==='quickpick')startQuickpick();
   else startFlash();
 }
 function replayGame(){
@@ -1809,6 +2348,8 @@ function replayGame(){
   else if(currentMode==='race')startRace();
   else if(currentMode==='memory')startMemory();
   else if(currentMode==='shooter')startShooter();
+  else if(currentMode==='swipe')startSwipe();
+  else if(currentMode==='quickpick')startQuickpick();
   else startFlash();
 }
 function dirBtnHTML(d){
@@ -1817,7 +2358,7 @@ function dirBtnHTML(d){
   return `<span style="font-size:.9rem">${ql.flag}</span> → <span style="font-size:.9rem">${al.flag}</span>`;
 }
 function updateDirButtons(){
-  ['match-dir-btn','spell-dir-btn','mc-dir-btn','flash-dir-btn'].forEach(id=>{
+  ['match-dir-btn','spell-dir-btn','mc-dir-btn','flash-dir-btn','swipe-dir-btn','qp-dir-btn'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.innerHTML=dirBtnHTML(direction);
   });
 }
@@ -2023,6 +2564,7 @@ function startFlash(fromUnsure){
   document.getElementById('flash-front-label').style.visibility=(d==='hard')?'hidden':'visible';
   // keyboard hint
   document.getElementById('flash-kb-hint').style.display='flex';
+  updateFlashPaceUI();
   showView('flash');
   loadFlashCard();
   // attach keyboard handler
@@ -2034,19 +2576,23 @@ function flashKeyHandler(e){
   if(currentMode!=='flash')return;
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
   if(e.code==='Space'){e.preventDefault();flipFlashCard();return;}
-  if(e.code==='ArrowRight'||e.code==='ArrowDown'){
+  if(e.code==='ArrowRight'||e.code==='ArrowDown'||e.code==='Enter'){
     e.preventDefault();
-    if(!flashFlipped)flipFlashCard(); else flashAdvance();
+    if(!flashFlipped){
+      flipFlashCard();
+    } else {
+      // in slow mode, → or Enter advances only if already rated (next-row visible)
+      const nextRow=document.getElementById('flash-next-row');
+      if(flashPace==='slow'&&nextRow&&nextRow.style.display!=='none'){
+        flashAdvanceFromSlow();
+      } else if(flashPace==='fast'){
+        flashAdvance();
+      }
+      // slow + not yet rated: just flip back (let user rate first)
+    }
     return;
   }
-  if(e.code==='ArrowLeft'||e.code==='ArrowUp'){
-    e.preventDefault();goBackFlash();return;
-  }
-  if(e.code==='Enter'){
-    e.preventDefault();
-    if(!flashFlipped)flipFlashCard(); else flashAdvance();
-    return;
-  }
+  if(e.code==='ArrowLeft'||e.code==='ArrowUp'){e.preventDefault();goBackFlash();return;}
   if(e.key==='1'){rateFlash('sure');return;}
   if(e.key==='2'){rateFlash('maybe');return;}
   if(e.key==='3'){rateFlash('unsure');return;}
@@ -2070,27 +2616,77 @@ function loadFlashCard(){
   document.getElementById('flash-idx').textContent=flashIdx+1;
   document.getElementById('f-remaining').textContent=flashQueue.length-flashIdx;
   document.getElementById('flash-progress').style.width=(flashIdx/flashQueue.length*100)+'%';
-  ['cb-unsure','cb-maybe','cb-sure'].forEach(id=>document.getElementById(id).disabled=true);
+  ['cb-unsure','cb-maybe','cb-sure'].forEach(id=>{
+    const el=document.getElementById(id);if(el){el.disabled=true;el.style.opacity='';}
+  });
+  const nextRow=document.getElementById('flash-next-row');
+  if(nextRow)nextRow.style.display='none';
 }
 
 function flipFlashCard(){
   if(flashIdx>=flashQueue.length)return;
   flashFlipped=!flashFlipped;
   document.getElementById('flash-inner').classList.toggle('flipped',flashFlipped);
-  if(flashFlipped)['cb-unsure','cb-maybe','cb-sure'].forEach(id=>document.getElementById(id).disabled=false);
+  if(flashFlipped){
+    ['cb-unsure','cb-maybe','cb-sure'].forEach(id=>document.getElementById(id).disabled=false);
+    // slow mode: show explicit next button
+    const nextRow=document.getElementById('flash-next-row');
+    if(nextRow)nextRow.style.display=flashPace==='slow'?'block':'none';
+  } else {
+    // flipped back to front — hide next button
+    const nextRow=document.getElementById('flash-next-row');
+    if(nextRow)nextRow.style.display='none';
+  }
 }
 
+let flashPace='fast'; // 'fast' = 🐇 gradering → nästa direkt | 'slow' = 🐢 gradering → väntar på Enter/knapp
+
+function toggleFlashPace(){
+  flashPace=flashPace==='fast'?'slow':'fast';
+  updateFlashPaceUI();
+}
+
+function updateFlashPaceUI(){
+  const btn=document.getElementById('flash-pace-btn');
+  const lbl=document.getElementById('flash-rate-label');
+  const hint=document.getElementById('flash-kb-hint');
+  const nextRow=document.getElementById('flash-next-row');
+  const kbFlip=document.getElementById('flash-kb-flip');
+  if(flashPace==='fast'){
+    if(btn){btn.textContent='🐇 Tempo';btn.style.borderColor='rgba(255,209,102,.4)';btn.style.color='var(--yellow)';}
+    if(lbl)lbl.textContent='Sortera – skattning går direkt vidare:';
+    if(kbFlip)kbFlip.innerHTML='<kbd>Mellanslag</kbd> Vänd &nbsp;<kbd>→</kbd> Nästa';
+    if(nextRow)nextRow.style.display='none';
+  } else {
+    if(btn){btn.textContent='🐢 Lugnt';btn.style.borderColor='rgba(6,214,160,.4)';btn.style.color='var(--teal)';}
+    if(lbl)lbl.textContent='Sortera – tryck sedan → eller Nästa för att gå vidare:';
+    if(kbFlip)kbFlip.innerHTML='<kbd>Mellanslag</kbd> Vänd';
+    if(nextRow)nextRow.style.display=flashFlipped?'block':'none';
+  }
+}
 function goBackFlash(){
   if(flashIdx<=0)return;
   flashIdx--;
+  const scene=document.getElementById('flash-scene');
   const inner=document.getElementById('flash-inner');
-  // slide in from left
-  inner.style.transition='none';
-  inner.style.transform='translateX(-60px)';inner.style.opacity='0';
-  loadFlashCard();
-  void inner.offsetWidth;
-  inner.style.transition='transform .3s cubic-bezier(.2,.8,.3,1), opacity .25s ease-out';
-  inner.style.transform='translateX(0)';inner.style.opacity='1';
+  if(flashFlipped){document.getElementById('flash-back-word').textContent='';}
+  scene.style.transition='opacity .18s ease, transform .18s ease';
+  scene.style.opacity='0';
+  scene.style.transform='translateX(28px)';
+  setTimeout(()=>{
+    inner.style.transition='none';
+    inner.classList.remove('flipped');
+    void inner.offsetWidth;
+    loadFlashCard();
+    scene.style.transition='none';
+    scene.style.transform='translateX(-28px)';
+    scene.style.opacity='0';
+    void scene.offsetWidth;
+    scene.style.transition='opacity .25s ease, transform .28s cubic-bezier(.2,.8,.3,1)';
+    scene.style.transform='translateX(0)';
+    scene.style.opacity='1';
+    setTimeout(()=>{inner.style.transition='transform .5s cubic-bezier(.4,0,.2,1)';},300);
+  },200);
 }
 function flashAdvance(){
   // called by Enter on back side or by rating buttons — just go next without rating
@@ -2108,29 +2704,77 @@ function rateFlash(rating){
   if(rating==='sure')flashSure++;
   else if(rating==='maybe')flashMaybe++;
   else{flashUnsureCount++;flashUnsureList.push(w);}
-  updatePiles();flashIdx++;
+  updatePiles();
+
+  if(flashPace==='fast'){
+    // tempo: advance immediately
+    flashIdx++;
+    animateNextCard();
+  } else {
+    // lugnt: highlight the chosen button, wait for explicit next
+    ['cb-sure','cb-maybe','cb-unsure'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.style.opacity=(id==='cb-'+{sure:'sure',maybe:'maybe',unsure:'unsure'}[rating])?'1':'.3';
+    });
+    // show next button prominently
+    const nextRow=document.getElementById('flash-next-row');
+    if(nextRow){
+      nextRow.style.display='block';
+      nextRow.innerHTML=`<button class="btn btn-yellow" onclick="flashAdvanceFromSlow()" style="font-size:.88rem">Nästa kort →</button>
+      <div style="font-size:.7rem;color:var(--gray);margin-top:5px">eller tryck <kbd>Enter</kbd> / <kbd>→</kbd></div>`;
+    }
+  }
+}
+
+function flashAdvanceFromSlow(){
+  flashIdx++;
+  // reset button opacity
+  ['cb-sure','cb-maybe','cb-unsure'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.opacity='';});
   animateNextCard();
+}
+
+function handleFlashTouch(e){
+  e.preventDefault(); // stop ghost click
+  flipFlashCard();
 }
 
 function animateNextCard(){
   const scene=document.getElementById('flash-scene');
   const inner=document.getElementById('flash-inner');
-  // slide out to left
-  inner.style.transition='transform .25s ease-in, opacity .25s ease-in';
-  inner.style.transform=(flashFlipped?'rotateY(180deg) ':'')+'translateX(-60px)';
-  inner.style.opacity='0';
+
+  // Step 1: if card is showing back face, blank the back word immediately
+  // so nothing readable is visible during the flip-back
+  if(flashFlipped){
+    document.getElementById('flash-back-word').textContent='';
+  }
+
+  // Step 2: slide + fade scene out
+  scene.style.transition='opacity .18s ease, transform .18s ease';
+  scene.style.opacity='0';
+  scene.style.transform='translateX(-28px)';
+
   setTimeout(()=>{
-    // reset position instantly (off-screen right), then slide in
+    // Step 3: while invisible — flip card back to front silently, load new content
     inner.style.transition='none';
-    inner.style.transform='translateX(60px)';
-    inner.style.opacity='0';
-    loadFlashCard();
-    // force reflow
-    void inner.offsetWidth;
-    inner.style.transition='transform .3s cubic-bezier(.2,.8,.3,1), opacity .25s ease-out';
-    inner.style.transform='translateX(0)';
-    inner.style.opacity='1';
-  },250);
+    inner.classList.remove('flipped');
+    void inner.offsetWidth; // force reflow so the remove sticks before next paint
+
+    loadFlashCard(); // fills in new front + back words with card face-up
+
+    // Step 4: position off-screen right, then slide in
+    scene.style.transition='none';
+    scene.style.transform='translateX(28px)';
+    scene.style.opacity='0';
+    void scene.offsetWidth;
+    scene.style.transition='opacity .25s ease, transform .28s cubic-bezier(.2,.8,.3,1)';
+    scene.style.transform='translateX(0)';
+    scene.style.opacity='1';
+
+    // restore card flip transition for user interactions
+    setTimeout(()=>{
+      inner.style.transition='transform .5s cubic-bezier(.4,0,.2,1)';
+    },300);
+  },200);
 }
 
 function updatePiles(){
@@ -2145,6 +2789,8 @@ function showResults(){
   let c,w,t,total,mode;
   if(currentMode==='match'){c=mCorrect;w=mWrong;t=mSeconds;total=mPairs;mode='Para ihop';}
   else if(currentMode==='spell'){c=sCorrect;w=sWrong;t=sSeconds;total=spellQueue.length;mode='Stava';}
+  else if(currentMode==='swipe'){c=swipeCorrect;w=swipeWrong;t=0;total=swipeQueue.length;mode='Svep';}
+  else if(currentMode==='quickpick'){c=qpCorrect;w=qpWrong;t=qpSeconds;total=qpQueue.length;mode='Snabbval';}
   else{c=mcCorrect;w=mcWrong;t=mcSeconds;total=mcQueue.length;mode='Flerval';}
   const pct=total>0?Math.round(c/total*100):0;
   let trophy='🏆',title='Bra jobbat!';
@@ -2161,6 +2807,153 @@ function showResults(){
   buildSessionSummary();
   showView('results');
 }
+
+/* ═══ SWIPE GAME ═══ */
+let swipeQueue=[],swipeIdx=0,swipeCorrect=0,swipeWrong=0;
+let swipeDragging=false,swipeStartX=0,swipeCurrentX=0;
+
+function startSwipe(){
+  const valid=getActiveWords();
+  if(valid.length<2){toast('⚠️ Minst 2 glospar!');return;}
+  currentMode='swipe';const d=diff.swipe||'easy';
+  setBadge('swipe-diff-badge',d);updateDiffButtons('swipe');
+  swipeQueue=shuffle([...valid]);swipeIdx=0;swipeCorrect=0;swipeWrong=0;
+  document.getElementById('swipe-correct').textContent='0';
+  document.getElementById('swipe-wrong').textContent='0';
+  updateDirButtons();
+  showView('swipe');
+  loadSwipeCard();
+  initSwipeDrag();
+}
+function loadSwipeCard(){
+  if(swipeIdx>=swipeQueue.length){stopSwipe();showResults();return;}
+  const w=swipeQueue[swipeIdx];
+  const card=document.getElementById('swipe-card');
+  card.style.transition='none';card.style.transform='translateX(0) rotate(0deg)';card.style.opacity='1';
+  document.getElementById('swipe-question').textContent=q(w);
+  document.getElementById('swipe-sub').textContent=w.category||'';
+  document.getElementById('swipe-yes-label').style.opacity='0';
+  document.getElementById('swipe-no-label').style.opacity='0';
+  document.getElementById('swipe-left').textContent=swipeQueue.length-swipeIdx;
+  document.getElementById('swipe-progress').style.width=(swipeIdx/swipeQueue.length*100)+'%';
+  // build options
+  const correct=a(w);
+  const pool=swipeQueue.filter((_,i)=>i!==swipeIdx).map(x=>a(x));
+  const distractors=shuffle(pool).slice(0,3);
+  const opts=shuffle([correct,...distractors]);
+  const cont=document.getElementById('swipe-options');
+  cont.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='swipe-opt';btn.textContent=opt;
+    btn.ontouchend=(e)=>{e.preventDefault();resolveSwipe(opt===correct,btn);};
+    btn.onclick=()=>resolveSwipe(opt===correct,btn);
+    cont.appendChild(btn);
+  });
+  const hint=document.getElementById('swipe-hint');
+  hint.textContent=`${swipeIdx+1} / ${swipeQueue.length}`;
+}
+function resolveSwipe(correct,btn){
+  const card=document.getElementById('swipe-card');
+  if(card.style.transition!=='none'&&card.dataset.animating)return;
+  card.dataset.animating='1';
+  if(btn)btn.className='swipe-opt '+(correct?'opt-correct':'opt-wrong');
+  if(correct){swipeCorrect++;spawnConfetti(2);}else swipeWrong++;
+  document.getElementById('swipe-correct').textContent=swipeCorrect;
+  document.getElementById('swipe-wrong').textContent=swipeWrong;
+  // fly off screen
+  card.style.transition='transform .35s ease-in, opacity .3s ease-in';
+  card.style.transform=`translateX(${correct?320:-320}px) rotate(${correct?18:-18}deg)`;
+  card.style.opacity='0';
+  setTimeout(()=>{card.dataset.animating='';swipeIdx++;loadSwipeCard();},370);
+}
+function initSwipeDrag(){
+  const card=document.getElementById('swipe-card');
+  const yes=document.getElementById('swipe-yes-label');
+  const no=document.getElementById('swipe-no-label');
+  // touch
+  card.ontouchstart=e=>{swipeDragging=true;swipeStartX=e.touches[0].clientX;swipeCurrentX=0;};
+  card.ontouchmove=e=>{
+    if(!swipeDragging)return;
+    e.preventDefault();
+    swipeCurrentX=e.touches[0].clientX-swipeStartX;
+    const rot=swipeCurrentX*0.06;
+    card.style.transition='none';
+    card.style.transform=`translateX(${swipeCurrentX}px) rotate(${rot}deg)`;
+    const pct=Math.min(Math.abs(swipeCurrentX)/80,1);
+    yes.style.opacity=swipeCurrentX>0?pct:0;
+    no.style.opacity=swipeCurrentX<0?pct:0;
+  };
+  card.ontouchend=()=>{
+    if(!swipeDragging)return;swipeDragging=false;
+    if(Math.abs(swipeCurrentX)>80){
+      resolveSwipe(swipeCurrentX>0,null);
+    } else {
+      card.style.transition='transform .3s ease';
+      card.style.transform='translateX(0) rotate(0deg)';
+      yes.style.opacity='0';no.style.opacity='0';
+    }
+    swipeCurrentX=0;
+  };
+}
+function stopSwipe(){clearInterval(null);}
+
+/* ═══ QUICKPICK GAME ═══ */
+let qpQueue=[],qpIdx=0,qpCorrect=0,qpWrong=0,qpAnswered=false,qpSeconds=0,qpTimer=null;
+
+function startQuickpick(){
+  const valid=getActiveWords();
+  if(valid.length<2){toast('⚠️ Minst 2 glospar!');return;}
+  currentMode='quickpick';const d=diff.quickpick||'easy';
+  setBadge('qp-diff-badge',d);updateDiffButtons('quickpick');
+  qpQueue=shuffle([...valid]);qpIdx=0;qpCorrect=0;qpWrong=0;qpSeconds=0;qpAnswered=false;
+  document.getElementById('qp-correct').textContent='0';
+  document.getElementById('qp-wrong').textContent='0';
+  document.getElementById('qp-total').textContent=qpQueue.length;
+  updateDirButtons();
+  qpTimer=setInterval(()=>{qpSeconds++;document.getElementById('qp-timer').textContent=fmt(qpSeconds);},1000);
+  showView('quickpick');
+  loadQPWord();
+}
+function loadQPWord(){
+  if(qpIdx>=qpQueue.length){stopQuickpick();showResults();return;}
+  const w=qpQueue[qpIdx];qpAnswered=false;
+  document.getElementById('qp-word').textContent=q(w);
+  document.getElementById('qp-idx').textContent=qpIdx+1;
+  document.getElementById('qp-progress').style.width=(qpIdx/qpQueue.length*100)+'%';
+  const fb=document.getElementById('qp-feedback');fb.style.display='none';
+  const correct=a(w);
+  const pool=qpQueue.filter((_,i)=>i!==qpIdx).map(x=>a(x));
+  const distractors=shuffle(pool).slice(0,3);
+  const opts=shuffle([correct,...distractors]);
+  const cont=document.getElementById('qp-options');
+  cont.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='qp-opt';btn.textContent=opt;
+    btn.ontouchend=(e)=>{e.preventDefault();if(!qpAnswered)onQPClick(btn,opt===correct,correct,cont);};
+    btn.onclick=()=>{if(!qpAnswered)onQPClick(btn,opt===correct,correct,cont);};
+    cont.appendChild(btn);
+  });
+}
+function onQPClick(btn,isCorrect,correct,cont){
+  qpAnswered=true;
+  const fb=document.getElementById('qp-feedback');
+  if(isCorrect){
+    btn.className='qp-opt qp-correct';
+    qpCorrect++;document.getElementById('qp-correct').textContent=qpCorrect;
+    spawnConfetti(2);
+    setTimeout(()=>{qpIdx++;loadQPWord();},420);
+  } else {
+    btn.className='qp-opt qp-wrong';
+    qpWrong++;document.getElementById('qp-wrong').textContent=qpWrong;
+    // highlight correct
+    [...cont.querySelectorAll('.qp-opt')].forEach(b=>{if(b.textContent===correct)b.className='qp-opt qp-correct';});
+    fb.className='feedback-banner wrong';fb.textContent=`Rätt svar: ${correct}`;fb.style.display='block';
+    setTimeout(()=>{qpIdx++;loadQPWord();},1200);
+  }
+}
+function stopQuickpick(){clearInterval(qpTimer);}
 
 /* ═══ LIBRARY SYSTEM ═══ */
 let library=[]; // [{name,subject,lang1,lang2,words,id}]
@@ -2196,9 +2989,9 @@ function loadLibraryFiles(e){
           if(ratingMap[k]){if(ratingMap[k].flashRating)n.flashRating=ratingMap[k].flashRating;if(ratingMap[k].spellRating)n.spellRating=ratingMap[k].spellRating;}
           return n;
         });
-        const set={id,name:data.name||file.name.replace('.json',''),subject:data.subject||'',lang1:l1,lang2:l2,words:ws};
+        const set={id,name:data.name||file.name.replace('.json',''),subject:data.subject||'',lang1:l1,lang2:l2,words:ws,locked:true};
         const idx=library.findIndex(s=>s.id===id);
-        if(idx>=0)library[idx]=set;else library.push(set);
+        if(idx>=0)library[idx]={...library[idx],...set,locked:true};else library.push(set);
         saveLibraryToStorage();
         loaded++;
         if(loaded===files.length){renderLibraryGrid();toast(`✅ ${loaded} glosset laddade`);}
@@ -2211,47 +3004,169 @@ function loadLibraryFiles(e){
 
 function showLibrary(){
   loadLibraryFromStorage();
+  // sync any live edits from teacher view back into the library entry
+  if(activeSetId&&activeSetId!=='combined'){
+    const idx=library.findIndex(s=>s.id===activeSetId);
+    if(idx>=0)library[idx].words=words.filter(w=>w[lang1]&&w[lang2]);
+  }
   renderLibraryGrid();
   showView('library');
+}
+
+let libView='rows'; // 'rows' or 'cards'
+let libLangFilter=''; // '' = all, otherwise lang1 code
+
+function setLibView(v){
+  libView=v;
+  const rb=document.getElementById('lib-view-rows');
+  const cb=document.getElementById('lib-view-cards');
+  if(rb){rb.style.background=v==='rows'?'rgba(255,255,255,.12)':'transparent';rb.style.color=v==='rows'?'var(--white)':'var(--gray)';}
+  if(cb){cb.style.background=v==='cards'?'rgba(255,255,255,.12)':'transparent';cb.style.color=v==='cards'?'var(--white)':'var(--gray)';}
+  renderLibraryGrid();
+}
+
+function renderLangFilters(){
+  const cont=document.getElementById('lib-lang-filters');
+  if(!cont)return;
+  const langs=[...new Set(library.map(s=>s.lang1))];
+  cont.innerHTML='';
+  if(langs.length<2)return;
+  const all=document.createElement('button');
+  all.className='lib-lang-pill'+(libLangFilter===''?' active':'');
+  all.textContent='Alla';
+  all.onclick=()=>{libLangFilter='';renderLangFilters();renderLibraryGrid();};
+  cont.appendChild(all);
+  langs.forEach(lc=>{
+    const lo=langObj(lc);
+    const p=document.createElement('button');
+    p.className='lib-lang-pill'+(libLangFilter===lc?' active':'');
+    p.textContent=lo.flag+' '+lo.name;
+    p.onclick=()=>{libLangFilter=lc;renderLangFilters();renderLibraryGrid();};
+    cont.appendChild(p);
+  });
+}
+
+function getFilteredSets(){
+  const q=(document.getElementById('lib-search')?.value||'').toLowerCase().trim();
+  return library.filter(s=>{
+    if(libLangFilter&&s.lang1!==libLangFilter)return false;
+    if(q&&!s.name.toLowerCase().includes(q)&&!(s.subject||'').toLowerCase().includes(q))return false;
+    return true;
+  });
 }
 
 function renderLibraryGrid(){
   const grid=document.getElementById('library-grid');
   const empty=document.getElementById('library-empty');
   const bar=document.getElementById('lib-selection-bar');
+  if(!grid)return;
   grid.innerHTML='';
-  if(!library.length){empty.style.display='block';bar.style.display='none';return;}
+  renderLangFilters();
+  const sets=getFilteredSets();
+  if(!library.length||!sets.length){
+    empty.style.display='block';
+    if(bar)bar.style.display='none';
+    return;
+  }
   empty.style.display='none';
-  bar.style.display='flex';
+  if(bar)bar.style.display='flex';
   updateSelectionText();
-  library.forEach(set=>{
-    const isSelected=selectedSetIds.has(set.id);
-    const isActive=set.id===activeSetId;
-    const counts=setStrengthCounts(set.words);
-    const total=set.words.length||1;
-    const card=document.createElement('div');
-    card.className='lib-set-card'+(isSelected?' selected':'')+(isActive&&!isSelected?' active-set':'');
-    card.onclick=()=>toggleSetSelection(set.id);
-    const l1=langObj(set.lang1),l2=langObj(set.lang2);
-    card.innerHTML=`
-      <div style="position:absolute;top:10px;right:10px;font-size:1.1rem">${isSelected?'✅':isActive?'▶️':''}</div>
-      <div class="lib-set-title">${esc(set.name)}</div>
-      <div class="lib-set-meta">${l1.flag} ${l1.name} → ${l2.flag} ${l2.name} &nbsp;·&nbsp; ${set.words.length} ord${set.subject?' · '+esc(set.subject):''}</div>
-      <div class="lib-strength-bar">
-        <div style="width:${counts.strong/total*100}%;background:var(--green)"></div>
-        <div style="width:${counts.medium/total*100}%;background:var(--yellow)"></div>
-        <div style="width:${counts.weak/total*100}%;background:var(--red)"></div>
-        <div style="width:${counts.unrated/total*100}%;background:rgba(255,255,255,.15)"></div>
-      </div>
-      <div style="font-size:.72rem;color:var(--gray);margin-bottom:10px">
-        🟢 ${counts.strong} &nbsp; 🟡 ${counts.medium} &nbsp; 🔴 ${counts.weak} &nbsp; ⚪ ${counts.unrated}
-      </div>
-      <div class="lib-set-actions" onclick="event.stopPropagation()">
-        <button class="btn btn-teal btn-sm" onclick="activateSingleSet('${set.id}')">▶ Öva detta</button>
-        <button class="btn btn-ghost btn-sm" onclick="removeSetFromLibrary('${set.id}')">🗑</button>
-      </div>`;
-    grid.appendChild(card);
-  });
+
+  if(libView==='rows'){
+    // ── ROW VIEW ──
+    const wrap=document.createElement('div');
+    wrap.style.cssText='background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);overflow:hidden';
+    sets.forEach(set=>{
+      const isSelected=selectedSetIds.has(set.id);
+      const isActive=set.id===activeSetId;
+      const counts=setStrengthCounts(set.words);
+      const total=set.words.length||1;
+      const l1=langObj(set.lang1),l2=langObj(set.lang2);
+      const row=document.createElement('div');
+      row.className='lib-row'+(isSelected?' lib-selected':isActive?' lib-active':'');
+      row.onclick=()=>toggleSetSelection(set.id);
+      row.innerHTML=`
+        <span class="lib-row-flags">${l1.flag}<span style="font-size:.65rem;color:var(--gray);margin:0 2px">→</span>${l2.flag}</span>
+        <div style="min-width:0">
+          <div class="lib-row-name">${esc(set.name)}</div>
+          ${set.subject?`<div class="lib-row-sub">${esc(set.subject)}</div>`:''}
+        </div>
+        <div class="lib-mini-bar">
+          <div style="width:${counts.strong/total*100}%;background:var(--green)"></div>
+          <div style="width:${counts.medium/total*100}%;background:var(--yellow)"></div>
+          <div style="width:${counts.weak/total*100}%;background:var(--red)"></div>
+          <div style="flex:1;background:rgba(255,255,255,.1)"></div>
+        </div>
+        <div class="lib-row-meta">${set.words.length} ord<br><span style="font-size:.66rem">🟢${counts.strong} 🟡${counts.medium} 🔴${counts.weak}</span></div>
+        <div style="display:flex;gap:6px" onclick="event.stopPropagation()">
+          <button class="lib-row-btn" onclick="activateSingleSet('${set.id}')">▶ Öva</button>
+          ${set.locked
+            ?`<span title="Lärarskapt – kan inte tas bort" style="font-size:.85rem;opacity:.35;padding:4px 6px" >🔒</span>`
+            :`<button class="lib-row-btn" onclick="removeSetFromLibrary('${set.id}')" style="color:var(--pink);border-color:rgba(239,71,111,.25)">🗑</button>`
+          }
+        </div>`;
+      wrap.appendChild(row);
+    });
+    grid.appendChild(wrap);
+  } else {
+    // ── CARD VIEW ──
+    const cardGrid=document.createElement('div');
+    cardGrid.style.cssText='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px';
+    sets.forEach(set=>{
+      const isSelected=selectedSetIds.has(set.id);
+      const isActive=set.id===activeSetId;
+      const counts=setStrengthCounts(set.words);
+      const total=set.words.length||1;
+      const l1=langObj(set.lang1),l2=langObj(set.lang2);
+      const langColors={en:'#118ab2',sv:'#06d6a0',es:'#f77f00',fr:'#a855f7',de:'#ef476f'};
+      const accent=langColors[set.lang1]||'#888';
+
+      // collect unique assigns and categories from words
+      const assigns=[...new Set(set.words.map(w=>w.assign).filter(Boolean))].sort();
+      const cats=[...new Set(set.words.map(w=>w.category).filter(Boolean))].sort();
+
+      // build assign pills (teal)
+      const assignHtml=assigns.map(a=>{
+        const count=set.words.filter(w=>w.assign===a).length;
+        return `<span style="display:inline-flex;align-items:center;gap:3px;font-size:.64rem;font-weight:700;padding:2px 7px;border-radius:50px;background:rgba(6,214,160,.12);color:#06d6a0;border:1px solid rgba(6,214,160,.25);white-space:nowrap">📋 ${esc(a)} <span style="opacity:.65">${count}</span></span>`;
+      }).join('');
+
+      // build category pills (coloured dots)
+      const catHtml=cats.slice(0,4).map((c,i)=>{
+        const col=CAT_COLORS[i%CAT_COLORS.length];
+        return `<span style="display:inline-flex;align-items:center;gap:3px;font-size:.64rem;font-weight:700;padding:2px 7px;border-radius:50px;background:${col}18;color:${col};border:1px solid ${col}33;white-space:nowrap">${esc(c)}</span>`;
+      }).join('')+(cats.length>4?`<span style="font-size:.62rem;color:var(--gray)">+${cats.length-4}</span>`:'');
+
+      const card=document.createElement('div');
+      card.className='lib-set-card'+(isSelected?' selected':'')+(isActive&&!isSelected?' active-set':'');
+      card.onclick=()=>toggleSetSelection(set.id);
+      card.innerHTML=`
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+          <span style="font-size:1.1rem">${l1.flag}<span style="font-size:.65rem;color:var(--gray);margin:0 2px">→</span>${l2.flag}</span>
+          <span style="font-size:.7rem;color:var(--gray)">${set.words.length} ord</span>
+        </div>
+        <div class="lib-set-title" style="border-left:3px solid ${accent};padding-left:7px;margin-bottom:4px;font-size:.88rem">${esc(set.name)}</div>
+        ${set.subject?`<div style="font-size:.7rem;color:var(--gray);margin-bottom:6px">${esc(set.subject)}</div>`:'<div style="margin-bottom:4px"></div>'}
+        ${assigns.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px">${assignHtml}</div>`:''}
+        ${cats.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px">${catHtml}</div>`:''}
+        <div class="lib-strength-bar" style="margin-bottom:4px">
+          <div style="width:${counts.strong/total*100}%;background:var(--green)"></div>
+          <div style="width:${counts.medium/total*100}%;background:var(--yellow)"></div>
+          <div style="width:${counts.weak/total*100}%;background:var(--red)"></div>
+          <div style="width:${counts.unrated/total*100}%;background:rgba(255,255,255,.15)"></div>
+        </div>
+        <div style="font-size:.68rem;color:var(--gray);margin-bottom:8px">🟢${counts.strong} 🟡${counts.medium} 🔴${counts.weak} ⚪${counts.unrated}</div>
+        <div class="lib-set-actions" onclick="event.stopPropagation()">
+          <button class="btn btn-teal btn-sm" style="font-size:.72rem;padding:4px 12px" onclick="activateSingleSet('${set.id}')">▶ Öva</button>
+          ${set.locked
+            ?`<span title="Lärarskapt – kan inte tas bort" style="font-size:.85rem;opacity:.35;padding:4px 6px">🔒</span>`
+            :`<button class="btn btn-ghost btn-sm" style="font-size:.72rem;padding:4px 8px;color:var(--pink)" onclick="removeSetFromLibrary('${set.id}')">🗑</button>`
+          }
+        </div>`;
+      cardGrid.appendChild(card);
+    });
+    grid.appendChild(cardGrid);
+  }
 }
 
 function setStrengthCounts(ws){
@@ -2302,11 +3217,15 @@ function activateSelectedSets(){
   setLangSelects(lang1,lang2);
   renderWordList();
   loadRatingsFromStorage();
+  loadGroups();
   strengthFilter='all';
+  assignFilter='';
   showStudentHome();
   toast(`✅ ${words.length} ord aktiverade`);
 }
 function removeSetFromLibrary(id){
+  const set=library.find(s=>s.id===id);
+  if(set&&set.locked){toast('🔒 Lärarskapade set kan inte tas bort');return;}
   if(!confirm('Ta bort detta glosset från biblioteket?'))return;
   library=library.filter(s=>s.id!==id);
   selectedSetIds.delete(id);
@@ -2315,6 +3234,131 @@ function removeSetFromLibrary(id){
 }
 
 /* Strength filter for practice */
+let assignFilter=''; // '' = all, a specific assign, or 'group:NAME' for a group
+
+/* ── Groups: {name, assigns:[]} stored per set ── */
+let assignGroups=[]; // [{name:'Prov 1', assigns:['Läxa 7.1','Läxa 7.2']}]
+const groupsKey=()=>'glos_groups_'+setName.replace(/\s/g,'_');
+function saveGroups(){try{localStorage.setItem(groupsKey(),JSON.stringify(assignGroups));}catch(e){}}
+function loadGroups(){try{const d=localStorage.getItem(groupsKey());assignGroups=d?JSON.parse(d):[]}catch(e){assignGroups=[];}}
+
+function getWordsForFilter(val){
+  if(!val)return words.filter(w=>w[lang1]&&w[lang2]);
+  if(val.startsWith('group:')){
+    const gname=val.slice(6);
+    const g=assignGroups.find(x=>x.name===gname);
+    if(!g)return words.filter(w=>w[lang1]&&w[lang2]);
+    return words.filter(w=>w[lang1]&&w[lang2]&&g.assigns.includes(w.assign));
+  }
+  return words.filter(w=>w[lang1]&&w[lang2]&&w.assign===val);
+}
+
+function setAssignFilter(val){
+  assignFilter=val;
+  renderAssignFilterRow();
+  showStudentHome();
+}
+
+function renderAssignFilterRow(){
+  const assigns=[...new Set(words.map(w=>w.assign).filter(Boolean))].sort();
+  const row=document.getElementById('assign-filter-row');
+  const pills=document.getElementById('assign-filter-pills');
+  if(!assigns.length&&!assignGroups.length){row.style.display='none';return;}
+  row.style.display='block';
+  pills.innerHTML='';
+
+  // All words pill
+  const allPill=document.createElement('button');
+  allPill.className='sh-fpill assign-pill'+(assignFilter===''?' active':'');
+  allPill.dataset.val='';
+  allPill.textContent='Alla ord';
+  allPill.onclick=()=>setAssignFilter('');
+  pills.appendChild(allPill);
+
+  // Group pills (📝 Prov 1)
+  assignGroups.forEach(g=>{
+    const key='group:'+g.name;
+    const count=words.filter(w=>w[lang1]&&w[lang2]&&g.assigns.includes(w.assign)).length;
+    const active=assignFilter===key;
+    const p=document.createElement('button');
+    p.className='sh-fpill assign-pill'+(active?' active':'');
+    p.dataset.val=key;
+    p.style.cssText=active
+      ?'background:rgba(168,85,247,.18);border-color:var(--purple);color:var(--purple)'
+      :'border-color:rgba(168,85,247,.35);color:var(--purple)';
+    p.innerHTML=`📝 ${esc(g.name)} <span style="font-size:.68rem;opacity:.7">(${count})</span>`;
+    p.onclick=()=>setAssignFilter(key);
+    pills.appendChild(p);
+  });
+
+  // Individual assign pills
+  assigns.forEach(a=>{
+    const count=words.filter(w=>w.assign===a).length;
+    const active=assignFilter===a;
+    const p=document.createElement('button');
+    p.className='sh-fpill assign-pill'+(active?' active':'');
+    p.dataset.val=a;
+    p.style.cssText=active
+      ?'background:rgba(6,214,160,.15);border-color:var(--teal);color:var(--teal)'
+      :'border-color:rgba(6,214,160,.3);color:var(--teal)';
+    p.innerHTML=`📋 ${esc(a)} <span style="font-size:.68rem;opacity:.7">(${count})</span>`;
+    p.onclick=()=>setAssignFilter(a);
+    pills.appendChild(p);
+  });
+
+  // Manage groups button
+  if(assigns.length>=2||assignGroups.length){
+    const mgmt=document.createElement('button');
+    mgmt.className='sh-info-pill';
+    mgmt.style.marginLeft='auto';
+    mgmt.innerHTML='⚙️ Hantera prov';
+    mgmt.onclick=()=>openGroupManager();
+    pills.appendChild(mgmt);
+  }
+}
+
+function openGroupManager(){
+  const assigns=[...new Set(words.map(w=>w.assign).filter(Boolean))].sort();
+  const modal=document.getElementById('group-manager-modal');
+  if(!modal)return;
+  const list=document.getElementById('gm-list');
+  list.innerHTML='';
+  assignGroups.forEach((g,gi)=>{
+    const div=document.createElement('div');
+    div.style.cssText='background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:10px';
+    div.innerHTML=`
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <input class="xl-input" value="${esc(g.name)}" placeholder="Namn, t.ex. Prov 1"
+          style="flex:1;font-size:.9rem;font-weight:700;background:var(--surface);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:5px 10px"
+          oninput="assignGroups[${gi}].name=this.value;saveGroups()"/>
+        <button class="xl-del-btn" onclick="assignGroups.splice(${gi},1);saveGroups();openGroupManager();renderAssignFilterRow()" title="Ta bort">×</button>
+      </div>
+      <div style="font-size:.75rem;color:var(--gray);margin-bottom:6px">Välj vilka tilldelningar som ingår:</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${assigns.map(a=>`
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 10px;border-radius:50px;border:1px solid ${g.assigns.includes(a)?'var(--teal)':'rgba(255,255,255,.12)'};background:${g.assigns.includes(a)?'rgba(6,214,160,.12)':'transparent'}">
+            <input type="checkbox" ${g.assigns.includes(a)?'checked':''} style="display:none"
+              onchange="toggleGroupAssign(${gi},'${esc(a)}',this.checked);openGroupManager()"/>
+            <span style="font-size:.78rem;font-weight:700;color:${g.assigns.includes(a)?'var(--teal)':'var(--gray)'}">${esc(a)}</span>
+          </label>`).join('')}
+      </div>`;
+    list.appendChild(div);
+  });
+  openModal('group-manager-modal');
+}
+
+function toggleGroupAssign(gi,assign,checked){
+  if(checked){if(!assignGroups[gi].assigns.includes(assign))assignGroups[gi].assigns.push(assign);}
+  else{assignGroups[gi].assigns=assignGroups[gi].assigns.filter(a=>a!==assign);}
+  saveGroups();
+}
+
+function addNewGroup(){
+  assignGroups.push({name:'Nytt prov',assigns:[]});
+  saveGroups();
+  openGroupManager();
+}
+
 function setStrengthFilter(f){
   strengthFilter=f;
   ['all','weak','medium','strong','unrated'].forEach(k=>{
@@ -2325,13 +3369,23 @@ function setStrengthFilter(f){
   showStudentHome();
 }
 function updateStrengthFilterCounts(){
-  const c={all:words.length,strong:0,medium:0,weak:0,unrated:0};
-  words.forEach(w=>{const s=wordStrength(w);c[s]=(c[s]||0)+1;});
+  const base=getWordsForFilter(assignFilter);
+  const c={all:base.filter(w=>w[lang1]&&w[lang2]).length,strong:0,medium:0,weak:0,unrated:0};
+  base.forEach(w=>{const s=wordStrength(w);c[s]=(c[s]||0)+1;});
   Object.keys(c).forEach(k=>{const el=document.getElementById('sf-'+k+'-n');if(el)el.textContent=c[k]?'('+c[k]+')':'';});
 }
 function getActiveWords(){
-  if(strengthFilter==='all')return words.filter(w=>w[lang1]&&w[lang2]);
-  return words.filter(w=>w[lang1]&&w[lang2]&&wordStrength(w)===strengthFilter);
+  let base=getWordsForFilter(assignFilter);
+  if(strengthFilter==='all')return base;
+  return base.filter(w=>wordStrength(w)===strengthFilter);
+}
+
+function checkFirstVisit(){
+  try{
+    if(!localStorage.getItem('glos_seen_welcome')){
+      setTimeout(()=>openModal('welcome-modal'),600);
+    }
+  }catch(e){}
 }
 
 /* ═══ MY WORDS / RATING STORAGE ═══ */
@@ -3260,152 +4314,19 @@ function stopShooter(){
 }
 
 /* BEGREPPS_INIT_START */
-// ── Mockup: flera glosset förinstallerade i biblioteket ──
-(function(){
-const mockSets=[
-  {
-    id:'Engelska – Kroppen_en_sv',name:'Engelska – Kroppen',subject:'Engelska åk 7',lang1:'en',lang2:'sv',
-    words:[
-      {en:'head',sv:'huvud',category:'Huvud & ansikte'},
-      {en:'eye',sv:'öga',category:'Huvud & ansikte'},
-      {en:'ear',sv:'öra',category:'Huvud & ansikte'},
-      {en:'nose',sv:'näsa',category:'Huvud & ansikte'},
-      {en:'mouth',sv:'mun',category:'Huvud & ansikte'},
-      {en:'tooth',sv:'tand',category:'Huvud & ansikte'},
-      {en:'arm',sv:'arm',category:'Kropp'},
-      {en:'leg',sv:'ben',category:'Kropp'},
-      {en:'hand',sv:'hand',category:'Kropp'},
-      {en:'shoulder',sv:'axel',category:'Kropp'},
-      {en:'knee',sv:'knä',category:'Kropp'},
-      {en:'finger',sv:'finger',category:'Kropp'},
-      {en:'back',sv:'rygg',category:'Kropp'},
-      {en:'chest',sv:'bröst',category:'Kropp'},
-      {en:'foot',sv:'fot',category:'Kropp'},
-    ]
-  },
-  {
-    id:'Engelska – Djur_en_sv',name:'Engelska – Djur',subject:'Engelska åk 7',lang1:'en',lang2:'sv',
-    words:[
-      {en:'dog',sv:'hund',category:'Husdjur'},
-      {en:'cat',sv:'katt',category:'Husdjur'},
-      {en:'rabbit',sv:'kanin',category:'Husdjur'},
-      {en:'hamster',sv:'hamster',category:'Husdjur'},
-      {en:'fish',sv:'fisk',category:'Husdjur'},
-      {en:'horse',sv:'häst',category:'Husdjur'},
-      {en:'lion',sv:'lejon',category:'Vilda djur'},
-      {en:'tiger',sv:'tiger',category:'Vilda djur'},
-      {en:'elephant',sv:'elefant',category:'Vilda djur'},
-      {en:'giraffe',sv:'giraff',category:'Vilda djur'},
-      {en:'wolf',sv:'varg',category:'Vilda djur'},
-      {en:'bear',sv:'björn',category:'Vilda djur'},
-      {en:'eagle',sv:'örn',category:'Fåglar'},
-      {en:'owl',sv:'uggla',category:'Fåglar'},
-      {en:'penguin',sv:'pingvin',category:'Fåglar'},
-    ]
-  },
-  {
-    id:'Engelska – Mat & dryck_en_sv',name:'Engelska – Mat & dryck',subject:'Engelska åk 7',lang1:'en',lang2:'sv',
-    words:[
-      {en:'bread',sv:'bröd',category:'Bakverk'},
-      {en:'cake',sv:'kaka',category:'Bakverk'},
-      {en:'biscuit',sv:'kex',category:'Bakverk'},
-      {en:'apple',sv:'äpple',category:'Frukt'},
-      {en:'banana',sv:'banan',category:'Frukt'},
-      {en:'orange',sv:'apelsin',category:'Frukt'},
-      {en:'strawberry',sv:'jordgubbe',category:'Frukt'},
-      {en:'potato',sv:'potatis',category:'Grönsaker'},
-      {en:'carrot',sv:'morot',category:'Grönsaker'},
-      {en:'onion',sv:'lök',category:'Grönsaker'},
-      {en:'milk',sv:'mjölk',category:'Dryck'},
-      {en:'juice',sv:'juice',category:'Dryck'},
-      {en:'water',sv:'vatten',category:'Dryck'},
-      {en:'coffee',sv:'kaffe',category:'Dryck'},
-      {en:'tea',sv:'te',category:'Dryck'},
-    ]
-  },
-  {
-    id:'Spanska – Hälsningsfraser_es_sv',name:'Spanska – Hälsningar',subject:'Spanska åk 8',lang1:'es',lang2:'sv',
-    words:[
-      {es:'hola',sv:'hej',category:'Hälsningar'},
-      {es:'buenos días',sv:'god morgon',category:'Hälsningar'},
-      {es:'buenas tardes',sv:'god eftermiddag',category:'Hälsningar'},
-      {es:'buenas noches',sv:'god natt',category:'Hälsningar'},
-      {es:'adiós',sv:'hejdå',category:'Hälsningar'},
-      {es:'hasta luego',sv:'vi ses',category:'Hälsningar'},
-      {es:'por favor',sv:'snälla / tack',category:'Artighetsfraser'},
-      {es:'gracias',sv:'tack',category:'Artighetsfraser'},
-      {es:'de nada',sv:'varsågod',category:'Artighetsfraser'},
-      {es:'perdón',sv:'förlåt',category:'Artighetsfraser'},
-      {es:'sí',sv:'ja',category:'Vanliga ord'},
-      {es:'no',sv:'nej',category:'Vanliga ord'},
-      {es:'bien',sv:'bra',category:'Vanliga ord'},
-      {es:'mal',sv:'dålig',category:'Vanliga ord'},
-      {es:'mucho',sv:'mycket',category:'Vanliga ord'},
-    ]
-  },
-  {
-    id:'Tyska – Siffror & tid_de_sv',name:'Tyska – Siffror & tid',subject:'Tyska åk 8',lang1:'de',lang2:'sv',
-    words:[
-      {de:'eins',sv:'ett',category:'Siffror'},
-      {de:'zwei',sv:'två',category:'Siffror'},
-      {de:'drei',sv:'tre',category:'Siffror'},
-      {de:'vier',sv:'fyra',category:'Siffror'},
-      {de:'fünf',sv:'fem',category:'Siffror'},
-      {de:'sechs',sv:'sex',category:'Siffror'},
-      {de:'sieben',sv:'sju',category:'Siffror'},
-      {de:'acht',sv:'åtta',category:'Siffror'},
-      {de:'neun',sv:'nio',category:'Siffror'},
-      {de:'zehn',sv:'tio',category:'Siffror'},
-      {de:'Montag',sv:'måndag',category:'Veckodagar'},
-      {de:'Dienstag',sv:'tisdag',category:'Veckodagar'},
-      {de:'Mittwoch',sv:'onsdag',category:'Veckodagar'},
-      {de:'Donnerstag',sv:'torsdag',category:'Veckodagar'},
-      {de:'Freitag',sv:'fredag',category:'Veckodagar'},
-    ]
-  },
-  {
-    id:'Franska – Färger & former_fr_sv',name:'Franska – Färger & former',subject:'Franska åk 9',lang1:'fr',lang2:'sv',
-    words:[
-      {fr:'rouge',sv:'röd',category:'Färger'},
-      {fr:'bleu',sv:'blå',category:'Färger'},
-      {fr:'vert',sv:'grön',category:'Färger'},
-      {fr:'jaune',sv:'gul',category:'Färger'},
-      {fr:'noir',sv:'svart',category:'Färger'},
-      {fr:'blanc',sv:'vit',category:'Färger'},
-      {fr:'orange',sv:'orange',category:'Färger'},
-      {fr:'violet',sv:'lila',category:'Färger'},
-      {fr:'cercle',sv:'cirkel',category:'Former'},
-      {fr:'carré',sv:'kvadrat',category:'Former'},
-      {fr:'triangle',sv:'triangel',category:'Former'},
-      {fr:'rectangle',sv:'rektangel',category:'Former'},
-      {fr:'étoile',sv:'stjärna',category:'Former'},
-      {fr:'cœur',sv:'hjärta',category:'Former'},
-      {fr:'losange',sv:'romb',category:'Former'},
-    ]
-  }
-];
-// seed some ratings for demo realism
-const ratings=[
-  ['Engelska – Kroppen_en_sv','en|sv',{head:'sure',eye:'sure',ear:'maybe',nose:'sure',mouth:'sure',tooth:'hard',arm:'sure',leg:'sure',hand:'sure',shoulder:'maybe',knee:'maybe',finger:'sure',back:'unsure',chest:'unsure',foot:'maybe'}],
-];
-mockSets.forEach(set=>{
-  const existing=localStorage.getItem('glos_library_v1');
-  const lib=existing?JSON.parse(existing):[];
-  if(!lib.find(s=>s.id===set.id))lib.push(set);
-  localStorage.setItem('glos_library_v1',JSON.stringify(lib));
-});
-})();
-
-words=[{en:'head',sv:'huvud',category:'Huvud & ansikte'},{en:'eye',sv:'öga',category:'Huvud & ansikte'},{en:'arm',sv:'arm',category:'Kropp'},{en:'leg',sv:'ben',category:'Kropp'},{en:'hand',sv:'hand',category:'Kropp'},{en:'mouth',sv:'mun',category:'Huvud & ansikte'},{en:'nose',sv:'näsa',category:'Huvud & ansikte'},{en:'ear',sv:'öra',category:'Huvud & ansikte'},{en:'shoulder',sv:'axel',category:'Kropp'},{en:'knee',sv:'knä',category:'Kropp'},{en:'finger',sv:'finger',category:'Kropp'},{en:'tooth',sv:'tand',category:'Huvud & ansikte'}];
-setName='Engelska – Kroppen';setSubject='Engelska åk 7';
+words=[];
+setName='';setSubject='';
 lang1='en';lang2='sv';
-document.getElementById('set-name').value=setName;document.getElementById('set-subject').value=setSubject;
+document.getElementById('set-name').value=setName;
+document.getElementById('set-subject').value=setSubject;
 setLangSelects(lang1,lang2);
 renderWordList();
 updateDirButtons();
 loadLibraryFromStorage();
 loadRatingsFromStorage();
-showStudentHome();
+loadGroups();
+checkUrlParam();
+showView('teacher');
 /* BEGREPPS_INIT_END */
 (function(){const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'>${Array.from({length:90},()=>`<circle cx='${Math.random()*800}' cy='${Math.random()*600}' r='${Math.random()*1.4+.3}' fill='white' opacity='${Math.random()*.45+.08}'/>`).join('')}</svg>`;document.getElementById('stars').style.backgroundImage=`url("data:image/svg+xml,${encodeURIComponent(svg)}")`;})();
 </script>
